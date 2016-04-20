@@ -5,6 +5,7 @@ var Botkit = require('botkit');
 var baseResponses = require('./coreMike/responses/baseResponses');
 var scheduledResponses = require('./coreMike/responses/scheduledResponses');
 
+// Keep bot from starting if a Slack token is missing
 if (!process.env.token) {
   console.log('Error: Specify token in environment');
   process.exit(1);
@@ -12,7 +13,7 @@ if (!process.env.token) {
 
 
 var controller = Botkit.slackbot({
-  debug: true,
+  debug: true
 });
 
 var bot = controller.spawn({
