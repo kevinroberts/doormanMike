@@ -15,5 +15,8 @@
     "dotenv": "^2.0.0",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0"
-  }
+  },
+  "contributors": [
+    "Kevin Roberts <kevin.roberts@icfolson.com> (https://github.com/kevinroberts)"
+  ]
 }
