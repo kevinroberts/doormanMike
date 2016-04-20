@@ -175,6 +175,20 @@ var baseResponses = function(controller, callback) {
             });
         });
 
+    controller.hears(['mornin mornin', 'good morning', 'morning'],
+        'direct_message,direct_mention,mention', function(bot, message) {
+
+            var msg = dayOfTheWeekResponses.statementResponse();
+
+            controller.storage.users.get(message.user, function(err, user) {
+                if (user && user.name) {
+                    bot.reply(message, user.name + '!!! ' + msg);
+                } else {
+                    bot.reply(message, msg );
+                }
+            });
+        });
+
     controller.hears(['shutdown-bot'], 'direct_message,direct_mention,mention', function(bot, message) {
 
         bot.startConversation(message, function(err, convo) {
