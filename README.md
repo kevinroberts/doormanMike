@@ -4,7 +4,15 @@ The famous doorman from 211 Wacker comes to Slack now with all your favorite cat
 
 ## RUN THE BOT: ##
 
-`token=<MY TOKEN> node ./bin/www`
+`node ./bin/www`
+
+## SOME PRE-REQS
+
+Setup a .env file in the root of the project with the following properties
+
+`NODE_ENV=development`
+`token=<BOT TOKEN FROM SLACK>`
+`TIMEZONE=America/Chicago`
 
 ## Some features: ##
 
