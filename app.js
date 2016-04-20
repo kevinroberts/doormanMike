@@ -1,5 +1,6 @@
 var path = require('path');
-var Botkit = require('Botkit');
+
+var Botkit = require('botkit');
 
 var baseResponses = require('./coreMike/responses/baseResponses');
 var scheduledResponses = require('./coreMike/responses/scheduledResponses');
