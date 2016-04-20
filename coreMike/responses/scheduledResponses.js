@@ -5,7 +5,7 @@ var scheduledResponses = function(bot) {
 
     cron.schedule('00 30 9 * * 1-5', function(){
 
-        bot.api.chat.postMessage({'channel' : 'general', 'text' : 'mornin mornin', 'as_user' : true}, function (err, res) {
+        bot.api.chat.postMessage({'channel' : 'general', 'text' : 'Mornin Mornin!', 'as_user' : true}, function (err, res) {
           console.log(res);
         });
 
