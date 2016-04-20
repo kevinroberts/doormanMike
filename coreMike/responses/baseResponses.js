@@ -120,7 +120,7 @@ var baseResponses = function(controller, callback) {
 
             bot.reply(message,
                 ':doorman: I am a bot named <@' + bot.identity.name +
-                '>. I have been alive for ' + uptime + ' on NONE OF YOU GODANG BUSINESS SERVER.');
+                '>. I have been alive for ' + uptime + ' on NONE OF YO GODANG BUSINESS SERVER. (' + hostname + ')');
 
         });
 
@@ -175,7 +175,7 @@ var baseResponses = function(controller, callback) {
             });
         });
 
-    controller.hears(['mornin mornin', 'good morning', 'morning'],
+    controller.hears(['mornin mornin', 'good morning', 'morning', 'mornin'],
         'direct_message,direct_mention,mention', function(bot, message) {
 
             var msg = dayOfTheWeekResponses.statementResponse();
