@@ -1,5 +1,7 @@
 
 var dayOfWeek = require('day-of-week').get
+var vocabulary = require('../helpers/vocabulary');
+var messageUtils = require('../helpers/messageUtils');
 
 function getDayOfWeek(timezone) {
     if (timezone == null) {
@@ -15,33 +17,25 @@ module.exports = {
         var day = getDayOfWeek();
         var msg = '';
         if (day == 1) {
-            msg = "it's GOD DANG MONDAY DON'T TALK TO ME!! :thumbsdown::skin-tone-5:";
+            msg = "it's " + vocabulary.getMikeDang().toUpperCase() + " MONDAY DON'T TALK TO ME!! :thumbsdown::skin-tone-5:";
         }
         if (day == 2) {
-            msg = "it's GOD DANG HUMPDAY'S EVE!! :fist::skin-tone-5:";
+            msg = "it's " + vocabulary.getMikeDang().toUpperCase() + " HUMPDAY'S EVE!! :fist::skin-tone-5:";
         }
         if (day == 3) {
-            msg = "it's GOD DANG :camel: HUMPDAY :camel: !!!! :fist::skin-tone-5:";
+            msg = "it's " + vocabulary.getMikeDang().toUpperCase() + " :camel: HUMPDAY :camel: !!!! :fist::skin-tone-5:";
             if (bot != null && message != null) {
-                    bot.api.reactions.add({
-                        timestamp: message.ts,
-                        channel: message.channel,
-                        name: 'camel',
-                    }, function(err, res) {
-                        if (err) {
-                            bot.botkit.log('Failed to add emoji reaction :(', err);
-                        }
-                    });
-                }
+                messageUtils.postReaction(bot, message, 'camel');
+            }
         }
         if (day == 4) {
-            msg = "it's GOD DANG FRIDAY'S EVE!!!! :fist::skin-tone-5:";
+            msg = "it's " + vocabulary.getMikeDang().toUpperCase() + " FRIDAY'S EVE!!!! :fist::skin-tone-5:";
         }
         if (day == 5) {
-            msg = "it's GOD DANG FRIDAY!!!! :fist::skin-tone-5:";
+            msg = "it's " + vocabulary.getMikeDang().toUpperCase() + " FRIDAY!!!! :fist::skin-tone-5:";
         }
         if (day > 5) {
-            msg = "HAPPY MOTHER FLIPPIN WEEKEND BRO!!!! :fist::skin-tone-5:";
+            msg = "HAPPY " + vocabulary.getMikeDang().toUpperCase() + " WEEKEND BRO!!!! :fist::skin-tone-5:";
         }
         if (username != null) {
             msg = username + ' ' + msg;

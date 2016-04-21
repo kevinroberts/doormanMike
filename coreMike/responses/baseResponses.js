@@ -1,24 +1,16 @@
 /*
-    defines all the basic mike responses
+ *   defines all the basic mike responses
  */
-var dayOfWeek = require('day-of-week').get
 var os = require('os');
 var dayOfTheWeekResponses = require('./dayOfTheWeek');
+var messageUtils = require('../helpers/messageUtils');
+var vocabulary = require('../helpers/vocabulary');
 
 var baseResponses = function(controller, callback) {
 
     controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', function(bot, message) {
 
-        bot.api.reactions.add({
-            timestamp: message.ts,
-            channel: message.channel,
-            name: 'fist',
-        }, function(err, res) {
-            if (err) {
-                bot.botkit.log('Failed to add emoji reaction :(', err);
-            }
-        });
-
+        messageUtils.postReaction(bot, message, 'fist');
 
         controller.storage.users.get(message.user, function(err, user) {
             if (user && user.name) {
@@ -142,17 +134,9 @@ var baseResponses = function(controller, callback) {
     controller.hears(['what time is it'],
         'direct_message,direct_mention,mention', function(bot, message) {
 
-            bot.api.reactions.add({
-                timestamp: message.ts,
-                channel: message.channel,
-                name: 'timer_clock',
-            }, function(err, res) {
-                if (err) {
-                    bot.botkit.log('Failed to add emoji reaction :(', err);
-                }
-            });
+            messageUtils.postReaction(bot, message, 'timer_clock');
 
-            var msg = "it's time to get a God darn watch!";
+            var msg = "it's time to get a " + vocabulary.getMikeDang() + " watch!";
             controller.storage.users.get(message.user, function(err, user) {
                 if (user && user.name) {
                     bot.reply(message, user.name + ' ' + msg);
@@ -161,6 +145,12 @@ var baseResponses = function(controller, callback) {
                 }
             });
         });
+
+
+    controller.hears(["what time is it"], ["ambient"], function(bot, message) {
+        var intro = "<@"+message.user+"> it's time to get a " + vocabulary.getMikeDang() + " watch!";
+        bot.reply(message, intro);
+    });
 
 
     controller.hears(['what day is it'],
@@ -189,11 +179,11 @@ var baseResponses = function(controller, callback) {
             });
         });
 
-    controller.hears(['shutdown-bot'], 'direct_message,direct_mention,mention', function(bot, message) {
+    controller.hears(['shutdown'], 'direct_message,direct_mention,mention', function(bot, message) {
 
         bot.startConversation(message, function(err, convo) {
 
-            convo.ask('Are you sure you want me to shutdown?', [
+            convo.ask('Are you sure you want me to ' + vocabulary.getMikeDang() + ' shutdown?', [
                 {
                     pattern: bot.utterances.yes,
                     callback: function(response, convo) {
