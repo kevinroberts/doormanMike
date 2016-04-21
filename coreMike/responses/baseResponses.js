@@ -27,10 +27,6 @@ var baseResponses = function(controller, callback) {
         bot.reply(message, ":fist::skin-tone-5:")
     });
 
-    controller.hears('.*', ['mention'], function (bot, message) {
-        bot.reply(message, 'you\'re ' + vocabulary.getMikeDang() + ' right')
-    });
-
     controller.hears(['call me (.*)', 'my name is (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
         var name = message.match[1];
         controller.storage.users.get(message.user, function(err, user) {
@@ -140,7 +136,7 @@ var baseResponses = function(controller, callback) {
 
             controller.storage.users.get(message.user, function(err, user) {
                 if (user && user.name) {
-                    bot.reply(message, 'WHAT\'S UP ' + user.name + '!!! ' + msg);
+                    bot.reply(message, 'WHAT\'S UP ' + user.name.toUpperCase() + '!!! ' + msg);
                 } else {
                     bot.reply(message, 'WHAT\'S UP!!! ' + msg );
                 }
@@ -177,8 +173,17 @@ var baseResponses = function(controller, callback) {
 
     controller.hears(['mornin mornin', 'good morning', 'morning', 'mornin'],
         ["direct_message","direct_mention","mention","ambient"], function(bot, message) {
-
-            bot.reply(message, "<@"+message.user+"> " + vocabulary.getMikeMornin() + "\n" + dayOfTheWeekResponses.statementResponse());
+            var myDate = new Date();
+            // only trigger if hour is before noon
+            if (myDate.getHours() < 12) {
+                bot.reply(message, "<@" + message.user + "> " + vocabulary.getMikeMornin() + "\n" + dayOfTheWeekResponses.statementResponse());
+            }
+            if (myDate.getHours() >= 12 && myDate.getHours() <= 17) {
+                bot.reply(message, "<@" + message.user + "> get to that sack-room it's da afternoon yo!");
+            }
+            if (myDate.getHours() > 17 && myDate.getHours() <= 24) {
+                bot.reply(message, "<@" + message.user + "> " + vocabulary.getMikeDang() + " :sleeping: ");
+            }
 
         });
 
@@ -209,6 +214,10 @@ var baseResponses = function(controller, callback) {
         });
 
 
+    });
+
+    controller.hears('.*', ['mention'], function (bot, message) {
+        bot.reply(message, 'you\'re ' + vocabulary.getMikeDang() + ' right')
     });
 
     controller.hears(['shutdown'], 'direct_message,direct_mention,mention', function(bot, message) {
