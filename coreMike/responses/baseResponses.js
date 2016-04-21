@@ -46,7 +46,7 @@ var baseResponses = function(controller, callback) {
         });
     });
 
-    controller.hears(['what is my name', 'who am i'], 'direct_message,direct_mention,mention', function(bot, message) {
+    controller.hears(['what is my name', 'who am i', 'what my name'], 'direct_message,direct_mention,mention', function(bot, message) {
 
         controller.storage.users.get(message.user, function(err, user) {
             if (user && user.name) {
@@ -113,6 +113,13 @@ var baseResponses = function(controller, callback) {
             }
         });
     });
+
+    controller.hears(['who killed roger rabbit'],
+        'direct_message,direct_mention,mention', function(bot, message) {
+
+            bot.reply(message, 'I did! And it\'s NONE OF YOUR GAWDDANG BUSINESS ');
+
+        });
 
     controller.hears(['uptime', 'identify yourself', 'who are you', 'what is your name'],
         'direct_message,direct_mention,mention', function(bot, message) {
