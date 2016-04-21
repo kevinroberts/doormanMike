@@ -3,7 +3,7 @@ var mikeDangs = [
     'god digggidy',
     'gaddd dannng',
     'garsh darn',
-    'ɡaddanng',
+    'gaddanng',
     'goddamn'
 ];
 
