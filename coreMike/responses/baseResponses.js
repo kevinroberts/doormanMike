@@ -42,6 +42,24 @@ var baseResponses = function(controller, callback) {
         });
     });
 
+
+
+    controller.hears(['call (.*) (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
+        var username = message.match[1];
+        var nickname = message.match[2];
+        controller.storage.users.get(username, function(err, user) {
+            if (!user) {
+                user = {
+                    id: username,
+                };
+            }
+            user.name = nickname;
+            controller.storage.users.save(user, function(err, id) {
+                bot.reply(message, 'Got it. I will call that dude ' + user.name + ' from now on.');
+            });
+        });
+    });
+
     controller.hears(['what is my name', 'who am i', 'what my name'], 'direct_message,direct_mention,mention', function(bot, message) {
 
         controller.storage.users.get(message.user, function(err, user) {
