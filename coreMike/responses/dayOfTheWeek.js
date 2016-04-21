@@ -3,9 +3,18 @@ var dayOfWeek = require('day-of-week').get
 var vocabulary = require('../helpers/vocabulary');
 var messageUtils = require('../helpers/messageUtils');
 
+var timezoneEnv = process.env.TIMEZONE;
+function getDefaultTz() {
+    if (timezoneEnv == null) {
+        return 'America/Chicago';
+    } else {
+        return timezoneEnv;
+    }
+}
+
 function getDayOfWeek(timezone) {
     if (timezone == null) {
-        return dayOfWeek(new Date(), 'America/Chicago');
+        return dayOfWeek(new Date(), getDefaultTz());
     } else {
         return dayOfWeek(new Date(), timezone);
     }
@@ -72,7 +81,7 @@ module.exports = {
 
     getDayOfTheWeek: function getDayOfTheWeek(timezone) {
         if (timezone == null) {
-            return dayOfWeek(new Date(), 'America/Chicago');
+            return dayOfWeek(new Date(), getDefaultTz());
         } else {
             return dayOfWeek(new Date(), timezone);
         }

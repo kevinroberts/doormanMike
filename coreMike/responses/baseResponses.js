@@ -21,6 +21,14 @@ var baseResponses = function(controller, callback) {
         });
     });
 
+    controller.on('bot_channel_join', function (bot, message) {
+        bot.reply(message, ":fist::skin-tone-5:")
+    });
+
+    controller.hears('.*', ['mention'], function (bot, message) {
+        bot.reply(message, 'you\'re ' + vocabulary.getMikeDang() + ' right')
+    });
+
     controller.hears(['call me (.*)', 'my name is (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
         var name = message.match[1];
         controller.storage.users.get(message.user, function(err, user) {
@@ -116,7 +124,7 @@ var baseResponses = function(controller, callback) {
 
         });
 
-    controller.hears(['hey', 'sup', 'whats up'],
+    controller.hears(['hey', 'sup', 'whats up', 'whats good'],
         'direct_message,direct_mention,mention', function(bot, message) {
 
             var msg = dayOfTheWeekResponses.statementResponse();
@@ -131,23 +139,7 @@ var baseResponses = function(controller, callback) {
         });
 
 
-    controller.hears(['what time is it'],
-        'direct_message,direct_mention,mention', function(bot, message) {
-
-            messageUtils.postReaction(bot, message, 'timer_clock');
-
-            var msg = "it's time to get a " + vocabulary.getMikeDang() + " watch!";
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-                    bot.reply(message, user.name + ' ' + msg);
-                } else {
-                    bot.reply(message, msg);
-                }
-            });
-        });
-
-
-    controller.hears(["what time is it"], ["ambient"], function(bot, message) {
+    controller.hears(["what time is it"], ["direct_message","direct_mention","mention","ambient"], function(bot, message) {
         var intro = "<@"+message.user+"> it's time to get a " + vocabulary.getMikeDang() + " watch!";
         bot.reply(message, intro);
     });
@@ -166,17 +158,10 @@ var baseResponses = function(controller, callback) {
         });
 
     controller.hears(['mornin mornin', 'good morning', 'morning', 'mornin'],
-        'direct_message,direct_mention,mention', function(bot, message) {
+        ["direct_message","direct_mention","mention","ambient"], function(bot, message) {
 
-            var msg = dayOfTheWeekResponses.statementResponse();
+            bot.reply(message, "<@"+message.user+"> " + vocabulary.getMikeMornin() + "\n" + dayOfTheWeekResponses.statementResponse());
 
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-                    bot.reply(message, user.name + '!!! ' + msg);
-                } else {
-                    bot.reply(message, msg );
-                }
-            });
         });
 
     controller.hears(['shutdown'], 'direct_message,direct_mention,mention', function(bot, message) {

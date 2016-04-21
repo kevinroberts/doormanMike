@@ -2,6 +2,7 @@ var CronJob = require('cron').CronJob;
 
 var dayOfTheWeekResponses = require('./dayOfTheWeek');
 var messageUtils = require('../helpers/messageUtils');
+var vocabulary = require('../helpers/vocabulary');
 
 var scheduledResponses = function(bot) {
 
@@ -13,7 +14,7 @@ var scheduledResponses = function(bot) {
              * at 9:10:00 AM. It does not run on Saturday
              * or Sunday.
              */
-            messageUtils.postMessage(bot, 'general', 'Mornin Mornin!\n' + dayOfTheWeekResponses.statementResponse());
+            messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin() + '\n' + dayOfTheWeekResponses.statementResponse());
 
         },
         start: false,
