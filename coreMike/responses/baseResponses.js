@@ -140,8 +140,18 @@ var baseResponses = function(controller, callback) {
 
 
     controller.hears(["what time is it"], ["direct_message","direct_mention","mention","ambient"], function(bot, message) {
-        var intro = "<@"+message.user+"> it's time to get a " + vocabulary.getMikeDang() + " watch!";
-        bot.reply(message, intro);
+
+        messageUtils.postReaction(bot, message, 'timer_clock');
+
+        var msg = "it's time to get a " + vocabulary.getMikeDang() + " watch!";
+        controller.storage.users.get(message.user, function(err, user) {
+            if (user && user.name) {
+                bot.reply(message, user.name + ' ' + msg);
+            } else {
+                bot.reply(message, msg);
+            }
+        });
+
     });
 
 
