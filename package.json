@@ -14,7 +14,8 @@
     "debug": "~2.2.0",
     "dotenv": "^2.0.0",
     "morgan": "~1.6.1",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "yql-client": "0.0.3"
   },
   "contributors": [
     "Kevin Roberts <kevin.roberts@icfolson.com> (https://github.com/kevinroberts)"

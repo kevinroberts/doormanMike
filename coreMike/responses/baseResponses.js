@@ -5,6 +5,8 @@ var os = require('os');
 var dayOfTheWeekResponses = require('./dayOfTheWeek');
 var messageUtils = require('../helpers/messageUtils');
 var vocabulary = require('../helpers/vocabulary');
+var YQLClient = require('yql-client'),
+    YQL = YQLClient.YQL;
 
 var baseResponses = function(controller, callback) {
 
@@ -154,7 +156,6 @@ var baseResponses = function(controller, callback) {
 
     });
 
-
     controller.hears(['what day is it'],
         'direct_message,direct_mention,mention', function(bot, message) {
 
@@ -173,6 +174,35 @@ var baseResponses = function(controller, callback) {
             bot.reply(message, "<@"+message.user+"> " + vocabulary.getMikeMornin() + "\n" + dayOfTheWeekResponses.statementResponse());
 
         });
+
+    controller.hears('(.*)weather?',["direct_message","direct_mention","mention"],function(bot,message) {
+        // JSON format back from Yahoo {
+        //    "code": "28",
+        //    "date": "Thu, 21 Apr 2016 10:00 AM CDT",
+        //    "temp": "62",
+        //    "text": "Mostly Cloudy"
+        //}
+        YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="Chicago, IL")', function(r) {
+            if (r.query.results.channel.item.condition != null) {
+                var currentWeather = r.query.results.channel.item.condition;
+                var currentTemp = parseInt(currentWeather.temp);
+                var weatherReaction = ' ';
+                if (currentTemp < 50) {
+                    weatherReaction += 'and you better have a coat because its chilly'
+                }
+                if (currentTemp > 70) {
+                    weatherReaction += 'and you better have a some shorts on cuz its hot out there'
+                }
+                bot.reply(message, 'the weather today is ' + vocabulary.getMikeDang() + ' ' + currentWeather.text.toLowerCase() + weatherReaction);
+
+            } else {
+                bot.reply(message, 'the weather is ' + vocabulary.getMikeDang() + ' head outside');
+            }
+
+        });
+
+
+    });
 
     controller.hears(['shutdown'], 'direct_message,direct_mention,mention', function(bot, message) {
 
