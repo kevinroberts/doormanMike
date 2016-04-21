@@ -171,10 +171,12 @@ var baseResponses = function(controller, callback) {
             if (myDate.getHours() < 12) {
                 bot.reply(message, "<@" + message.user + "> " + vocabulary.getMikeMornin() + "\n" + dayOfTheWeekResponses.statementResponse());
             }
-            if (myDate.getHours() >= 12 && myDate.getHours() <= 17) {
+            /* Hour is from noon to 5pm (actually to 5:59 pm) */
+            else if (myDate.getHours() >= 12 && myDate.getHours() <= 17) {
                 bot.reply(message, "<@" + message.user + "> get to that sack-room it's da afternoon yo!");
             }
-            if (myDate.getHours() > 17 && myDate.getHours() <= 24) {
+            /* the hour is after 5pm, so it is between 6pm and midnight */
+            else if (myDate.getHours() > 17 && myDate.getHours() <= 24) {
                 bot.reply(message, "<@" + message.user + "> " + vocabulary.getMikeDang() + " :sleeping: ");
             }
 
