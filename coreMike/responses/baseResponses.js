@@ -125,7 +125,7 @@ var baseResponses = function(controller, callback) {
 
     controller.hears(['who killed (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
 
-            bot.reply(message, 'I did! And it\'s NONE OF YOUR ' + vocabulary.getMikeDang() + ' BUSINESS ');
+            bot.reply(message, 'I did! And it\'s NONE OF YOUR ' + vocabulary.getMikeDang().toUpperCase() + ' BUSINESS ');
 
         });
 
