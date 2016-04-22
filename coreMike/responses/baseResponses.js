@@ -8,7 +8,22 @@ var vocabulary = require('../helpers/vocabulary');
 var YQLClient = require('yql-client'),
     YQL = YQLClient.YQL;
 
+var cleverbot = require("cleverbot.io"),
+    cleverbot = new cleverbot(process.env.CLEVERBOTUSER, process.env.CLEVERBOTAPI);
+cleverbot.setNick("Mike");
+cleverbot.create(function (err, session) {
+    if (err) {
+        console.log('Cleverbot create fail', err);
+    } else {
+        console.log('cleverbot create success.');
+    }
+});
+
 var baseResponses = function(controller, callback) {
+
+    controller.on('bot_channel_join', function (bot, message) {
+        bot.reply(message, ":fist::skin-tone-5:")
+    });
 
     controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', function(bot, message) {
 
@@ -23,9 +38,7 @@ var baseResponses = function(controller, callback) {
         });
     });
 
-    controller.on('bot_channel_join', function (bot, message) {
-        bot.reply(message, ":fist::skin-tone-5:")
-    });
+
 
     controller.hears(['call me (.*)', 'my name is (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
         var name = message.match[1];
@@ -110,10 +123,9 @@ var baseResponses = function(controller, callback) {
         });
     });
 
-    controller.hears(['who killed roger rabbit'],
-        'direct_message,direct_mention,mention', function(bot, message) {
+    controller.hears(['who killed (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
 
-            bot.reply(message, 'I did! And it\'s NONE OF YOUR GAWDDANG BUSINESS ');
+            bot.reply(message, 'I did! And it\'s NONE OF YOUR ' + vocabulary.getMikeDang() + ' BUSINESS ');
 
         });
 
@@ -190,6 +202,9 @@ var baseResponses = function(controller, callback) {
         });
 
     controller.hears('(.*)weather?',["direct_message","direct_mention","mention"],function(bot,message) {
+
+        bot.startTyping(message);
+
         // JSON format back from Yahoo {
         //    "code": "28",
         //    "date": "Thu, 21 Apr 2016 10:00 AM CDT",
@@ -200,17 +215,17 @@ var baseResponses = function(controller, callback) {
             if (r.query.results.channel.item.condition != null) {
                 var currentWeather = r.query.results.channel.item.condition;
                 var currentTemp = parseInt(currentWeather.temp);
-                var weatherReaction = ' ';
+                var weatherReaction = '';
                 if (currentTemp < 50) {
-                    weatherReaction += 'and you better have a coat because its chilly'
+                    weatherReaction = ' and you better have a coat because its chilly';
                 }
                 if (currentTemp > 70) {
-                    weatherReaction += 'and you better have a some shorts on cuz its hot out there'
+                    weatherReaction += ' and you better have a some shorts on cuz its hot out there';
                 }
                 bot.reply(message, 'the weather today is ' + vocabulary.getMikeDang() + ' ' + currentWeather.text.toLowerCase() + weatherReaction);
 
             } else {
-                bot.reply(message, 'the weather is ' + vocabulary.getMikeDang() + ' head outside');
+                bot.reply(message, 'the weather is ' + vocabulary.getMikeDang() + ' stick yo head outside');
             }
 
         });
@@ -218,8 +233,15 @@ var baseResponses = function(controller, callback) {
 
     });
 
-    controller.hears('.*', ['mention'], function (bot, message) {
-        bot.reply(message, 'you\'re ' + vocabulary.getMikeDang() + ' right')
+    controller.on("user_channel_join", function(bot, message) {
+        messageUtils.postReaction(bot, message, 'fist');
+        var intro = "Welcome <@"+message.user+">! May I be the first to welcome you to the " +message.channel+" channel.";
+        bot.reply(message, intro);
+    });
+
+    controller.hears(["doorman-mike"], ["ambient"], function(bot, message) {
+        var intro = "<@"+message.user+"> you spoke my name?";
+        bot.reply(message, intro);
     });
 
     controller.hears(['shutdown'], 'direct_message,direct_mention,mention', function(bot, message) {
@@ -248,6 +270,23 @@ var baseResponses = function(controller, callback) {
             ]);
         });
     });
+
+    /*
+        Catch all other responses that are not defined
+     */
+    controller.hears('', 'direct_message,direct_mention,mention', function (bot, message) {
+        bot.startTyping(message);
+        var msg = message.text;
+        cleverbot.ask(msg, function (err, response) {
+            if (!err) {
+                bot.reply(message, response);
+            } else {
+                bot.botkit.log('cleverbot err: ' + err);
+            }
+        });
+    });
+
+
 
 
 };
