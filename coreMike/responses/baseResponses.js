@@ -39,7 +39,6 @@ var baseResponses = function(controller, callback) {
     });
 
 
-
     controller.hears(['call me (.*)', 'my name is (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
         var name = message.match[1];
         controller.storage.users.get(message.user, function(err, user) {
@@ -216,11 +215,15 @@ var baseResponses = function(controller, callback) {
                 var currentWeather = r.query.results.channel.item.condition;
                 var currentTemp = parseInt(currentWeather.temp);
                 var weatherReaction = '';
-                if (currentTemp < 50) {
-                    weatherReaction = ' and you better have a coat because its chilly';
+
+                if (currentTemp < 40) {
+                    weatherReaction = ' and you better have a coat because its ' + vocabulary.getMikeDang() + ' freezin';
                 }
-                if (currentTemp > 70) {
-                    weatherReaction += ' and you better have a some shorts on cuz its hot out there';
+                else if (currentTemp < 50) {
+                    weatherReaction = ' and you better have a coat because its ' + vocabulary.getMikeDang() + ' chilly';
+                }
+                else if (currentTemp > 70) {
+                    weatherReaction += ' and you better have a some shorts on cuz its ' + vocabulary.getMikeDang() + ' hot out there';
                 }
                 bot.reply(message, 'the weather today is ' + vocabulary.getMikeDang() + ' ' + currentWeather.text.toLowerCase() + weatherReaction);
 
@@ -240,7 +243,7 @@ var baseResponses = function(controller, callback) {
     });
 
     controller.hears(["doorman-mike"], ["ambient"], function(bot, message) {
-        var intro = "<@"+message.user+"> you spoke my name?";
+        var intro = "<@"+message.user+"> what's up?";
         bot.reply(message, intro);
     });
 
@@ -272,7 +275,7 @@ var baseResponses = function(controller, callback) {
     });
 
     /*
-        Catch all other responses that are not defined
+        Catch all other responses that are not defined and pass it through cleverbot.io
      */
     controller.hears('', 'direct_message,direct_mention,mention', function (bot, message) {
         bot.startTyping(message);
@@ -282,10 +285,10 @@ var baseResponses = function(controller, callback) {
                 bot.reply(message, response);
             } else {
                 bot.botkit.log('cleverbot err: ' + err);
+                bot.reply(message, vocabulary.getWaster());
             }
         });
     });
-
 
 
 
