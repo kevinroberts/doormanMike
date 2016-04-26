@@ -14,10 +14,16 @@ var cleverbot = require('../helpers/cleverbot');
 
 var baseResponses = function(controller, callback) {
 
+    // when joins a channel
     controller.on('bot_channel_join', function (bot, message) {
         bot.reply(message, "Mike is here! :fist::skin-tone-5:")
     });
 
+    controller.on("user_channel_join", function(bot, message) {
+        messageUtils.postReaction(bot, message, 'fist');
+        var intro = "Welcome <@"+message.user+">! May I be the first to welcome you to the <#" +message.channel+"> channel.";
+        bot.reply(message, intro);
+    });
 
     // ambient responses [use sparingly]
     controller.hears(['mornin mornin', 'good morning', 'morning', 'mornin'], ["ambient"], function(bot, message) {
@@ -31,11 +37,7 @@ var baseResponses = function(controller, callback) {
         bot.reply(message, intro);
     });
 
-    controller.on("user_channel_join", function(bot, message) {
-        messageUtils.postReaction(bot, message, 'fist');
-        var intro = "Welcome <@"+message.user+">! May I be the first to welcome you to the <#" +message.channel+"> channel.";
-        bot.reply(message, intro);
-    });
+
 
 
     /*
