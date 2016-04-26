@@ -16,6 +16,14 @@ var mikeMornin = [
     'Morning Morning!!!'
 ];
 
+var mikeHellos = [
+    'Hey |username|! what\'s up?! :fist::skin-tone-5: ',
+    'What\'s cookin |username|?!',
+    'whats up |username|!!!',
+    'Yo |username|!',
+    'Hey |username|!'
+];
+
 var sadMikes = [
     ':thumbsdown::skin-tone-5:',
     ':rage:',
@@ -55,5 +63,13 @@ module.exports = {
     getSadMikeReaction: function getSadMikeReaction() {
         var index = Math.floor(Math.random() * sadMikes.length);
         return sadMikes[index];
+    },
+    getMikeHello: function getMikeHello() {
+        var index = Math.floor(Math.random() * mikeHellos.length);
+        return mikeHellos[index].replace(" |username|", "");
+    },
+    getPersonalMikeHello: function getPersonalMikeHello(name) {
+        var index = Math.floor(Math.random() * mikeHellos.length);
+        return mikeHellos[index].replace("|username|", name);
     }
 }

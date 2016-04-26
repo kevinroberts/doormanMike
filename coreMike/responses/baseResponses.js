@@ -140,16 +140,18 @@ var baseResponses = function(controller, callback) {
 
         });
 
-    controller.hears(['hey', 'sup', 'whats up', 'whats good'],
+    controller.hears(['hey', 'sup', 'whats up', 'whats good', 'hows it going'],
         'direct_message,direct_mention,mention', function(bot, message) {
 
-            var msg = dayOfTheWeekResponses.statementResponse();
+            var msgPt2 = dayOfTheWeekResponses.statementResponse();
 
             controller.storage.users.get(message.user, function(err, user) {
                 if (user && user.name) {
-                    bot.reply(message, 'WHAT\'S UP ' + user.name.toUpperCase() + '!!! ' + msg);
+                    var msg = vocabulary.getPersonalMikeHello(user.name).toUpperCase();
+                    bot.reply(message, msg + ' ' + msgPt2);
                 } else {
-                    bot.reply(message, 'WHAT\'S UP!!! ' + msg );
+                    var msg = vocabulary.getMikeHello().toUpperCase();
+                    bot.reply(message, msg + ' ' + msgPt2);
                 }
             });
         });
@@ -187,14 +189,17 @@ var baseResponses = function(controller, callback) {
             var myDate = new Date();
             // only trigger if hour is before noon
             if (myDate.getHours() < 12) {
+                bot.startTyping(message);
                 bot.reply(message, "<@" + message.user + "> " + vocabulary.getMikeMornin() + "\n" + dayOfTheWeekResponses.statementResponse());
             }
             /* Hour is from noon to 5pm (actually to 5:59 pm) */
             else if (myDate.getHours() >= 12 && myDate.getHours() <= 17) {
+                bot.startTyping(message);
                 bot.reply(message, "<@" + message.user + "> get to that sack-room it's da afternoon yo!");
             }
             /* the hour is after 5pm, so it is between 6pm and midnight */
             else if (myDate.getHours() > 17 && myDate.getHours() <= 24) {
+                bot.startTyping(message);
                 bot.reply(message, "<@" + message.user + "> " + vocabulary.getMikeDang() + " :sleeping: ");
             }
 
