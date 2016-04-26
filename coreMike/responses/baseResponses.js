@@ -25,7 +25,7 @@ cleverbot.create(function (err, session) {
 var baseResponses = function(controller, callback) {
 
     controller.on('bot_channel_join', function (bot, message) {
-        bot.reply(message, ":fist::skin-tone-5:")
+        bot.reply(message, "Mike is here! :fist::skin-tone-5:")
     });
 
 
