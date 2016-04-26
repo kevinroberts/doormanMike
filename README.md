@@ -36,6 +36,9 @@ Tell the bot your nickname. Now you are friends.
 Say: `"who am I?"`
 The bot will tell you your nickname, if it knows one for you.
 
+Say: `"send mornin to @username in #random"`
+Mike bot will send a custom mornin mornin message to the specified slack user in that channel.
+
  Make sure to invite your bot into other channels using /invite @doorman-Mike!
 
 ## EXTEND THE BOT: ##

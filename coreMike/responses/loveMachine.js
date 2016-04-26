@@ -32,7 +32,6 @@ var mikeCats =  [
 ];
 
 
-
 module.exports = {
 
     getLoveReactionForName: function getLoveReactionForName(name) {

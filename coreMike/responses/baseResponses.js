@@ -6,8 +6,10 @@ var dayOfTheWeekResponses = require('./dayOfTheWeek');
 var messageUtils = require('../helpers/messageUtils');
 var vocabulary = require('../helpers/vocabulary');
 var love = require('../responses/loveMachine');
-var YQLClient = require('yql-client'),
-    YQL = YQLClient.YQL;
+var weather = require('../responses/weatherResponses');
+var conversations = require('../responses/conversations');
+var patterns = require('../helpers/regexPatterns');
+
 
 var cleverbot = require("cleverbot.io"),
     cleverbot = new cleverbot(process.env.CLEVERBOTUSER, process.env.CLEVERBOTAPI);
@@ -26,170 +28,47 @@ var baseResponses = function(controller, callback) {
         bot.reply(message, ":fist::skin-tone-5:")
     });
 
-    controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', function(bot, message) {
 
+    // ambient responses [use sparingly]
+    controller.hears(['mornin mornin', 'good morning', 'morning', 'mornin'], ["ambient"], function(bot, message) {
+            bot.startTyping(message);
+            bot.reply(message, vocabulary.getMikeMorninTimeSensitive(message.user));
+    });
+
+    controller.hears(["doorman-mike"], ["ambient"], function(bot, message) {
         messageUtils.postReaction(bot, message, 'fist');
+        var intro = "<@"+message.user+"> what's up?";
+        bot.reply(message, intro);
+    });
 
-        controller.storage.users.get(message.user, function(err, user) {
-            if (user && user.name) {
-                var msg = vocabulary.getPersonalMikeHello(user.name);
+    controller.on("user_channel_join", function(bot, message) {
+        messageUtils.postReaction(bot, message, 'fist');
+        var intro = "Welcome <@"+message.user+">! May I be the first to welcome you to the <#" +message.channel+"> channel.";
+        bot.reply(message, intro);
+    });
+
+
+    /*
+     *    Catch all other responses that are not defined and pass it through our mike logic
+     */
+    controller.hears('', 'direct_message,direct_mention,mention', function (bot, message) {
+        // start mike typing - some responses take longer than others
+        bot.startTyping(message);
+
+        // checking the message.event: message.event == 'direct_message'
+        var usersMessage = message.text;
+
+
+        // respond to weather related queries
+        if (usersMessage.search(weather.getWeatherRegex()) !== -1) {
+
+            weather.getWeatherResponse(message.user, function(msg) {
                 bot.reply(message, msg);
-            } else {
-                var msg = vocabulary.getPersonalMikeHello("<@" + message.user + "> ");
-                bot.reply(message, msg);
-            }
-        });
-    });
-
-
-    controller.hears(['call me (.*)', 'my name is (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
-        var name = message.match[1];
-        controller.storage.users.get(message.user, function(err, user) {
-            if (!user) {
-                user = {
-                    id: message.user,
-                };
-            }
-            user.name = name;
-            controller.storage.users.save(user, function(err, id) {
-                var loveMsg = love.getLoveReactionForName(user.name);
-                if (loveMsg) {
-                    loveMsg = " I kind of like that name." + loveMsg;
-                }
-                bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
             });
-        });
-    });
 
-    controller.hears(['what is my name', 'who am i', 'what my name'], 'direct_message,direct_mention,mention', function(bot, message) {
-
-        controller.storage.users.get(message.user, function(err, user) {
-            if (user && user.name) {
-                bot.reply(message, 'Your name is ' + user.name + ' ' + love.getLoveReactionForName(user.name));
-            } else {
-                bot.startConversation(message, function(err, convo) {
-                    if (!err) {
-                        convo.say('I do not know your name yet!');
-                        convo.ask('What should I call you?', function(response, convo) {
-                            convo.ask('You want me to call you `' + response.text + '`?', [
-                                {
-                                    pattern: 'yes',
-                                    callback: function(response, convo) {
-                                        // since no further messages are queued after this,
-                                        // the conversation will end naturally with status == 'completed'
-                                        convo.next();
-                                    }
-                                },
-                                {
-                                    pattern: 'no',
-                                    callback: function(response, convo) {
-                                        // stop the conversation. this will cause it to end with status == 'stopped'
-                                        convo.stop();
-                                    }
-                                },
-                                {
-                                    default: true,
-                                    callback: function(response, convo) {
-                                        convo.repeat();
-                                        convo.next();
-                                    }
-                                }
-                            ]);
-
-                            convo.next();
-
-                        }, {'key': 'nickname'}); // store the results in a field called nickname
-
-                        convo.on('end', function(convo) {
-                            if (convo.status == 'completed') {
-                                bot.reply(message, 'OK! I will update my god dang notes...');
-
-                                controller.storage.users.get(message.user, function(err, user) {
-                                    if (!user) {
-                                        user = {
-                                            id: message.user,
-                                        };
-                                    }
-                                    user.name = convo.extractResponse('nickname');
-                                    controller.storage.users.save(user, function(err, id) {
-                                        var loveMsg = love.getLoveReactionForName(user.name);
-                                        if (loveMsg) {
-                                            loveMsg = " I kind of like that name." + loveMsg;
-                                        }
-                                        bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
-
-                                    });
-                                });
-
-
-
-                            } else {
-                                // this happens if the conversation ended prematurely for some reason
-                                bot.reply(message, 'OK, nevermind!');
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    });
-
-    controller.hears(['who killed (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
-
-            bot.reply(message, 'I did! And it\'s NONE OF YOUR ' + vocabulary.getMikeDang().toUpperCase() + ' BUSINESS ');
-
-        });
-
-    controller.hears(['uptime', 'identify yourself', 'who are you', 'what is your name'],
-        'direct_message,direct_mention,mention', function(bot, message) {
-
-            var hostname = os.hostname();
-            var uptime = formatUptime(process.uptime());
-
-            bot.reply(message,
-                ':doorman: I am a bot named <@' + bot.identity.name +
-                '>. I have been alive for ' + uptime + ' on NONE OF YO GODANG BUSINESS SERVER. (' + hostname + ')');
-
-        });
-
-    controller.hears(['hey', 'sup', 'whats up', 'whats good', 'hows it going'],
-        'direct_message,direct_mention,mention', function(bot, message) {
-
-            var msgPt2 = dayOfTheWeekResponses.statementResponse();
-
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-                    var msg = vocabulary.getPersonalMikeHello(user.name).toUpperCase();
-                    bot.reply(message, msg + ' ' + msgPt2);
-                } else {
-                    var msg = vocabulary.getPersonalMikeHello("<@" + message.user + "> ").toUpperCase();
-                    bot.reply(message, msg + ' ' + msgPt2);
-                }
-            });
-        });
-
-
-    controller.hears(["what time is it"], ["direct_message","direct_mention","mention","ambient"], function(bot, message) {
-
-        messageUtils.postReaction(bot, message, 'timer_clock');
-
-        var msg = "it's time to get a " + vocabulary.getMikeDang() + " watch!";
-        var loveMsg = love.getLoveReactionForName(message.user);
-        if (love) {
-            msg += loveMsg;
         }
-        controller.storage.users.get(message.user, function(err, user) {
-            if (user && user.name) {
-                bot.reply(message, user.name + ' ' + msg);
-            } else {
-                bot.reply(message, "<@" + message.user + "> " + msg);
-            }
-        });
-
-    });
-
-    controller.hears(['what day is it'],
-        'direct_message,direct_mention,mention', function(bot, message) {
+        // message asks what day is it?
+        else if ( usersMessage.search(patterns.getWhatDayRegex()) !== -1) {
 
             controller.storage.users.get(message.user, function(err, user) {
                 if (user && user.name) {
@@ -198,123 +77,98 @@ var baseResponses = function(controller, callback) {
                     bot.reply(message, dayOfTheWeekResponses.questionResponse(null, bot, message));
                 }
             });
-        });
 
-    controller.hears(['mornin mornin', 'good morning', 'morning', 'mornin'],
-        ["direct_message","direct_mention","mention","ambient"], function(bot, message) {
-            var myDate = new Date();
-            // only trigger if hour is before noon
-            if (myDate.getHours() < 12) {
-                bot.startTyping(message);
-                bot.reply(message, "<@" + message.user + "> " + vocabulary.getMikeMornin() + "\n" + dayOfTheWeekResponses.statementResponse());
+        }// message asks what time is it?
+        else if ( usersMessage.search(patterns.getTimeRegex()) !== -1) {
+            messageUtils.postReaction(bot, message, 'timer_clock');
+
+            var msg = "it's time to get a " + vocabulary.getMikeDang() + " watch!";
+            var loveMsg = love.getLoveReactionForName(message.user);
+            if (love) {
+                msg += loveMsg;
             }
-            /* Hour is from noon to 5pm (actually to 5:59 pm) */
-            else if (myDate.getHours() >= 12 && myDate.getHours() <= 17) {
-                bot.startTyping(message);
-                bot.reply(message, "<@" + message.user + "> get to that sack-room it's da afternoon yo!");
-            }
-            /* the hour is after 5pm, so it is between 6pm and midnight */
-            else if (myDate.getHours() > 17 && myDate.getHours() <= 24) {
-                bot.startTyping(message);
-                bot.reply(message, "<@" + message.user + "> " + vocabulary.getMikeDang() + " :sleeping: ");
-            }
-
-        });
-
-    controller.hears('(.*)weather?',["direct_message","direct_mention","mention"],function(bot,message) {
-
-        bot.startTyping(message);
-
-        // JSON format back from Yahoo {
-        //    "code": "28",
-        //    "date": "Thu, 21 Apr 2016 10:00 AM CDT",
-        //    "temp": "62",
-        //    "text": "Mostly Cloudy"
-        //}
-        YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="Chicago, IL")', function(r) {
-            if (r.query.results.channel.item.condition != null) {
-                var currentWeather = r.query.results.channel.item.condition;
-                var currentTemp = parseInt(currentWeather.temp);
-                var weatherReaction = '';
-
-                if (currentTemp < 40) {
-                    weatherReaction = ' and you better have a coat because its ' + vocabulary.getMikeDang() + ' freezin';
+            controller.storage.users.get(message.user, function(err, user) {
+                if (user && user.name) {
+                    bot.reply(message, user.name + ' ' + msg);
+                } else {
+                    bot.reply(message, "<@" + message.user + "> " + msg);
                 }
-                else if (currentTemp < 50) {
-                    weatherReaction = ' and you better have a coat because its ' + vocabulary.getMikeDang() + ' chilly';
+            });
+
+        } else if ( usersMessage.search(patterns.getMyNameRegex()) !== -1) {
+
+            conversations.callMeHandler(controller, bot, message);
+
+        } else if ( usersMessage.search(patterns.getWhoKilledRegex()) !== -1) {
+            messageUtils.postReaction(bot, message, 'knife');
+
+            bot.reply(message, 'I did! And it\'s NONE OF YOUR ' + vocabulary.getMikeDang().toUpperCase() + ' BUSINESS ');
+
+        } else if (usersMessage.indexOf('send mornin to') > -1) {
+            conversations.sendMorninToHandler(bot, message);
+
+        } else if ( usersMessage.indexOf("what is my name") > -1 | usersMessage.indexOf("who am i") > -1  | usersMessage.indexOf("whats my name") > -1) {
+
+            conversations.setNameHandler(controller, bot, message);
+
+        } else if ( usersMessage.indexOf("mornin mornin") > -1 | usersMessage.indexOf("good mornin") > -1  | usersMessage.indexOf("morning") > -1) {
+
+            bot.reply(message, vocabulary.getMikeMorninTimeSensitive(message.user));
+
+        } else if ( usersMessage.indexOf("uptime") > -1 | usersMessage.indexOf("identify yourself") > -1  | usersMessage.indexOf("who are you") > -1 | usersMessage.indexOf("what is your name") > -1) {
+
+            messageUtils.postReaction(bot, message, 'fist');
+
+            var hostname = os.hostname();
+            var uptime = formatUptime(process.uptime());
+
+            bot.reply(message,
+                ':doorman: I am a bot named <@' + bot.identity.name +
+                '>. I have been alive for ' + uptime + ' on NONE OF YO GODANG BUSINESS SERVER. (' + hostname + ')');
+
+        } else if ( usersMessage.indexOf("hey") > -1 | message.text.indexOf("sup?") > -1  | message.text.indexOf("hows it going") > -1 | message.text.indexOf("whats good") > -1 | message.text.indexOf("whats up") > -1) {
+
+            var msgPt2 = dayOfTheWeekResponses.statementResponse();
+
+            controller.storage.users.get(message.user, function(err, user) {
+                if (user && user.name) {
+                    var personalHello = vocabulary.getPersonalMikeHello(user.name).toUpperCase();
+                    bot.reply(message, personalHello + ' ' + msgPt2);
+                } else {
+                    var personalMikeHello = vocabulary.getPersonalMikeHello("<@" + message.user + "> ").toUpperCase();
+                    bot.reply(message, personalMikeHello + ' ' + msgPt2);
                 }
-                else if (currentTemp > 70) {
-                    weatherReaction += ' and you better have a some shorts on cuz its ' + vocabulary.getMikeDang() + ' hot out there';
+            });
+
+        } else if ( message.text.toLowerCase() == 'hi' | message.text.toLowerCase() == 'hello') {
+
+            messageUtils.postReaction(bot, message, 'fist');
+
+            controller.storage.users.get(message.user, function(err, user) {
+                if (user && user.name) {
+                    bot.reply(message, vocabulary.getPersonalMikeHello(user.name));
+                } else {
+                    bot.reply(message, vocabulary.getPersonalMikeHello("<@" + message.user + "> "));
                 }
-                bot.reply(message, 'the weather today is ' + vocabulary.getMikeDang() + ' ' + currentWeather.text.toLowerCase() + weatherReaction);
+            });
 
-            } else {
-                bot.reply(message, 'the weather is ' + vocabulary.getMikeDang() + ' stick yo head outside');
-            }
-
-        });
-
-
-    });
-
-    controller.on("user_channel_join", function(bot, message) {
-        messageUtils.postReaction(bot, message, 'fist');
-        var intro = "Welcome <@"+message.user+">! May I be the first to welcome you to the " +message.channel+" channel.";
-        bot.reply(message, intro);
-    });
-
-    controller.hears(["doorman-mike"], ["ambient"], function(bot, message) {
-        var intro = "<@"+message.user+"> what's up?";
-        bot.reply(message, intro);
-    });
-
-    controller.hears(['shutdown'], 'direct_message,direct_mention,mention', function(bot, message) {
-
-        bot.startConversation(message, function(err, convo) {
-
-            convo.ask('Are you sure you want me to ' + vocabulary.getMikeDang() + ' shutdown?', [
-                {
-                    pattern: bot.utterances.yes,
-                    callback: function(response, convo) {
-                        convo.say('Bye!');
-                        convo.next();
-                        setTimeout(function() {
-                            process.exit();
-                        }, 3000);
+        } else {
+            // else ask clever bot for a response (cleverbot.io)
+            cleverbot.ask(usersMessage, function (err, response) {
+                if (!err) {
+                    var msg = response;
+                    if (response.indexOf('HAL') !== -1) {
+                        msg = response.replace('HAL', "<@"+message.user+">")
                     }
-                },
-                {
-                    pattern: bot.utterances.no,
-                    default: true,
-                    callback: function(response, convo) {
-                        convo.say('*Phew!*');
-                        convo.next();
-                    }
+                    bot.reply(message, msg);
+                } else {
+                    bot.botkit.log('cleverbot err: ' + err);
+                    bot.reply(message, vocabulary.getWaster());
                 }
-            ]);
-        });
-    });
+            });
+        }
 
-    /*
-        Catch all other responses that are not defined and pass it through cleverbot.io
-     */
-    controller.hears('', 'direct_message,direct_mention,mention', function (bot, message) {
-        bot.startTyping(message);
-        var msg = message.text;
-        cleverbot.ask(msg, function (err, response) {
-            if (!err) {
-                var msg = response;
-                if (response.indexOf('HAL') !== -1) {
-                    msg = response.replace('HAL', "<@"+message.user+">")
-                }
-                bot.reply(message, msg);
-            } else {
-                bot.botkit.log('cleverbot err: ' + err);
-                bot.reply(message, vocabulary.getWaster());
-            }
-        });
     });
-
 
 
 };

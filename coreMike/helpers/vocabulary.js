@@ -1,4 +1,5 @@
 var love = require('../responses/loveMachine');
+var dayOfTheWeekResponses = require('../responses/dayOfTheWeek');
 
 var mikeDangs = [
     'god digggidy',
@@ -34,14 +35,16 @@ var sadMikes = [
 var lunchMikes = [
     '\'bout lunch o\'clock who\'s down for some grub :fork_and_knife: ',
     'nearin lunch time! I don\'t know about you guy\'s but i\'m cravin some La Cocina :flag-mx: :taco: :flag-mx:',
-    'nearin lunch time! might i suggest some gosh dang UB DOGS :hamburger: :hotdog: :hamburger:!?',
+    'nearin lunch time! might I suggest you go to Tommy\'s Place!?',
+    'nearin lunch o\'clock! might I suggest you go to Blackwood for |DANG| some brisket!? :meat_on_bone: ',
+    'nearin lunch time! might I suggest some |DANG| UB DOGS :hamburger: :hotdog: :hamburger:!?',
     'almost lunch! You guys getting dat GROUP DISCOUNT!? :fist::skin-tone-5:'
 ];
 
 var wasters = [
     "hm...",
-        "well",
-        "interesting..."
+    "well",
+    "interesting..."
 ];
 
 module.exports = {
@@ -53,13 +56,44 @@ module.exports = {
         var index = Math.floor(Math.random() * mikeMornin.length);
         return mikeMornin[index];
     },
+    getMikeMorninTimeSensitive: function getMikeMornin(user) {
+        var index = Math.floor(Math.random() * mikeMornin.length);
+        var index2 = Math.floor(Math.random() * mikeDangs.length);
+        var morninMsg = mikeMornin[index];
+        var myDate = new Date();
+        // only trigger if hour is before noon
+        if (myDate.getHours() < 12) {
+            if (user) {
+                return "<@" + user + "> " + morninMsg + "\n" + dayOfTheWeekResponses.statementResponse();
+            } else {
+                return morninMsg + "\n" + dayOfTheWeekResponses.statementResponse();
+            }
+        }
+        /* Hour is from noon to 5pm (actually to 5:59 pm) */
+        else if (myDate.getHours() >= 12 && myDate.getHours() <= 17) {
+            if (user) {
+                return "<@" + user + "> get to that sack-room it's da afternoon yo!";
+            } else {
+                return "get to that sack-room it's da afternoon yo!";
+            }
+        }
+        /* the hour is after 5pm, so it is between 6pm and midnight */
+        else if (myDate.getHours() > 17 && myDate.getHours() <= 24) {
+            if (user) {
+                return "<@" + message.user + "> " + mikeDangs[index2] + " :sleeping: ";
+            } else {
+                return mikeDangs[index2] + " :sleeping: ";
+            }
+        }
+    },
     getWaster: function getWaster() {
         var index = Math.floor(Math.random() * wasters.length);
         return wasters[index];
     },
     getLunchMike: function getLunchMike() {
         var index = Math.floor(Math.random() * lunchMikes.length);
-        return lunchMikes[index];
+        var index2 = Math.floor(Math.random() * mikeDangs.length);
+        return lunchMikes[index].replace("|DANG|", mikeDangs[index2]);
     },
     getSadMikeReaction: function getSadMikeReaction() {
         var index = Math.floor(Math.random() * sadMikes.length);
