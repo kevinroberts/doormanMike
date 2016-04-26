@@ -1,3 +1,4 @@
+var love = require('../responses/loveMachine');
 
 var mikeDangs = [
     'god digggidy',
@@ -17,7 +18,7 @@ var mikeMornin = [
 ];
 
 var mikeHellos = [
-    'Hey |username|! what\'s up?! :fist::skin-tone-5: ',
+    'Hey |username|! what\'s up?! :fist: ',
     'What\'s cookin |username|?!',
     'whats up |username|!!!',
     'Yo |username|!',
@@ -70,6 +71,8 @@ module.exports = {
     },
     getPersonalMikeHello: function getPersonalMikeHello(name) {
         var index = Math.floor(Math.random() * mikeHellos.length);
-        return mikeHellos[index].replace("|username|", name);
+        var personalHelloMsg = mikeHellos[index].replace("|username|", name);
+        personalHelloMsg += love.getLoveReactionForName(name);
+        return personalHelloMsg;
     }
 }

@@ -5,6 +5,7 @@ var os = require('os');
 var dayOfTheWeekResponses = require('./dayOfTheWeek');
 var messageUtils = require('../helpers/messageUtils');
 var vocabulary = require('../helpers/vocabulary');
+var love = require('../responses/loveMachine');
 var YQLClient = require('yql-client'),
     YQL = YQLClient.YQL;
 
@@ -25,15 +26,17 @@ var baseResponses = function(controller, callback) {
         bot.reply(message, ":fist::skin-tone-5:")
     });
 
-    controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', function(bot, message) {
+    controller.hears(['hello', 'hi', 'yo'], 'direct_message,direct_mention,mention', function(bot, message) {
 
         messageUtils.postReaction(bot, message, 'fist');
 
         controller.storage.users.get(message.user, function(err, user) {
             if (user && user.name) {
-                bot.reply(message, 'Hello ' + user.name + '!!');
+                var msg = vocabulary.getPersonalMikeHello(user.name);
+                bot.reply(message, msg);
             } else {
-                bot.reply(message, 'Hello.');
+                var msg = vocabulary.getPersonalMikeHello("<@" + message.user + "> ");
+                bot.reply(message, msg);
             }
         });
     });
@@ -49,7 +52,11 @@ var baseResponses = function(controller, callback) {
             }
             user.name = name;
             controller.storage.users.save(user, function(err, id) {
-                bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.');
+                var loveMsg = love.getLoveReactionForName(user.name);
+                if (loveMsg) {
+                    loveMsg = " I kind of like that name." + loveMsg;
+                }
+                bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
             });
         });
     });
@@ -58,7 +65,7 @@ var baseResponses = function(controller, callback) {
 
         controller.storage.users.get(message.user, function(err, user) {
             if (user && user.name) {
-                bot.reply(message, 'Your name is ' + user.name);
+                bot.reply(message, 'Your name is ' + user.name + ' ' + love.getLoveReactionForName(user.name));
             } else {
                 bot.startConversation(message, function(err, convo) {
                     if (!err) {
@@ -105,7 +112,12 @@ var baseResponses = function(controller, callback) {
                                     }
                                     user.name = convo.extractResponse('nickname');
                                     controller.storage.users.save(user, function(err, id) {
-                                        bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.');
+                                        var loveMsg = love.getLoveReactionForName(user.name);
+                                        if (loveMsg) {
+                                            loveMsg = " I kind of like that name." + loveMsg;
+                                        }
+                                        bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
+
                                     });
                                 });
 
@@ -150,7 +162,7 @@ var baseResponses = function(controller, callback) {
                     var msg = vocabulary.getPersonalMikeHello(user.name).toUpperCase();
                     bot.reply(message, msg + ' ' + msgPt2);
                 } else {
-                    var msg = vocabulary.getMikeHello().toUpperCase();
+                    var msg = vocabulary.getPersonalMikeHello("<@" + message.user + "> ").toUpperCase();
                     bot.reply(message, msg + ' ' + msgPt2);
                 }
             });
@@ -162,11 +174,15 @@ var baseResponses = function(controller, callback) {
         messageUtils.postReaction(bot, message, 'timer_clock');
 
         var msg = "it's time to get a " + vocabulary.getMikeDang() + " watch!";
+        var loveMsg = love.getLoveReactionForName(message.user);
+        if (love) {
+            msg += loveMsg;
+        }
         controller.storage.users.get(message.user, function(err, user) {
             if (user && user.name) {
                 bot.reply(message, user.name + ' ' + msg);
             } else {
-                bot.reply(message, msg);
+                bot.reply(message, "<@" + message.user + "> " + msg);
             }
         });
 
@@ -287,7 +303,11 @@ var baseResponses = function(controller, callback) {
         var msg = message.text;
         cleverbot.ask(msg, function (err, response) {
             if (!err) {
-                bot.reply(message, response);
+                var msg = response;
+                if (response.indexOf('HAL') !== -1) {
+                    msg = response.replace('HAL', "<@"+message.user+">")
+                }
+                bot.reply(message, msg);
             } else {
                 bot.botkit.log('cleverbot err: ' + err);
                 bot.reply(message, vocabulary.getWaster());
