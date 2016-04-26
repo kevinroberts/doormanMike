@@ -26,7 +26,7 @@ var baseResponses = function(controller, callback) {
         bot.reply(message, ":fist::skin-tone-5:")
     });
 
-    controller.hears(['hello', 'hi', 'yo'], 'direct_message,direct_mention,mention', function(bot, message) {
+    controller.hears(['hello', 'hi'], 'direct_message,direct_mention,mention', function(bot, message) {
 
         messageUtils.postReaction(bot, message, 'fist');
 
