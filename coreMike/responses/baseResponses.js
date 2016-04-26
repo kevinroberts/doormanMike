@@ -9,18 +9,8 @@ var love = require('../responses/loveMachine');
 var weather = require('../responses/weatherResponses');
 var conversations = require('../responses/conversations');
 var patterns = require('../helpers/regexPatterns');
+var cleverbot = require('../helpers/cleverbot');
 
-
-var cleverbot = require("cleverbot.io"),
-    cleverbot = new cleverbot(process.env.CLEVERBOTUSER, process.env.CLEVERBOTAPI);
-cleverbot.setNick("Mike");
-cleverbot.create(function (err, session) {
-    if (err) {
-        console.log('Cleverbot create fail', err);
-    } else {
-        console.log('cleverbot create success.');
-    }
-});
 
 var baseResponses = function(controller, callback) {
 
@@ -60,7 +50,7 @@ var baseResponses = function(controller, callback) {
 
 
         // respond to weather related queries
-        if (usersMessage.search(weather.getWeatherRegex()) !== -1) {
+        if (usersMessage.search(patterns.getWeatherRegex()) !== -1) {
 
             weather.getWeatherResponse(message.user, function(msg) {
                 bot.reply(message, msg);
@@ -152,19 +142,23 @@ var baseResponses = function(controller, callback) {
                 }
             });
 
-        } else {
-            // else ask clever bot for a response (cleverbot.io)
-            cleverbot.ask(usersMessage, function (err, response) {
-                if (!err) {
-                    var msg = response;
-                    if (response.indexOf('HAL') !== -1) {
-                        msg = response.replace('HAL', "<@"+message.user+">")
-                    }
-                    bot.reply(message, msg);
+        } else if ( message.text.toLowerCase() == 'mike' | message.text.toLowerCase() == 'doorman') {
+
+            messageUtils.postReaction(bot, message, 'fist');
+
+            controller.storage.users.get(message.user, function(err, user) {
+                if (user && user.name) {
+                    bot.reply(message, "Yes, " + user.name + " that's my name.");
                 } else {
-                    bot.botkit.log('cleverbot err: ' + err);
-                    bot.reply(message, vocabulary.getWaster());
+                    bot.reply(message, "Yes, that's my name.");
                 }
+            });
+
+        }
+        else {
+            // else ask clever bot for a response (cleverbot.io)
+            cleverbot.getCleverBotResponse(message, function(response) {
+               bot.reply(message, response);
             });
         }
 
