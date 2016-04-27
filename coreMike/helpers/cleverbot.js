@@ -22,6 +22,10 @@ module.exports = {
                 if (response.indexOf('HAL') !== -1) {
                     msg = response.replace('HAL', "<@"+message.user+">")
                 }
+                if (response.indexOf('Cleverbot') !== -1) {
+                    msg = response.replace('Cleverbot', "Mike")
+                }
+
 
                 callback(msg);
 

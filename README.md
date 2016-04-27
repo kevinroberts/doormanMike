@@ -25,24 +25,29 @@ Grab an API key from https://cleverbot.io/keys for use with cleverbot responses
 ## Some features: ##
 
 Say: `"Hello"`
-The bot will reply "Hello!"
+Doorman Mike will reply "Hello!"
 
 Say: `"who are you?"`
-The bot will tell you its name, where it running, and for how long.
+Doorman Mike will tell you his name, where he's running, and for how long.
 
 Say: `"Call me <nickname>"`
-Tell the bot your nickname. Now you are friends.
+Tell Doorman Mike your nickname. Now you are friends.
 
 Say: `"who am I?"`
-The bot will tell you your nickname, if it knows one for you.
+Doorman Mike will tell you your nickname, if it knows one for you.
 
 Say: `"send mornin to @username in #random"`
-Mike bot will send a custom mornin mornin message to the specified slack user in that channel.
+Mike will send a custom mornin' mornin' message to the specified slack user in that channel.
 
  Make sure to invite your bot into other channels using /invite @doorman-Mike!
 
 ## EXTEND THE BOT: ##
-Botkit has many features for building cool and useful bots!
+Botkit was used as the base framework for doorman-Mike's construction
 Read all about it here:
 
 -> http://howdy.ai/botkit
+
+Some additional integrations include:
+YQL - Yahoo! Query Language
+
+Cleverbot.io

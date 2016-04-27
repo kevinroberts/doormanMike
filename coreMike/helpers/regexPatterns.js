@@ -1,5 +1,7 @@
 
 
+// https://jsfiddle.net/yjajue8d/ -- quick test fiddle
+
 var nameRegex =         new RegExp("call me (.*)|my name is (.*)", "i");
 
 var whatsMyNameRegex =  new RegExp("whats my name(.*)|who am i(.*)|what\'s my name(.*)", "i");
@@ -11,6 +13,8 @@ var weatherRegex =      new RegExp("weather","i");
 var timeRegex =         new RegExp("what time is it", "i");
 
 var whoKilled =         new RegExp("who killed ", "i");
+
+var whereToEat =        new RegExp("(.*) I eat(.*)|(.*)for lunch(.*)|(.*)for food(.*)|lunch\?", "i");
 
 module.exports = {
 
@@ -28,6 +32,9 @@ module.exports = {
     },
     getTimeRegex: function getTimeRegex() {
         return timeRegex;
+    },
+    getWhereToEatRegex: function getWhereToEatRegex() {
+        return whereToEat;
     },
     getWhoKilledRegex: function getWhoKilledRegex() {
         return whoKilled;

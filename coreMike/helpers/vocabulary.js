@@ -32,14 +32,34 @@ var sadMikes = [
     ':sob:'
 ];
 
+var lunchIntro = [
+    '\'bout lunch o\'clock',
+    'nearin lunch time!',
+    'LUNCH!!!',
+    'nearin lunch o\'clock!',
+    'almost lunch!'
+];
+
+var lunchDestinations = [
+    'La Cocina :flag-mx: :taco: :flag-mx:',
+    'Tommy\'s Place -> https://goo.gl/maps/m2hR5yT8gS52',
+    'Blackwoods BBQ :meat_on_bone: -> https://goo.gl/maps/7BaCbKpUbLn',
+    'Goodwins sandwiches -> https://goo.gl/maps/uxqAZJG1AYH2',
+    'UB DOGS :hamburger: :hotdog: :hamburger:',
+    'Naf Naf :camel: -> https://goo.gl/maps/JsXP5QABoPu',
+    'Halsted Street Deli -> https://goo.gl/maps/kxEk9BCnV9F2',
+    'Baccis Pizza -> https://goo.gl/maps/1Ed4fu2rqcM2',
+    'boring :sleeping: Caffe Baci https://goo.gl/maps/wiCXCFehbq72',
+    'Specialty\'s bakery :bread: -> https://goo.gl/maps/XvJmgaGH9852',
+    'Mixed Greens :leaves: -> https://goo.gl/maps/LkRp5Lq46UJ2'
+];
+
 var lunchMikes = [
-    '\'bout lunch o\'clock who\'s down for some grub!? :fork_and_knife: ',
-    'nearin lunch time! I don\'t know about you guy\'s but i\'m cravin some La Cocina :flag-mx: :taco: :flag-mx:',
-    'nearin lunch time! might I suggest you go to Tommy\'s Place!?',
-    'nearin lunch o\'clock! why don\'t you all take a trip to the |DANG| healthy side for a change and go to Mixed Greens? :leaves: ',
-    'nearin lunch o\'clock! might I suggest you go to Blackwood for |DANG| some brisket!? :meat_on_bone: ',
-    'nearin lunch time! might I suggest some |DANG| UB DOGS :hamburger: :hotdog: :hamburger:!?',
-    'almost lunch! You guys getting dat GROUP DISCOUNT!? :fist::skin-tone-5:'
+    '|INTRO| I don\'t know about you guy\'s but i\'m cravin some |DESTINATION|',
+    '|INTRO| might I suggest you go to |DESTINATION|!?',
+    '|INTRO| why don\'t you all take a trip to the |DANG| |DESTINATION|? ',
+    '|INTRO| might I suggest some |DANG| |DESTINATION|!?',
+    '|INTRO| You guys getting dat GROUP DISCOUNT!? Go to |DESTINATION| for a change! :fist::skin-tone-5:'
 ];
 
 var wasters = [
@@ -92,9 +112,27 @@ module.exports = {
         return wasters[index];
     },
     getLunchMike: function getLunchMike() {
+        var myDate = new Date();
         var index = Math.floor(Math.random() * lunchMikes.length);
         var index2 = Math.floor(Math.random() * mikeDangs.length);
-        return lunchMikes[index].replace("|DANG|", mikeDangs[index2]);
+        var index3 = Math.floor(Math.random() * lunchIntro.length);
+        var index4 = Math.floor(Math.random() * lunchDestinations.length);
+        var msg = lunchMikes[index].replace("|DANG|", mikeDangs[index2]);
+        msg = msg.replace("|DESTINATION|", lunchDestinations[index4]);
+        msg = msg.replace("|INTRO|", lunchIntro[index3]);
+
+        if (myDate.getHours() < 15) {
+            return msg;
+        }/* Hour is past 3pm */
+        else if (myDate.getHours() >= 15) {
+
+            return "its " + mikeDangs[index2] + " past lunch time. Go to monks pub or make yourself some dinner."
+        }
+
+    },
+    getLunchDestination : function getLunchDestination() {
+        var index = Math.floor(Math.random() * lunchDestinations.length);
+        return lunchDestinations[index];
     },
     getSadMikeReaction: function getSadMikeReaction() {
         var index = Math.floor(Math.random() * sadMikes.length);

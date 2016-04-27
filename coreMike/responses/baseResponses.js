@@ -95,6 +95,19 @@ var baseResponses = function(controller, callback) {
 
             bot.reply(message, 'I did! And it\'s NONE OF YOUR ' + vocabulary.getMikeDang().toUpperCase() + ' BUSINESS ');
 
+        } else if ( usersMessage.search(patterns.getWhereToEatRegex()) !== -1) {
+
+            messageUtils.postReaction(bot, message, 'fork_and_knife');
+            var lunchSuggestion = vocabulary.getLunchMike();
+            controller.storage.users.get(message.user, function(err, user) {
+                if (user && user.name) {
+
+                    bot.reply(message, user.name + ' ' + lunchSuggestion)
+                } else {
+                    bot.reply(message, "<@" + message.user + "> " + lunchSuggestion);
+                }
+            });
+
         } else if (usersMessage.indexOf('send mornin to') > -1) {
             conversations.sendMorninToHandler(bot, message);
 
@@ -117,7 +130,7 @@ var baseResponses = function(controller, callback) {
                 ':doorman: I am a bot named <@' + bot.identity.name +
                 '>. I have been alive for ' + uptime + ' on NONE OF YO GODANG BUSINESS SERVER. (' + hostname + ')');
 
-        } else if ( usersMessage.indexOf("hey") > -1 | message.text.indexOf("sup?") > -1  | message.text.indexOf("hows it going") > -1 | message.text.indexOf("whats good") > -1 | message.text.indexOf("whats up") > -1) {
+        } else if ( usersMessage.toLowerCase() == "hey" | usersMessage.indexOf("sup?") > -1  | usersMessage.indexOf("hows it going") > -1 | usersMessage.toLowerCase() == "whats good" | usersMessage.toLowerCase() == "whats up") {
 
             var msgPt2 = dayOfTheWeekResponses.statementResponse();
 
