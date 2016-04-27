@@ -33,9 +33,10 @@ var sadMikes = [
 ];
 
 var lunchMikes = [
-    '\'bout lunch o\'clock who\'s down for some grub :fork_and_knife: ',
+    '\'bout lunch o\'clock who\'s down for some grub!? :fork_and_knife: ',
     'nearin lunch time! I don\'t know about you guy\'s but i\'m cravin some La Cocina :flag-mx: :taco: :flag-mx:',
     'nearin lunch time! might I suggest you go to Tommy\'s Place!?',
+    'nearin lunch o\'clock! why don\'t you all take a trip to the |DANG| healthy side for a change and go to Mixed Greens? :leaves: ',
     'nearin lunch o\'clock! might I suggest you go to Blackwood for |DANG| some brisket!? :meat_on_bone: ',
     'nearin lunch time! might I suggest some |DANG| UB DOGS :hamburger: :hotdog: :hamburger:!?',
     'almost lunch! You guys getting dat GROUP DISCOUNT!? :fist::skin-tone-5:'

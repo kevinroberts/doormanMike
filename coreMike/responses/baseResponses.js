@@ -1,15 +1,15 @@
 /*
  *   defines all the basic mike responses
  */
-var os = require('os');
-var dayOfTheWeekResponses = require('./dayOfTheWeek');
-var messageUtils = require('../helpers/messageUtils');
-var vocabulary = require('../helpers/vocabulary');
-var love = require('../responses/loveMachine');
-var weather = require('../responses/weatherResponses');
-var conversations = require('../responses/conversations');
-var patterns = require('../helpers/regexPatterns');
-var cleverbot = require('../helpers/cleverbot');
+var os = require('os'),
+    dayOfTheWeekResponses = require('./dayOfTheWeek'),
+    messageUtils = require('../helpers/messageUtils'),
+    vocabulary = require('../helpers/vocabulary'),
+    love = require('../responses/loveMachine'),
+    weather = require('../responses/weatherResponses'),
+    conversations = require('../responses/conversations'),
+    patterns = require('../helpers/regexPatterns'),
+    cleverbot = require('../helpers/cleverbot');
 
 
 var baseResponses = function(controller, callback) {
@@ -36,7 +36,6 @@ var baseResponses = function(controller, callback) {
         var intro = "<@"+message.user+"> what's up?";
         bot.reply(message, intro);
     });
-
 
 
 
@@ -99,7 +98,7 @@ var baseResponses = function(controller, callback) {
         } else if (usersMessage.indexOf('send mornin to') > -1) {
             conversations.sendMorninToHandler(bot, message);
 
-        } else if ( usersMessage.indexOf("what is my name") > -1 | usersMessage.indexOf("who am i") > -1  | usersMessage.indexOf("whats my name") > -1) {
+        } else if ( usersMessage.search(patterns.getWhatsMyNameRegex()) !== -1) {
 
             conversations.setNameHandler(controller, bot, message);
 
@@ -171,14 +170,31 @@ var baseResponses = function(controller, callback) {
 
 function formatUptime(uptime) {
 
-    var hours   = Math.floor(uptime / 3600);
-    var minutes = Math.floor((uptime - (hours * 3600)) / 60);
-    var seconds = uptime - (hours * 3600) - (minutes * 60);
+    // if uptime is greater than one day
+    if (uptime > 86400) {
+        var days    = Math.floor(uptime / 86400);
+        var hours   = Math.floor((uptime - (days * 86400)) / 3600);
+        var minutes = Math.floor((uptime - ((hours * 3600)+(days * 86400))) / 60);
+        var seconds = uptime - (days * 86400) - (hours * 3600) - (minutes * 60);
 
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    return hours+' hrs : '+minutes+' minutes : '+seconds + ' seconds';
+        if (days   < 10) {days   = "0"+days;}
+        if (hours   < 10) {hours   = "0"+hours;}
+        if (minutes < 10) {minutes = "0"+minutes;}
+        if (seconds < 10) {seconds = "0"+seconds;}
+
+        return days + ' days : ' + hours + ' hrs : ' + minutes + ' minutes : ' + Math.round(seconds) + ' seconds';
+
+    } else {
+        // else uptime is less than a day
+        var hours   = Math.floor(uptime / 3600);
+        var minutes = Math.floor((uptime - (hours * 3600)) / 60);
+        var seconds = uptime - (hours * 3600) - (minutes * 60);
+
+        if (hours   < 10) {hours   = "0"+hours;}
+        if (minutes < 10) {minutes = "0"+minutes;}
+        if (seconds < 10) {seconds = "0"+seconds;}
+        return hours + ' hrs : ' + minutes + ' minutes : ' + Math.round(seconds) + ' seconds';
+    }
 }
 
 module.exports = baseResponses;
