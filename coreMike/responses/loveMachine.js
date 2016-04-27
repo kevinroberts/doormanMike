@@ -23,6 +23,7 @@ var mikeCrush = [
     'ooh tho :kissing_heart: ',
     'oi :kissing_closed_eyes:, keep being u :tiger: ',
     'raawwrr :tiger: :heart: ',
+    ':heart: :rose: :rose: :rose: :heart:',
     ':heart: :powers: :heart:'
 ];
 

@@ -75,7 +75,7 @@ var baseResponses = function(controller, callback) {
 
             var msg = "it's time to get a " + vocabulary.getMikeDang() + " watch!";
             var loveMsg = love.getLoveReactionForName(message.user);
-            if (love) {
+            if (loveMsg) {
                 msg += loveMsg;
             }
             controller.storage.users.get(message.user, function(err, user) {
@@ -99,12 +99,13 @@ var baseResponses = function(controller, callback) {
 
             messageUtils.postReaction(bot, message, 'fork_and_knife');
             var lunchSuggestion = vocabulary.getLunchMike();
+
             controller.storage.users.get(message.user, function(err, user) {
                 if (user && user.name) {
 
-                    bot.reply(message, user.name + ' ' + lunchSuggestion)
+                    bot.reply(message, user.name + ' ' + lunchSuggestion + love.getLoveReactionForName(user.name))
                 } else {
-                    bot.reply(message, "<@" + message.user + "> " + lunchSuggestion);
+                    bot.reply(message, "<@" + message.user + "> " + lunchSuggestion + love.getLoveReactionForName(message.user));
                 }
             });
 
