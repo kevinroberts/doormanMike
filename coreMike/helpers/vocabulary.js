@@ -44,13 +44,15 @@ var lunchDestinations = [
     'La Cocina :flag-mx: :taco: :flag-mx:',
     'Tommy\'s Place -> https://goo.gl/maps/m2hR5yT8gS52',
     'Blackwoods BBQ :meat_on_bone: -> https://goo.gl/maps/7BaCbKpUbLn',
-    'Goodwins sandwiches -> https://goo.gl/maps/uxqAZJG1AYH2',
-    'UB DOGS :hamburger: :hotdog: :hamburger:',
+    'Goodwins sandwiches :bread: -> https://goo.gl/maps/uxqAZJG1AYH2',
+    'UB DOGS :hamburger: :hotdog: -> :hamburger: https://goo.gl/maps/orVEFT9PMJz',
     'Naf Naf :camel: -> https://goo.gl/maps/JsXP5QABoPu',
     'Halsted Street Deli -> https://goo.gl/maps/kxEk9BCnV9F2',
     'Baccis Pizza -> https://goo.gl/maps/1Ed4fu2rqcM2',
+    'Taza for some Mediterranean -> https://goo.gl/maps/NCUk1w3E2am',
     'boring :sleeping: Caffe Baci https://goo.gl/maps/wiCXCFehbq72',
     'Specialty\'s bakery :bread: -> https://goo.gl/maps/XvJmgaGH9852',
+    'Costa Vida for some Baja-style :burrito:\'s -> https://goo.gl/maps/L1MtEmRdeYE2',
     'Mixed Greens :leaves: -> https://goo.gl/maps/LkRp5Lq46UJ2'
 ];
 
@@ -121,11 +123,13 @@ module.exports = {
         msg = msg.replace("|DESTINATION|", lunchDestinations[index4]);
         msg = msg.replace("|INTRO|", lunchIntro[index3]);
 
-        if (myDate.getHours() < 15) {
+        if (myDate.getHours() >= 10) {
+            return "its " + mikeDangs[index2] + " breakfast time. Go to dunkin dohnuts or make yourself a bagel."
+        }
+        else if (myDate.getHours() >= 10 && myDate.getHours() <= 15) {
             return msg;
         }/* Hour is past 3pm */
         else if (myDate.getHours() >= 15) {
-
             return "its " + mikeDangs[index2] + " past lunch time. Go to monks pub or make yourself some dinner."
         }
 

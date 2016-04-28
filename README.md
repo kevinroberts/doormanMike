@@ -36,6 +36,9 @@ Tell Doorman Mike your nickname. Now you are friends.
 Say: `"who am I?"`
 Doorman Mike will tell you your nickname, if it knows one for you.
 
+Say: `"what should I get for lunch?"`
+Doorman Mike will give you a suggestion for a lunch destination
+
 Say: `"send mornin to @username in #random"`
 Mike will send a custom mornin' mornin' message to the specified slack user in that channel.
 
