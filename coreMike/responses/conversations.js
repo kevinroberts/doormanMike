@@ -3,11 +3,15 @@ var vocabulary = require('../helpers/vocabulary');
 var patterns = require('../helpers/regexPatterns');
 var love = require('../responses/loveMachine');
 
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
 
 module.exports = {
 
     callMeHandler: function callMeHandler(controller, bot, message) {
-        var name = message.text.match(patterns.getMyNameRegex())[1];
+        var name = message.text.match(patterns.getMyNameRegex())[1].replaceAll(":", "");
         controller.storage.users.get(message.user, function(err, user) {
             if (!user) {
                 user = {
@@ -34,8 +38,10 @@ module.exports = {
                 bot.startConversation(message, function(err, convo) {
                     if (!err) {
                         convo.say('I do not know your name yet!');
+
                         convo.ask('What should I call you?', function(response, convo) {
-                            convo.ask('You want me to call you `' + response.text + '`?', [
+                            var name = response.text.replaceAll(":", "");
+                            convo.ask('You want me to call you `' + name + '`?', [
                                 {
                                     pattern: 'yes',
                                     callback: function(response, convo) {
@@ -74,7 +80,7 @@ module.exports = {
                                             id: message.user,
                                         };
                                     }
-                                    user.name = convo.extractResponse('nickname');
+                                    user.name = convo.extractResponse('nickname').replaceAll(":", "");
                                     controller.storage.users.save(user, function(err, id) {
                                         var loveMsg = love.getLoveReactionForName(user.name);
                                         if (loveMsg) {
