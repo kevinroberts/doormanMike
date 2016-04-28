@@ -101,9 +101,9 @@ module.exports = {
         /* the hour is after 5pm, so it is between 6pm and midnight */
         else if (myDate.getHours() > 17 && myDate.getHours() <= 24) {
             if (user) {
-                return "<@" + message.user + "> " + mikeDangs[index2] + " :sleeping: ";
+                return "<@" + user + "> " + mikeDangs[index2] + " :sleeping: ";
             } else {
-                return mikeDangs[index2] + " :sleeping: ";
+                return mikeDangs[index2] + " zZz :sleeping: ";
             }
         }
     },

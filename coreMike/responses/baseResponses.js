@@ -28,7 +28,13 @@ var baseResponses = function(controller, callback) {
     // ambient responses [use sparingly]
     controller.hears(['mornin mornin', 'good morning', 'morning', 'mornin'], ["ambient"], function(bot, message) {
             bot.startTyping(message);
-            bot.reply(message, vocabulary.getMikeMorninTimeSensitive(message.user));
+            controller.storage.users.get(message.user, function(err, user) {
+                if (user && user.name) {
+                    bot.reply(message, user.name + ' ' + vocabulary.getMikeMorninTimeSensitive(null) + love.getLoveReactionForName(user.name))
+                } else {
+                    bot.reply(message, vocabulary.getMikeMorninTimeSensitive(message.user) + love.getLoveReactionForName(message.user));
+                }
+            });
     });
 
     controller.hears(["doorman-mike"], ["ambient"], function(bot, message) {
