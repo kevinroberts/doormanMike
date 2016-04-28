@@ -6,6 +6,7 @@ var mikeDangs = [
     'gaddd dannng',
     'garsh darn',
     'gahdamn',
+    'gotdang',
     'gaddanng',
     'goddamn'
 ];
