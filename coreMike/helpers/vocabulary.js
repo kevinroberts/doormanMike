@@ -124,7 +124,7 @@ module.exports = {
         msg = msg.replace("|DESTINATION|", lunchDestinations[index4]);
         msg = msg.replace("|INTRO|", lunchIntro[index3]);
 
-        if (myDate.getHours() >= 10) {
+        if (myDate.getHours() > 5 && myDate.getHours() <= 10) {
             return "its " + mikeDangs[index2] + " breakfast time. Go to dunkin dohnuts or make yourself a bagel."
         }
         else if (myDate.getHours() >= 10 && myDate.getHours() <= 15) {
