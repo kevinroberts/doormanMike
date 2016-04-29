@@ -14,6 +14,8 @@ var timeRegex =         new RegExp("what time is it", "i");
 
 var whoKilled =         new RegExp("who killed ", "i");
 
+var kidsRegex =         new RegExp(":baby:|kids|children", "i");
+
 var whereToEat =        new RegExp("(.*) I eat(.*)|(.*)for lunch(.*)|(.*)for food(.*)|lunch\?", "i");
 
 module.exports = {
@@ -32,6 +34,9 @@ module.exports = {
     },
     getTimeRegex: function getTimeRegex() {
         return timeRegex;
+    },
+    getKidsRegex: function getKidsRegex() {
+        return kidsRegex;
     },
     getWhereToEatRegex: function getWhereToEatRegex() {
         return whereToEat;

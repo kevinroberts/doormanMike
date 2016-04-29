@@ -101,6 +101,11 @@ var baseResponses = function(controller, callback) {
 
             bot.reply(message, 'I did! And it\'s NONE OF YOUR ' + vocabulary.getMikeDang().toUpperCase() + ' BUSINESS ');
 
+        } else if ( usersMessage.search(patterns.getKidsRegex()) !== -1) {
+            messageUtils.postReaction(bot, message, 'scream');
+
+            bot.reply(message, 'I don\'t run a ' + vocabulary.getMikeDang() + ' day care here keep dem kids away!');
+
         } else if ( usersMessage.search(patterns.getWhereToEatRegex()) !== -1) {
 
             messageUtils.postReaction(bot, message, 'fork_and_knife');
