@@ -42,7 +42,7 @@ var lunchIntro = [
 ];
 
 var lunchDestinations = [
-    'La Cocina :flag-mx: :taco: :flag-mx:',
+    'La Cocina :flag-mx: :burrito: :flag-mx:',
     'Tommy\'s Place -> https://goo.gl/maps/m2hR5yT8gS52',
     'Blackwoods BBQ :meat_on_bone: -> https://goo.gl/maps/7BaCbKpUbLn',
     'Goodwins sandwiches :bread: -> https://goo.gl/maps/uxqAZJG1AYH2',
