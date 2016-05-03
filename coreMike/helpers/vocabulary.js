@@ -48,6 +48,8 @@ var lunchDestinations = [
     'Goodwins sandwiches :bread: -> https://goo.gl/maps/uxqAZJG1AYH2',
     'UB DOGS :hamburger: :hotdog: -> :hamburger: https://goo.gl/maps/orVEFT9PMJz',
     'Naf Naf :camel: -> https://goo.gl/maps/JsXP5QABoPu',
+    'Jersey Mikes sandwiches',
+    'Cafecito :flag-cu: -> https://goo.gl/maps/PrWAYBd34bz',
     'Halsted Street Deli -> https://goo.gl/maps/kxEk9BCnV9F2',
     'Baccis Pizza -> https://goo.gl/maps/1Ed4fu2rqcM2',
     'Taza for some Mediterranean -> https://goo.gl/maps/NCUk1w3E2am',
