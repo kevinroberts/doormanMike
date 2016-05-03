@@ -156,7 +156,7 @@ var baseResponses = function(controller, callback) {
                 }
             });
 
-        } else if ( message.text.toLowerCase() == 'hi' | message.text.toLowerCase() == 'hello') {
+        } else if ( usersMessage.toLowerCase() == 'hi' | usersMessage.toLowerCase() == 'hello') {
 
             messageUtils.postReaction(bot, message, 'fist');
 
@@ -168,7 +168,19 @@ var baseResponses = function(controller, callback) {
                 }
             });
 
-        } else if ( message.text.toLowerCase() == 'mike' | message.text.toLowerCase() == 'doorman') {
+        } else if ( usersMessage.match(patterns.getBraptRegex())) {
+
+            messageUtils.postReaction(bot, message, 'poop');
+
+            controller.storage.users.get(message.user, function(err, user) {
+                if (user && user.name) {
+                    bot.reply(message, user.name + " u stink dude");
+                } else {
+                    bot.reply(message, "<@" + message.user + "> u stink dude.");
+                }
+            });
+
+        } else if ( usersMessage.toLowerCase() == 'mike' | usersMessage.toLowerCase() == 'doorman') {
 
             messageUtils.postReaction(bot, message, 'fist');
 
