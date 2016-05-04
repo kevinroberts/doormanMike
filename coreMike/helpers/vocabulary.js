@@ -27,6 +27,12 @@ var mikeHellos = [
     'Hey |username|!'
 ];
 
+var beerFriday = [
+    'It\'s gahdamn :beer: FRIDAY time! Grabs yo self a brew!',
+    ':fist::skin-tone-5: SOMEONE SAY GGAAAAAHDAMN BEER FRIDAY TIME!!!!!1@? CUZ IT IS, GRAB YOURSELF A BEER :beers: :fist::skin-tone-5: ',
+    'BRAAAPT! its :beer: Friday time! grabs yo self a beer! :fist::skin-tone-5:'
+];
+
 var sadMikes = [
     ':thumbsdown::skin-tone-5:',
     ':rage:',
@@ -118,6 +124,10 @@ module.exports = {
     getMikeHello: function getMikeHello() {
         var index = Math.floor(Math.random() * mikeHellos.length);
         return mikeHellos[index].replace(" |username|", "");
+    },
+    getBeerFriday: function getBeerFriday(){
+        var index = Math.floor(Math.random() * beerFriday.length);
+        return beerFriday[index];
     },
     getPersonalMikeHello: function getPersonalMikeHello(name) {
         var index = Math.floor(Math.random() * mikeHellos.length);

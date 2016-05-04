@@ -17,21 +17,28 @@ module.exports = {
         //}
         YQL('select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="Chicago, IL")', function(r) {
             if (r.query.results.channel.item.condition != null) {
-                var currentWeather = r.query.results.channel.item.condition;
-                var currentTemp = parseInt(currentWeather.temp);
-                var weatherReaction = '';
+                try {
+                    var currentWeather = r.query.results.channel.item.condition;
+                    var currentTemp = parseInt(currentWeather.temp);
+                    var weatherReaction = '';
 
-                if (currentTemp < 40) {
-                    weatherReaction = ' and you better have a coat because its ' + vocabulary.getMikeDang() + ' freezin';
-                }
-                else if (currentTemp < 50) {
-                    weatherReaction = ' and you better have a coat because its ' + vocabulary.getMikeDang() + ' chilly';
-                }
-                else if (currentTemp > 70) {
-                    weatherReaction += ' and you better have a some shorts on cuz its ' + vocabulary.getMikeDang() + ' hot out there';
+                    if (currentTemp < 40) {
+                        weatherReaction = ' and you better have a coat because its ' + vocabulary.getMikeDang() + ' freezin';
+                    }
+                    else if (currentTemp < 50) {
+                        weatherReaction = ' and you better have a coat because its ' + vocabulary.getMikeDang() + ' chilly';
+                    }
+                    else if (currentTemp > 70) {
+                        weatherReaction += ' and you better have a some shorts on cuz its ' + vocabulary.getMikeDang() + ' hot out there';
+                    }
+
+                    callback(userText + 'the weather today is ' + vocabulary.getMikeDang() + ' ' + currentWeather.text.toLowerCase() + weatherReaction);
+                } catch (e) {
+                    // statements to handle any exceptions
+                    console.error("could not parse weather details" , e);
+                    callback(userText + 'the weather is ' + vocabulary.getMikeDang() + ' stick yo head outside');
                 }
 
-                callback(userText + 'the weather today is ' + vocabulary.getMikeDang() + ' ' + currentWeather.text.toLowerCase() + weatherReaction);
 
             } else {
                 callback(userText + 'the weather is ' + vocabulary.getMikeDang() + ' stick yo head outside');

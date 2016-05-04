@@ -44,8 +44,23 @@ var scheduledResponses = function(bot) {
         timeZone: getDefaultTz()
     });
 
+    var beerFridayJob = new CronJob({
+        cronTime: '00 10 15 * * 5',
+        onTick: function() {
+            /*
+             * Runs every Friday
+             * at 3 PM.
+             */
+            messageUtils.postMessage(bot, ['john-cena', 'general'], vocabulary.getBeerFriday());
+        },
+        start: false,
+        timeZone: getDefaultTz()
+    });
+
+
     dailyMorninJob.start();
     dailyLunchJob.start();
+    beerFridayJob.start();
 
 };
 
