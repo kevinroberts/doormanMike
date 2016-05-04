@@ -79,6 +79,38 @@ module.exports = {
         return msg;
     },
 
+    getMikeMorninTimeSensitive: function getMikeMornin(user) {
+        var mikeDang = vocabulary.getMikeDang();
+        var mikeMornin = vocabulary.getMikeMornin();
+
+        var myDate = new Date();
+        // only trigger if hour is before noon
+        var dayResponse = this.statementResponse();
+        if (myDate.getHours() < 12) {
+            if (user) {
+                return "<@" + user + "> " + mikeMornin + "\n" + dayResponse;
+            } else {
+                return mikeMornin + "\n" + dayResponse;
+            }
+        }
+        /* Hour is from noon to 5pm (actually to 5:59 pm) */
+        else if (myDate.getHours() >= 12 && myDate.getHours() <= 17) {
+            if (user) {
+                return "<@" + user + "> get to that sack-room it's da afternoon yo!";
+            } else {
+                return "get to that sack-room it's da afternoon yo!";
+            }
+        }
+        /* the hour is after 5pm, so it is between 6pm and midnight */
+        else if (myDate.getHours() > 17 && myDate.getHours() <= 24) {
+            if (user) {
+                return "<@" + user + "> " + mikeDang + " :sleeping: ";
+            } else {
+                return mikeDang + " zZz :sleeping: ";
+            }
+        }
+    },
+
     getDayOfTheWeek: function getDayOfTheWeek(timezone) {
         if (timezone == null) {
             return dayOfWeek(new Date(), getDefaultTz());

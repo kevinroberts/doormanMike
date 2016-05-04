@@ -1,5 +1,6 @@
 var messageUtils = require('../helpers/messageUtils');
 var vocabulary = require('../helpers/vocabulary');
+var dayOfTheWeekResponses = require('../responses/dayOfTheWeek');
 var patterns = require('../helpers/regexPatterns');
 var love = require('../responses/loveMachine');
 var S = require('string');
@@ -126,12 +127,12 @@ module.exports = {
                     if ( response.text === 'yes' | response.text === 'Yes' ) {
 
                         bot.reply(message, "Will do! Check <#"+channel+">");
-                        var morninMessage = vocabulary.getMikeMorninTimeSensitive(null);
+                        var morninMessage = dayOfTheWeekResponses.getMikeMorninTimeSensitive(null);
 
                         messageUtils.postMessage(bot, channel, "Yo "+user + ", <@"+message.user+"> wants me to tell yah, " + morninMessage);
 
                     } else {
-                        var msg = vocabulary.getMikeMorninTimeSensitive(null);
+                        var msg = dayOfTheWeekResponses.getMikeMorninTimeSensitive(null);
 
                         bot.reply(message, "Sneaky! Check <#"+channel+">");
 

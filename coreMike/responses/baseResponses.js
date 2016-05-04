@@ -30,9 +30,9 @@ var baseResponses = function(controller, callback) {
             bot.startTyping(message);
             controller.storage.users.get(message.user, function(err, user) {
                 if (user && user.name) {
-                    bot.reply(message, user.name + ' ' + vocabulary.getMikeMorninTimeSensitive(null) + love.getLoveReactionForName(user.name))
+                    bot.reply(message, user.name + ' ' + dayOfTheWeekResponses.getMikeMorninTimeSensitive(null) + love.getLoveReactionForName(user.name))
                 } else {
-                    bot.reply(message, vocabulary.getMikeMorninTimeSensitive(message.user) + love.getLoveReactionForName(message.user));
+                    bot.reply(message, dayOfTheWeekResponses.getMikeMorninTimeSensitive(message.user) + love.getLoveReactionForName(message.user));
                 }
             });
     });
@@ -129,7 +129,7 @@ var baseResponses = function(controller, callback) {
 
         } else if ( usersMessage.indexOf("mornin mornin") > -1 | usersMessage.indexOf("good mornin") > -1  | usersMessage.indexOf("morning") > -1) {
 
-            bot.reply(message, vocabulary.getMikeMorninTimeSensitive(message.user));
+            bot.reply(message, dayOfTheWeekResponses.getMikeMorninTimeSensitive(message.user));
 
         } else if ( usersMessage.indexOf("uptime") > -1 | usersMessage.indexOf("identify yourself") > -1  | usersMessage.indexOf("who are you") > -1 | usersMessage.indexOf("what is your name") > -1) {
 
