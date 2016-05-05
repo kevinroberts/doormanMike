@@ -4,11 +4,19 @@ var dayOfTheWeekResponses = require('../responses/dayOfTheWeek');
 var patterns = require('../helpers/regexPatterns');
 var love = require('../responses/loveMachine');
 var S = require('string');
+var characterLimit = 50;
 
 module.exports = {
 
     callMeHandler: function callMeHandler(controller, bot, message) {
         var name = S(message.text.match(patterns.getMyNameRegex())[1]).replaceAll(":", "").s;
+        var length = name.length;
+        var tooLong = false;
+        if (length > characterLimit) {
+            name = S(name).left(characterLimit).s;
+            tooLong = true;
+        }
+
         controller.storage.users.get(message.user, function(err, user) {
             if (!user) {
                 user = {
@@ -21,7 +29,11 @@ module.exports = {
                 if (loveMsg) {
                     loveMsg = " I kind of like that name." + loveMsg;
                 }
-                bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
+                if (tooLong) {
+                    bot.reply(message, 'woah bro that\'s a long ass name.. im gonna cut yah off and call yah `' + name + '`' );
+                } else {
+                    bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
+                }
             });
         });
 
@@ -71,19 +83,35 @@ module.exports = {
                             if (convo.status == 'completed') {
                                 bot.reply(message, 'OK! I will update my god dang notes...');
 
+                                var tooLong = false;
+
+
                                 controller.storage.users.get(message.user, function(err, user) {
                                     if (!user) {
                                         user = {
                                             id: message.user,
                                         };
                                     }
+
+
                                     user.name = S(convo.extractResponse('nickname')).replaceAll(":", "").s;
+                                    var length = user.name.length;
+
+                                    if (length > characterLimit) {
+                                        user.name = S(user.name).left(characterLimit).s;
+                                        tooLong = true;
+                                    }
                                     controller.storage.users.save(user, function(err, id) {
                                         var loveMsg = love.getLoveReactionForName(user.name);
                                         if (loveMsg) {
                                             loveMsg = " I kind of like that name." + loveMsg;
                                         }
-                                        bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
+                                        if (tooLong) {
+                                            bot.reply(message, 'woah bro that\'s a long ass name.. im gonna cut yah off and call yah `' + name + '`' );
+                                        } else {
+                                            bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
+                                        }
+
 
                                     });
                                 });

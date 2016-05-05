@@ -22,6 +22,8 @@ Grab an API key from https://cleverbot.io/keys for use with cleverbot responses
 
 `CLEVERBOTAPI=<API KEY>`
 
+`FIREBASEURI=<xxx-firebaseio.com>`
+
 ## Some features: ##
 
 Say: `"Hello"`
