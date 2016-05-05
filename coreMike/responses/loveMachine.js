@@ -22,7 +22,7 @@ var mikeCrush = [
     'ooh tho :kissing_heart: ',
     'oi :kissing_closed_eyes:, keep being u :tiger: ',
     'raawwrr :tiger: :heart: ',
-    ':heart: :rose: :rose: :rose: :heart:',
+    //':heart: :rose: :rose: :rose: :heart:',
     ':heart: :powers: :heart:'
 ];
 
@@ -40,8 +40,7 @@ module.exports = {
             // if passed name contains a crush
             var re = new RegExp(crush,"i");
             if (name.search(re) !== -1) {
-                var index = Math.floor(Math.random() * mikeCrush.length);
-                mikeCrushMsg = " \n" + mikeCrush[index] + '\n';
+                mikeCrushMsg = " \n" + _.sample(mikeCrush) + '\n';
             }
         });
 
@@ -49,8 +48,7 @@ module.exports = {
             // if passed name contains a crush
             var re = new RegExp(crush,"i");
             if (name.search(re) !== -1) {
-                var index = Math.floor(Math.random() * mikeCats.length);
-                mikeCrushMsg = " " + mikeCats[index];
+                mikeCrushMsg = " " +  _.sample(mikeCats);
             }
         });
 
