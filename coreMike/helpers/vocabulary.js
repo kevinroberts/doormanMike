@@ -1,5 +1,5 @@
 var love = require('../responses/loveMachine');
-var dayOfTheWeekResponses = require('../responses/dayOfTheWeek');
+var _ = require('lodash');
 
 var mikeDangs = [
     'god digggidy',
@@ -81,58 +81,46 @@ var wasters = [
 
 module.exports = {
     getMikeDang: function getMikeDang() {
-        var index = Math.floor(Math.random() * mikeDangs.length);
-        return mikeDangs[index];
+        return _.sample(mikeDangs);
     },
     getMikeMornin: function getMikeMornin() {
-        var index = Math.floor(Math.random() * mikeMornin.length);
-        return mikeMornin[index];
+        return _.sample(mikeMornin);
     },
     getWaster: function getWaster() {
-        var index = Math.floor(Math.random() * wasters.length);
-        return wasters[index];
+        return _.sample(wasters);
     },
     getLunchMike: function getLunchMike() {
         var myDate = new Date();
-        var index = Math.floor(Math.random() * lunchMikes.length);
-        var index2 = Math.floor(Math.random() * mikeDangs.length);
-        var index3 = Math.floor(Math.random() * lunchIntro.length);
-        var index4 = Math.floor(Math.random() * lunchDestinations.length);
-        var msg = lunchMikes[index].replace("|DANG|", mikeDangs[index2]);
-        msg = msg.replace("|DESTINATION|", lunchDestinations[index4]);
-        msg = msg.replace("|INTRO|", lunchIntro[index3]);
+        var msg = _.sample(lunchMikes).replace("|DANG|", _.sample(mikeDangs));
+        msg = msg.replace("|DESTINATION|", _.sample(lunchDestinations));
+        msg = msg.replace("|INTRO|", _.sample(lunchIntro));
 
         if (myDate.getHours() > 5 && myDate.getHours() <= 10) {
-            return "its " + mikeDangs[index2] + " breakfast time. Go to dunkin dohnuts or make yourself a bagel."
+            return "its " + _.sample(mikeDangs) + " breakfast time. Go to dunkin dohnuts or make yourself a bagel."
         }
         else if (myDate.getHours() >= 10 && myDate.getHours() <= 15) {
             return msg;
         }/* Hour is past 3pm */
         else if (myDate.getHours() >= 15) {
-            return "its " + mikeDangs[index2] + " past lunch time. Go to monks pub or make yourself some dinner."
+            return "its " + _.sample(mikeDangs) + " past lunch time. Go to monks pub or make yourself some dinner."
         }
 
     },
     getLunchDestination : function getLunchDestination() {
-        var index = Math.floor(Math.random() * lunchDestinations.length);
-        return lunchDestinations[index];
+        return _.sample(lunchDestinations);
     },
     getSadMikeReaction: function getSadMikeReaction() {
-        var index = Math.floor(Math.random() * sadMikes.length);
-        return sadMikes[index];
+        return _.sample(sadMikes);
     },
     getMikeHello: function getMikeHello() {
-        var index = Math.floor(Math.random() * mikeHellos.length);
-        return mikeHellos[index].replace(" |username|", "");
+        return _.sample(mikeHellos).replace(" |username|", "");
     },
     getBeerFriday: function getBeerFriday(){
-        var index = Math.floor(Math.random() * beerFriday.length);
-        return beerFriday[index];
+        return _.sample(beerFriday);
     },
     getPersonalMikeHello: function getPersonalMikeHello(name) {
-        var index = Math.floor(Math.random() * mikeHellos.length);
-        var personalHelloMsg = mikeHellos[index].replace("|username|", name);
+        var personalHelloMsg = _.sample(mikeHellos).replace("|username|", name);
         personalHelloMsg += love.getLoveReactionForName(name);
         return personalHelloMsg;
     }
-}
+};

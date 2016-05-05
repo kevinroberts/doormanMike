@@ -3,7 +3,7 @@ var _ = require('lodash');
 var catCrush = [
     'Agnes',
     'U0P7GGJVB', //agnes
-    'U0MKH8B7W'
+    'U0MKH8B7W' //belinda
 ];
 
 var specialCrushes = [
@@ -12,7 +12,6 @@ var specialCrushes = [
     'U0H0DARFW', // kyles user id
     'U0LN5LAQL', // jmolsen
     'Kevin',
-    'Kev',
     'Jeff',
     'Murl',
     'Kyle',
