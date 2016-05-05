@@ -1,5 +1,5 @@
 var path = require('path');
-require('dotenv').config();
+require('dotenv').config({silent: true});
 
 var Botkit = require('botkit');
 
@@ -10,6 +10,10 @@ var debugMode = false;
 
 // Keep bot from starting if a Slack token is missing
 if (!process.env.token) {
+  console.log('Error: Specify token in environment');
+  process.exit(1);
+}
+if (!process.env.FIREBASEURI) {
   console.log('Error: Specify token in environment');
   process.exit(1);
 }
