@@ -42,6 +42,9 @@ module.exports = {
         }
         if (day == 5) {
             msg = "it's " + vocabulary.getMikeDang().toUpperCase() + " FRIDAY!!!! :fist::skin-tone-5:";
+            if (bot != null && message != null) {
+                messageUtils.postReaction(bot, message, 'fist');
+            }
         }
         if (day > 5) {
             msg = "HAPPY " + vocabulary.getMikeDang().toUpperCase() + " WEEKEND BRO!!!! :fist::skin-tone-5:";

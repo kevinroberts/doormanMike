@@ -5,6 +5,7 @@ var Botkit = require('botkit');
 
 var baseResponses = require('./coreMike/responses/baseResponses');
 var scheduledResponses = require('./coreMike/responses/scheduledResponses');
+
 var debugMode = false;
 
 // Keep bot from starting if a Slack token is missing
@@ -22,8 +23,11 @@ if (!process.env.NODE_ENV) {
   }
 }
 
+var firebaseStorage = require('botkit-storage-firebase')({firebase_uri: process.env.FIREBASEURI});
+
 var controller = Botkit.slackbot({
-  debug: debugMode
+  debug: debugMode,
+  storage: firebaseStorage
 });
 
 var bot = controller.spawn({
