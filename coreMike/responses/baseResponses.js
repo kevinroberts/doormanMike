@@ -92,10 +92,19 @@ var baseResponses = function(controller, callback) {
                 }
             });
 
+        } else if ( usersMessage.search(patterns.getTacoRegex()) !== -1) {
+            messageUtils.postReaction(bot, message, 'fist');
+            var msg = "thanks for the " + vocabulary.getMikeDang() + " taco bro!";
+            controller.storage.users.get(message.user, function(err, user) {
+                if (user && user.name) {
+                    bot.reply(message, user.name + ' ' + msg);
+                } else {
+                    bot.reply(message, "<@" + message.user + "> " + msg);
+                }
+            });
+
         } else if ( usersMessage.search(patterns.getMyNameRegex()) !== -1) {
-
             conversations.callMeHandler(controller, bot, message);
-
         } else if ( usersMessage.search(patterns.getWhoKilledRegex()) !== -1) {
             messageUtils.postReaction(bot, message, 'knife');
 

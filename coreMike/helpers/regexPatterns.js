@@ -18,6 +18,8 @@ var whoKilled =         new RegExp("who killed ", "i");
 
 var kidsRegex =         new RegExp(":baby:|kids|children", "i");
 
+var tacoRegex =         new RegExp(":taco:", "i");
+
 var whereToEat =        new RegExp("(.*) I eat(.*)|(.*)for lunch(.*)|(.*)for food(.*)|lunch\?", "i");
 
 module.exports = {
@@ -45,6 +47,9 @@ module.exports = {
     },
     getWhoKilledRegex: function getWhoKilledRegex() {
         return whoKilled;
+    },
+    getTacoRegex: function getTacoRegex() {
+        return tacoRegex;
     },
     getBraptRegex: function getBraptRegex() {
         return braptRegex;
