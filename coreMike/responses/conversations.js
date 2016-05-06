@@ -187,4 +187,4 @@ module.exports = {
 
     }
 
-}
+};
