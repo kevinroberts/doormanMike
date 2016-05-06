@@ -12,30 +12,35 @@ module.exports = {
         var name = S(message.text.match(patterns.getMyNameRegex())[1]).replaceAll(":", "").s;
         var length = name.length;
         var tooLong = false;
+
         if (length > characterLimit) {
             name = S(name).left(characterLimit).s;
             tooLong = true;
         }
-
-        controller.storage.users.get(message.user, function(err, user) {
-            if (!user) {
-                user = {
-                    id: message.user,
-                };
-            }
-            user.name = name;
-            controller.storage.users.save(user, function(err, id) {
-                var loveMsg = love.getLoveReactionForName(user.name);
-                if (loveMsg) {
-                    loveMsg = " I kind of like that name." + loveMsg;
+        if (name.search(patterns.getInvalidNameRegex()) !== -1) {
+            bot.reply(message, 'woah bro I cannot call you that.');
+        } else {
+            controller.storage.users.get(message.user, function(err, user) {
+                if (!user) {
+                    user = {
+                        id: message.user,
+                    };
                 }
-                if (tooLong) {
-                    bot.reply(message, 'woah bro that\'s a long ass name.. im gonna cut yah off and call yah `' + name + '`' );
-                } else {
-                    bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
-                }
+                user.name = name;
+                controller.storage.users.save(user, function(err, id) {
+                    var loveMsg = love.getLoveReactionForName(user.name);
+                    if (loveMsg) {
+                        loveMsg = " I kind of like that name." + loveMsg;
+                    }
+                    if (tooLong) {
+                        bot.reply(message, 'woah bro that\'s a long ass name.. im gonna cut yah off and call yah `' + name + '`' );
+                    } else {
+                        bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
+                    }
+                });
             });
-        });
+        }
+
 
     },
     setNameHandler: function setNameHandler(controller, bot, message) {
@@ -101,19 +106,25 @@ module.exports = {
                                         user.name = S(user.name).left(characterLimit).s;
                                         tooLong = true;
                                     }
-                                    controller.storage.users.save(user, function(err, id) {
-                                        var loveMsg = love.getLoveReactionForName(user.name);
-                                        if (loveMsg) {
-                                            loveMsg = " I kind of like that name." + loveMsg;
-                                        }
-                                        if (tooLong) {
-                                            bot.reply(message, 'woah bro that\'s a long ass name.. im gonna cut yah off and call yah `' + name + '`' );
-                                        } else {
-                                            bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
-                                        }
+
+                                    if (user.name.search(patterns.getInvalidNameRegex()) !== -1) {
+                                        bot.reply(message, 'woah bro I cannot call you that.');
+                                    } else {
+                                        controller.storage.users.save(user, function(err, id) {
+                                            var loveMsg = love.getLoveReactionForName(user.name);
+                                            if (loveMsg) {
+                                                loveMsg = " I kind of like that name." + loveMsg;
+                                            }
+                                            if (tooLong) {
+                                                bot.reply(message, 'woah bro that\'s a long ass name.. im gonna cut yah off and call yah `' + name + '`' );
+                                            } else {
+                                                bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
+                                            }
 
 
-                                    });
+                                        });
+                                    }
+
                                 });
 
 

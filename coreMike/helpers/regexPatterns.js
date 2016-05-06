@@ -20,6 +20,8 @@ var kidsRegex =         new RegExp(":baby:|kids|children", "i");
 
 var tacoRegex =         new RegExp(":taco:", "i");
 
+var invalidNameRegex =  /@/;
+
 var whereToEat =        new RegExp("(.*) I eat(.*)|(.*)for lunch(.*)|(.*)for food(.*)|lunch\?", "i");
 
 module.exports = {
@@ -50,6 +52,9 @@ module.exports = {
     },
     getTacoRegex: function getTacoRegex() {
         return tacoRegex;
+    },
+    getInvalidNameRegex: function getInvalidNameRegex() {
+        return invalidNameRegex;
     },
     getBraptRegex: function getBraptRegex() {
         return braptRegex;
