@@ -20,6 +20,7 @@ module.exports = {
                 try {
                     var currentWeather = r.query.results.channel.item.condition;
                     var currentTemp = parseInt(currentWeather.temp);
+                    var temp = ' (currently ' + currentWeather.temp + '˚ F)';
                     var weatherReaction = '';
 
                     if (currentTemp < 40) {
@@ -31,6 +32,7 @@ module.exports = {
                     else if (currentTemp > 70) {
                         weatherReaction += ' and you better have a some shorts on cuz its ' + vocabulary.getMikeDang() + ' hot out there';
                     }
+                    weatherReaction += temp;
 
                     callback(userText + 'the weather today is ' + vocabulary.getMikeDang() + ' ' + currentWeather.text.toLowerCase() + weatherReaction);
                 } catch (e) {

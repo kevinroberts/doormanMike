@@ -47,7 +47,7 @@ module.exports = {
             }
         }
         if (day > 5) {
-            msg = "HAPPY " + vocabulary.getMikeDang().toUpperCase() + " WEEKEND BRO!!!! :fist::skin-tone-5:";
+            msg = "IT'S THE " + vocabulary.getMikeDang().toUpperCase() + " WEEKEND BRO!!!! :fist::skin-tone-5:";
         }
         if (username != null) {
             msg = username + ' ' + msg;
@@ -107,9 +107,9 @@ module.exports = {
         /* the hour is after 5pm, so it is between 6pm and midnight */
         else if (myDate.getHours() > 17 && myDate.getHours() <= 24) {
             if (user) {
-                return "<@" + user + "> " + mikeDang + " :sleeping: ";
+                return "<@" + user + "> I'M " + mikeDang.toUpperCase() + " :sleeping: NOW GO AWAY DOORMAN MIKE NEEDS HIS BEAUTY SLEEP";
             } else {
-                return mikeDang + " zZz :sleeping: ";
+                return "I am " + mikeDang + " zZz :sleeping: ";
             }
         }
     },

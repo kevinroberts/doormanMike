@@ -10,7 +10,7 @@ var os = require('os'),
     conversations = require('../responses/conversations'),
     patterns = require('../helpers/regexPatterns'),
     cleverbot = require('../helpers/cleverbot');
-
+const matcher = require('matcher');
 
 var baseResponses = function(controller, callback) {
 
@@ -26,7 +26,7 @@ var baseResponses = function(controller, callback) {
     });
 
     // ambient responses [use sparingly]
-    controller.hears(['mornin mornin', 'good morning', 'morning', 'mornin'], ["ambient"], function(bot, message) {
+    controller.hears(['mornin mornin', 'good morning', 'morning'], ["ambient"], function(bot, message) {
             bot.startTyping(message);
             controller.storage.users.get(message.user, function(err, user) {
                 if (user && user.name) {
@@ -129,14 +129,14 @@ var baseResponses = function(controller, callback) {
                 }
             });
 
-        } else if (usersMessage.indexOf('send mornin to') > -1) {
+        } else if (matcher.isMatch(usersMessage, 'send mornin to*')) {
             conversations.sendMorninToHandler(bot, message);
 
         } else if ( usersMessage.search(patterns.getWhatsMyNameRegex()) !== -1) {
 
             conversations.setNameHandler(controller, bot, message);
 
-        } else if ( usersMessage.indexOf("mornin mornin") > -1 | usersMessage.indexOf("good mornin") > -1  | usersMessage.indexOf("morning") > -1) {
+        } else if ( matcher.isMatch(usersMessage, 'mornin* mornin*') | matcher.isMatch(usersMessage, 'good mornin*') | matcher.isMatch(usersMessage, 'mornin*')) {
 
             bot.reply(message, dayOfTheWeekResponses.getMikeMorninTimeSensitive(message.user));
 
