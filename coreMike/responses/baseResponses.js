@@ -20,7 +20,7 @@ var baseResponses = function(controller, callback) {
     });
 
     controller.on("user_channel_join", function(bot, message) {
-        messageUtils.postReaction(bot, message, 'fist');
+        messageUtils.postMikeFist(bot, message);
         var intro = "Welcome <@"+message.user+">! May I be the first to welcome you to the <#" +message.channel+"> channel.";
         bot.reply(message, intro);
     });
@@ -38,7 +38,7 @@ var baseResponses = function(controller, callback) {
     });
 
     controller.hears(["doorman-mike"], ["ambient"], function(bot, message) {
-        messageUtils.postReaction(bot, message, 'fist');
+        messageUtils.postMikeFist(bot, message);
         var intro = "<@"+message.user+"> what's up?";
         bot.reply(message, intro);
     });
@@ -93,7 +93,7 @@ var baseResponses = function(controller, callback) {
             });
 
         } else if ( usersMessage.search(patterns.getTacoRegex()) !== -1) {
-            messageUtils.postReaction(bot, message, 'fist');
+            messageUtils.postMikeFist(bot, message);
             var msg = "thanks for the " + vocabulary.getMikeDang() + " taco bro!";
             controller.storage.users.get(message.user, function(err, user) {
                 if (user && user.name) {
@@ -142,10 +142,10 @@ var baseResponses = function(controller, callback) {
 
         } else if ( usersMessage.indexOf("uptime") > -1 | usersMessage.indexOf("identify yourself") > -1  | usersMessage.indexOf("who are you") > -1 | usersMessage.indexOf("what is your name") > -1) {
 
-            messageUtils.postReaction(bot, message, 'fist');
+            messageUtils.postMikeFist(bot, message);
 
             var hostname = os.hostname();
-            var uptime = formatUptime(process.uptime());
+            var uptime = messageUtils.formatUptime(process.uptime());
 
             bot.reply(message,
                 ':doorman: I am a bot named <@' + bot.identity.name +
@@ -167,7 +167,7 @@ var baseResponses = function(controller, callback) {
 
         } else if ( usersMessage.toLowerCase() == 'hi' | usersMessage.toLowerCase() == 'hello') {
 
-            messageUtils.postReaction(bot, message, 'fist');
+            messageUtils.postMikeFist(bot, message);
 
             controller.storage.users.get(message.user, function(err, user) {
                 if (user && user.name) {
@@ -183,15 +183,15 @@ var baseResponses = function(controller, callback) {
 
             controller.storage.users.get(message.user, function(err, user) {
                 if (user && user.name) {
-                    bot.reply(message, user.name + " u stink dude");
+                    bot.reply(message, vocabulary.getBrapt(user.name));
                 } else {
-                    bot.reply(message, "<@" + message.user + "> u stink dude.");
+                    bot.reply(message, vocabulary.getBrapt("<@" + message.user + ">"));
                 }
             });
 
         } else if ( usersMessage.toLowerCase() == 'mike' | usersMessage.toLowerCase() == 'doorman') {
 
-            messageUtils.postReaction(bot, message, 'fist');
+            messageUtils.postMikeFist(bot, message);
 
             controller.storage.users.get(message.user, function(err, user) {
                 if (user && user.name) {
@@ -214,33 +214,5 @@ var baseResponses = function(controller, callback) {
 
 };
 
-function formatUptime(uptime) {
-
-    // if uptime is greater than one day
-    if (uptime > 86400) {
-        var days    = Math.floor(uptime / 86400);
-        var hours   = Math.floor((uptime - (days * 86400)) / 3600);
-        var minutes = Math.floor((uptime - ((hours * 3600)+(days * 86400))) / 60);
-        var seconds = uptime - (days * 86400) - (hours * 3600) - (minutes * 60);
-
-        if (days   < 10) {days   = "0"+days;}
-        if (hours   < 10) {hours   = "0"+hours;}
-        if (minutes < 10) {minutes = "0"+minutes;}
-        if (seconds < 10) {seconds = "0"+seconds;}
-
-        return days + ' days : ' + hours + ' hrs : ' + minutes + ' minutes : ' + Math.round(seconds) + ' seconds';
-
-    } else {
-        // else uptime is less than a day
-        var hours   = Math.floor(uptime / 3600);
-        var minutes = Math.floor((uptime - (hours * 3600)) / 60);
-        var seconds = uptime - (hours * 3600) - (minutes * 60);
-
-        if (hours   < 10) {hours   = "0"+hours;}
-        if (minutes < 10) {minutes = "0"+minutes;}
-        if (seconds < 10) {seconds = "0"+seconds;}
-        return hours + ' hrs : ' + minutes + ' minutes : ' + Math.round(seconds) + ' seconds';
-    }
-}
 
 module.exports = baseResponses;

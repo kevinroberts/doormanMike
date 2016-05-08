@@ -2,11 +2,11 @@ var love = require('../responses/loveMachine');
 var _ = require('lodash');
 
 var mikeDangs = [
-    'god digggidy',
+    'gawd damn',
     'gaddd dannng',
-    'garsh darn',
+    'gad damn',
     'gahdamn',
-    'gotdang',
+    'gotdamn',
     'gaddanng',
     'goddamn'
 ];
@@ -20,7 +20,7 @@ var mikeMornin = [
 ];
 
 var mikeHellos = [
-    'Hey |username|! what\'s up?! :fist: ',
+    'Hey |username|! what\'s up?! :fist::skin-tone-5: ',
     'What\'s cookin |username|?!',
     'whats up |username|!!!',
     'Yo |username|!',
@@ -47,6 +47,12 @@ var lunchIntro = [
     'almost lunch!'
 ];
 
+var brapts = [
+    '|username| u stink dude :frog: ',
+    '|username| sick - that sounded wet',
+    '|username| sometimes you gamble and lose :game_die: '
+]
+
 var lunchDestinations = [
     'La Cocina :flag-mx: :burrito: :flag-mx:',
     'Tommy\'s Place -> https://goo.gl/maps/m2hR5yT8gS52',
@@ -68,7 +74,7 @@ var lunchDestinations = [
 ];
 
 var lunchMikes = [
-    '|INTRO| I don\'t know about you guy\'s but i\'m cravin some |DESTINATION|',
+    '|INTRO| I don\'t know about you guy\'s but i\'m cravin some |DESTINATION| :fist::skin-tone-5:',
     '|INTRO| might I suggest you go to |DESTINATION|!?',
     '|INTRO| why don\'t you all take a trip to the |DANG| |DESTINATION|? ',
     '|INTRO| might I suggest some |DANG| |DESTINATION|!?',
@@ -116,6 +122,9 @@ module.exports = {
     },
     getMikeHello: function getMikeHello() {
         return _.sample(mikeHellos).replace(" |username|", "");
+    },
+    getBrapt: function getBrapt(name) {
+        return _.sample(brapts).replace("|username|", name);
     },
     getBeerFriday: function getBeerFriday(){
         return _.sample(beerFriday);

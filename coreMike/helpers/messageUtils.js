@@ -36,6 +36,38 @@ module.exports = {
                 bot.botkit.log('Failed to add emoji reaction :(', err);
             }
         });
+    },
+
+    postMikeFist: function postMikeFist(bot, message) {
+       this.postReaction(bot, message, 'fist::skin-tone-5')
+    },
+
+    formatUptime: function formatUptime(uptime) {
+        // if uptime is greater than one day
+        if (uptime > 86400) {
+            var days    = Math.floor(uptime / 86400);
+            var hours   = Math.floor((uptime - (days * 86400)) / 3600);
+            var minutes = Math.floor((uptime - ((hours * 3600)+(days * 86400))) / 60);
+            var seconds = uptime - (days * 86400) - (hours * 3600) - (minutes * 60);
+
+            if (days   < 10) {days   = "0"+days;}
+            if (hours   < 10) {hours   = "0"+hours;}
+            if (minutes < 10) {minutes = "0"+minutes;}
+            if (seconds < 10) {seconds = "0"+seconds;}
+
+            return days + ' days : ' + hours + ' hrs : ' + minutes + ' minutes : ' + Math.round(seconds) + ' seconds';
+
+        } else {
+            // else uptime is less than a day
+            var hours   = Math.floor(uptime / 3600);
+            var minutes = Math.floor((uptime - (hours * 3600)) / 60);
+            var seconds = uptime - (hours * 3600) - (minutes * 60);
+
+            if (hours   < 10) {hours   = "0"+hours;}
+            if (minutes < 10) {minutes = "0"+minutes;}
+            if (seconds < 10) {seconds = "0"+seconds;}
+            return hours + ' hrs : ' + minutes + ' minutes : ' + Math.round(seconds) + ' seconds';
+        }
     }
 
 
