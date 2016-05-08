@@ -20,7 +20,7 @@ var mikeMornin = [
 ];
 
 var mikeHellos = [
-    'Hey |username|! what\'s up?! :fist::skin-tone-5: ',
+    'Hey |username|! what\'s up?!',
     'What\'s cookin |username|?!',
     'whats up |username|!!!',
     'Yo |username|!',
