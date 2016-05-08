@@ -103,14 +103,15 @@ module.exports = {
         msg = msg.replace("|DESTINATION|", _.sample(lunchDestinations));
         msg = msg.replace("|INTRO|", _.sample(lunchIntro));
 
+        // if the hour is between 5 and 10 am Mike is in breakfast mode
         if (myDate.getHours() > 5 && myDate.getHours() <= 10) {
-            return "its " + _.sample(mikeDangs) + " breakfast time. Go to dunkin dohnuts or make yourself a bagel."
+            return "it's " + _.sample(mikeDangs) + " breakfast time. Go to dunkin dohnuts or make yourself a bagel."
         }
         else if (myDate.getHours() >= 10 && myDate.getHours() <= 15) {
             return msg;
-        }/* Hour is past 3pm */
+        }/* Hour is past 3pm is like totes Dinner time for Mike*/
         else if (myDate.getHours() >= 15) {
-            return "its " + _.sample(mikeDangs) + " past lunch time. Go to monks pub or make yourself some dinner."
+            return "it's " + _.sample(mikeDangs) + " past lunch time. Go to monks pub or make yourself some dinner."
         }
 
     },
