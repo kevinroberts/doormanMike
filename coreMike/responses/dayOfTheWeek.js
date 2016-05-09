@@ -91,7 +91,7 @@ module.exports = {
         var dayResponse = this.statementResponse();
         if (myDate.getHours() < 12) {
             if (user) {
-                return "<@" + user + "> " + mikeMornin + "\n" + dayResponse;
+                return user + " " + mikeMornin + "\n" + dayResponse;
             } else {
                 return mikeMornin + "\n" + dayResponse;
             }
@@ -99,7 +99,7 @@ module.exports = {
         /* Hour is from noon to 5pm (actually to 5:59 pm) */
         else if (myDate.getHours() >= 12 && myDate.getHours() <= 17) {
             if (user) {
-                return "<@" + user + "> get to that sack-room it's da afternoon yo!";
+                return user + " get to that sack-room it's da afternoon yo!";
             } else {
                 return "get to that sack-room it's da afternoon yo!";
             }
@@ -107,7 +107,7 @@ module.exports = {
         /* the hour is after 5pm, so it is between 6pm and midnight */
         else if (myDate.getHours() > 17 && myDate.getHours() <= 24) {
             if (user) {
-                return "<@" + user + "> I'M " + mikeDang.toUpperCase() + " :sleeping: NOW GO AWAY DOORMAN MIKE NEEDS HIS BEAUTY SLEEP";
+                return user + " I'M " + mikeDang.toUpperCase() + " :sleeping: NOW GO AWAY DOORMAN MIKE NEEDS HIS BEAUTY SLEEP";
             } else {
                 return "I am " + mikeDang + " zZz :sleeping: ";
             }

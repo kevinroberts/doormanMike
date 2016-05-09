@@ -42,6 +42,17 @@ module.exports = {
        this.postReaction(bot, message, 'fist::skin-tone-5')
     },
 
+    getUsernameFromController: function getUsernameFromController(controller, user, callback) {
+
+        controller.storage.users.get(user, function(err, userObj) {
+            if (userObj && userObj.name) {
+                callback(userObj.name);
+            } else {
+                callback("<@" + user + ">");
+            }
+        });
+    },
+
     formatUptime: function formatUptime(uptime) {
         // if uptime is greater than one day
         if (uptime > 86400) {

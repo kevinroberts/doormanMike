@@ -1,6 +1,19 @@
 /*
  *   defines all the basic mike responses
  */
+
+var cleverbotio = require("cleverbot.io"),
+    cleverbotio = new cleverbotio(process.env.CLEVERBOTUSER, process.env.CLEVERBOTAPI);
+cleverbotio.setNick("Mike");
+cleverbotio.create(function (err, session) {
+    if (err) {
+        console.log('Cleverbot create fail', err);
+    } else {
+        console.log('cleverbot create success.');
+    }
+});
+
+
 var os = require('os'),
     dayOfTheWeekResponses = require('./dayOfTheWeek'),
     messageUtils = require('../helpers/messageUtils'),
@@ -9,8 +22,10 @@ var os = require('os'),
     weather = require('../responses/weatherResponses'),
     conversations = require('../responses/conversations'),
     patterns = require('../helpers/regexPatterns'),
-    cleverbot = require('../helpers/cleverbot');
+    Cleverbot = require('../helpers/cleverbot');
 const matcher = require('matcher');
+
+
 
 var baseResponses = function(controller, callback) {
 
@@ -28,12 +43,8 @@ var baseResponses = function(controller, callback) {
     // ambient responses [use sparingly]
     controller.hears(['mornin mornin', 'good morning', 'morning'], ["ambient"], function(bot, message) {
             bot.startTyping(message);
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-                    bot.reply(message, user.name + ' ' + dayOfTheWeekResponses.getMikeMorninTimeSensitive(null) + love.getLoveReactionForName(user.name))
-                } else {
-                    bot.reply(message, dayOfTheWeekResponses.getMikeMorninTimeSensitive(message.user) + love.getLoveReactionForName(message.user));
-                }
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                bot.reply(message, name + ' ' + dayOfTheWeekResponses.getMikeMorninTimeSensitive(null) + love.getLoveReactionForName(name));
             });
     });
 
@@ -42,7 +53,6 @@ var baseResponses = function(controller, callback) {
         var intro = "<@"+message.user+"> what's up?";
         bot.reply(message, intro);
     });
-
 
 
     /*
@@ -55,11 +65,10 @@ var baseResponses = function(controller, callback) {
         // checking the message.event: message.event == 'direct_message'
         var usersMessage = message.text;
 
-
         // respond to weather related queries
         if (usersMessage.search(patterns.getWeatherRegex()) !== -1) {
 
-            weather.getWeatherResponse(message.user, function(msg) {
+            weather.getWeatherResponse(controller, message.user, function(msg) {
                 bot.reply(message, msg);
             });
 
@@ -67,40 +76,25 @@ var baseResponses = function(controller, callback) {
         // message asks what day is it?
         else if ( usersMessage.search(patterns.getWhatDayRegex()) !== -1) {
 
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-                    bot.reply(message, dayOfTheWeekResponses.questionResponse(user.name, bot, message));
-                } else {
-                    bot.reply(message, dayOfTheWeekResponses.questionResponse(null, bot, message));
-                }
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                bot.reply(message, dayOfTheWeekResponses.questionResponse(name, bot, message));
             });
 
         }// message asks what time is it?
         else if ( usersMessage.search(patterns.getTimeRegex()) !== -1) {
             messageUtils.postReaction(bot, message, 'timer_clock');
 
-            var msg = "it's time to get a " + vocabulary.getMikeDang() + " watch!";
-            var loveMsg = love.getLoveReactionForName(message.user);
-            if (loveMsg) {
-                msg += loveMsg;
-            }
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-                    bot.reply(message, user.name + ' ' + msg);
-                } else {
-                    bot.reply(message, "<@" + message.user + "> " + msg);
-                }
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                var msg = "it's time to get a " + vocabulary.getMikeDang() + " watch!";
+                var loveMsg = love.getLoveReactionForName(name);
+                bot.reply(message, name + ' ' + msg + loveMsg);
             });
 
         } else if ( usersMessage.search(patterns.getTacoRegex()) !== -1) {
             messageUtils.postMikeFist(bot, message);
-            var msg = "thanks for the " + vocabulary.getMikeDang() + " taco bro!";
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-                    bot.reply(message, user.name + ' ' + msg);
-                } else {
-                    bot.reply(message, "<@" + message.user + "> " + msg);
-                }
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                var msg = "thanks for the " + vocabulary.getMikeDang() + " taco bro!";
+                bot.reply(message, name + ' ' + msg);
             });
 
         } else if ( usersMessage.search(patterns.getMyNameRegex()) !== -1) {
@@ -119,14 +113,9 @@ var baseResponses = function(controller, callback) {
 
             messageUtils.postReaction(bot, message, 'fork_and_knife');
             var lunchSuggestion = vocabulary.getLunchMike();
-
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-
-                    bot.reply(message, user.name + ' ' + lunchSuggestion + love.getLoveReactionForName(user.name))
-                } else {
-                    bot.reply(message, "<@" + message.user + "> " + lunchSuggestion + love.getLoveReactionForName(message.user));
-                }
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                var loveMessage = love.getLoveReactionForName(name);
+                bot.reply(message, name + ' ' + lunchSuggestion + loveMessage);
             });
 
         } else if (matcher.isMatch(usersMessage, 'send mornin to*')) {
@@ -137,8 +126,9 @@ var baseResponses = function(controller, callback) {
             conversations.setNameHandler(controller, bot, message);
 
         } else if ( matcher.isMatch(usersMessage, 'mornin* mornin*') | matcher.isMatch(usersMessage, 'good mornin*') | matcher.isMatch(usersMessage, 'mornin*')) {
-
-            bot.reply(message, dayOfTheWeekResponses.getMikeMorninTimeSensitive(message.user));
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                bot.reply(message, dayOfTheWeekResponses.getMikeMorninTimeSensitive(name));
+            });
 
         } else if ( usersMessage.indexOf("uptime") > -1 | usersMessage.indexOf("identify yourself") > -1  | usersMessage.indexOf("who are you") > -1 | usersMessage.indexOf("what is your name") > -1) {
 
@@ -155,56 +145,40 @@ var baseResponses = function(controller, callback) {
 
             var msgPt2 = dayOfTheWeekResponses.statementResponse();
 
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-                    var personalHello = vocabulary.getPersonalMikeHello(user.name).toUpperCase();
-                    bot.reply(message, personalHello + ' ' + msgPt2);
-                } else {
-                    var personalMikeHello = vocabulary.getPersonalMikeHello("<@" + message.user + "> ").toUpperCase();
-                    bot.reply(message, personalMikeHello + ' ' + msgPt2);
-                }
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                var personalHello = vocabulary.getPersonalMikeHello(name).toUpperCase();
+                bot.reply(message, personalHello + ' ' + msgPt2);
             });
 
         } else if ( usersMessage.toLowerCase() == 'hi' | usersMessage.toLowerCase() == 'hello') {
 
             messageUtils.postMikeFist(bot, message);
 
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-                    bot.reply(message, vocabulary.getPersonalMikeHello(user.name));
-                } else {
-                    bot.reply(message, vocabulary.getPersonalMikeHello("<@" + message.user + "> "));
-                }
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                bot.reply(message, vocabulary.getPersonalMikeHello(name));
             });
 
         } else if ( usersMessage.match(patterns.getBraptRegex())) {
 
             messageUtils.postReaction(bot, message, 'poop');
 
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-                    bot.reply(message, vocabulary.getBrapt(user.name));
-                } else {
-                    bot.reply(message, vocabulary.getBrapt("<@" + message.user + ">"));
-                }
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                bot.reply(message, vocabulary.getBrapt(name));
             });
 
         } else if ( usersMessage.toLowerCase() == 'mike' | usersMessage.toLowerCase() == 'doorman') {
 
             messageUtils.postMikeFist(bot, message);
 
-            controller.storage.users.get(message.user, function(err, user) {
-                if (user && user.name) {
-                    bot.reply(message, "Yes, " + user.name + " that's my name.");
-                } else {
-                    bot.reply(message, "Yes, that's my name.");
-                }
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                bot.reply(message, "Yes, " + name + " that's my name.");
             });
 
         }
         else {
+            var cleverbotInstance = new Cleverbot(cleverbotio);
             // else ask clever bot for a response (cleverbot.io)
-            cleverbot.getCleverBotResponse(message, function(response) {
+            cleverbotInstance.getCleverBotResponse(message, function(response) {
                bot.reply(message, response);
             });
         }

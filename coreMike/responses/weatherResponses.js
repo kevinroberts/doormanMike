@@ -4,11 +4,20 @@ var vocabulary = require('../helpers/vocabulary');
 
 module.exports = {
 
-    getWeatherResponse: function getWeatherResponse(user, callback) {
+    getWeatherResponse: function getWeatherResponse(controller, user, callback) {
         var userText = '';
-        if (user) {
-            userText = "<@" + user + "> ";
-        }
+
+        controller.storage.users.get(user, function(err, userObj) {
+            if (userObj && userObj.name) {
+                userText = userObj.name + " ";
+            } else {
+                if (user) {
+                    userText = "<@" + user + "> ";
+                }
+            }
+        });
+
+
         // JSON format back from Yahoo {
         //    "code": "28",
         //    "date": "Thu, 21 Apr 2016 10:00 AM CDT",
