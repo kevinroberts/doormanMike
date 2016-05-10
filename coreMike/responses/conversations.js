@@ -144,38 +144,93 @@ module.exports = {
     },
 
     getMyBirthdayHandler: function getMyBirthdayHandler(controller, bot, message) {
-        controller.storage.users.get(message.user, function(err, user) {
-            if (user && user.birthday) {
-                var birthdayDate = moment(user.birthday, "MM/DD");
-                var now = moment();
-                var difference, duration;
+        var myRegex = /my birthday/;
+        //message.text.search(monthDayRegex)
+        // check if user wants to see their birthday
+        if (message.text.search(myRegex) !== -1) {
+            controller.storage.users.get(message.user, function(err, user) {
+                if (user && user.birthday) {
+                    var birthdayDate = moment(user.birthday, "MM/DD");
+                    var now = moment();
+                    var difference, duration;
 
-                var secondPart = '';
-                if (now.isSame(birthdayDate, 'month') && now.isSame(birthdayDate, 'day')) {
-                    secondPart = " AND THAT IS TODAY HAPPY GAHDAMN BIRTHDAY!!!"
-                } else if (birthdayDate.isAfter(now)) {
-                    difference = birthdayDate.diff(now);
-                    duration = moment.duration(difference);
-                    secondPart = ", you\'ve still got " + duration.humanize() + " until your birthday."
-                } else if (birthdayDate.isBefore(now)) {
-                    birthdayDate = birthdayDate.add(1, "years");
-                    difference = birthdayDate.diff(now);
-                    duration = moment.duration(difference);
-                    secondPart = ", you\'ve still got " + duration.humanize() + " until your birthday."
+                    var secondPart = '';
+                    if (now.isSame(birthdayDate, 'month') && now.isSame(birthdayDate, 'day')) {
+                        secondPart = " AND THAT IS TODAY HAPPY GAHDAMN BIRTHDAY!!!"
+                    } else if (birthdayDate.isAfter(now)) {
+                        difference = birthdayDate.diff(now);
+                        duration = moment.duration(difference);
+                        secondPart = ", you\'ve still got " + duration.humanize() + " until your birthday."
+                    } else if (birthdayDate.isBefore(now)) {
+                        birthdayDate = birthdayDate.add(1, "years");
+                        difference = birthdayDate.diff(now);
+                        duration = moment.duration(difference);
+                        secondPart = ", you\'ve still got " + duration.humanize() + " until your birthday."
+                    }
+
+                    if (user.name) {
+                        bot.reply(message, "YO " + user.name.toUpperCase() + "! Your birthday is on " + birthdayDate.format("MMMM Do") + secondPart + " :birthday: :fist::skin-tone-5:");
+                    } else {
+                        bot.reply(message, "Your birthday is on " + birthdayDate.format("MMMM Do") + secondPart + " :birthday: :fist::skin-tone-5:");
+                    }
+
+                } else {
+                    var sryMsg = "Sorry I dont know your birthday. If you want me to remember your birthday, say `@doorman-mike my birthday is MM/DD`";
+                    bot.reply(message, sryMsg);
                 }
 
-                if (user.name) {
-                    bot.reply(message, "YO " + user.name.toUpperCase() + "! Your birthday is on " + birthdayDate.format("MMMM Do") + secondPart + " :birthday: :fist::skin-tone-5:");
-                } else {
-                    bot.reply(message, "Your birthday is on " + birthdayDate.format("MMMM Do") + secondPart + " :birthday: :fist::skin-tone-5:");
+            });
+        } else {
+            var re = /<@(.*)>/g;
+            var m;
+            if (message.text.search(re) !== -1) {
+                while ((m = re.exec(message.text)) !== null) {
+
+                    if (m.index === re.lastIndex) {
+                        re.lastIndex++;
+                    }
+                    var userToFind = m[1];
+                    controller.storage.users.get(userToFind, function(err, user) {
+                        if (user && user.birthday) {
+                            var birthdayDate = moment(user.birthday, "MM/DD");
+                            var now = moment();
+                            var difference, duration;
+
+                            var secondPart = '';
+                            if (now.isSame(birthdayDate, 'month') && now.isSame(birthdayDate, 'day')) {
+                                secondPart = " AND THAT IS TODAY HAPPY GAHDAMN BIRTHDAY!!!"
+                            } else if (birthdayDate.isAfter(now)) {
+                                difference = birthdayDate.diff(now);
+                                duration = moment.duration(difference);
+                                secondPart = ", bro\'s still got " + duration.humanize() + " until their birthday."
+                            } else if (birthdayDate.isBefore(now)) {
+                                birthdayDate = birthdayDate.add(1, "years");
+                                difference = birthdayDate.diff(now);
+                                duration = moment.duration(difference);
+                                secondPart = ", bro\'s still got " + duration.humanize() + " until their birthday."
+                            }
+
+                            if (user.name) {
+                                bot.reply(message, user.name + "'s birthday is on " + birthdayDate.format("MMMM Do") + secondPart + " :birthday: :fist::skin-tone-5:");
+                            } else {
+                                bot.reply(message, "<@" + userToFind + "> birthday is on " + birthdayDate.format("MMMM Do") + secondPart + " :birthday: :fist::skin-tone-5:");
+                            }
+
+                        } else {
+                            var sryMsg = "Sorry I dont know <@" + userToFind + "> birthday. Tell them to set a birthday with `@doorman-mike my birthday is MM/DD`";
+                            bot.reply(message, sryMsg);
+                        }
+
+                    });
                 }
 
             } else {
-                var sryMsg = "Sorry I dont know your birthday. If you want me to remember your birthday, say `@doorman-mike my birthday is MM/DD`";
+                var sryMsg = "Sorry I dont know what you are asking";
                 bot.reply(message, sryMsg);
             }
 
-        });
+
+        }
     },
 
     setMyBirthdayHandler: function setMyBirthdayHandler(controller, bot, message) {

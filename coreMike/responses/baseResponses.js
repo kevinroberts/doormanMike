@@ -128,7 +128,7 @@ var baseResponses = function(controller, callback) {
         } else if (matcher.isMatch(usersMessage, 'my birthday is*')) {
             conversations.setMyBirthdayHandler(controller, bot, message);
 
-        } else if (matcher.isMatch(usersMessage, 'when is my birthday*') | matcher.isMatch(usersMessage, 'whens my birthday*')) {
+        } else if (matcher.isMatch(usersMessage, 'when is * birthday*') | matcher.isMatch(usersMessage, 'when* * birthday*')) {
             conversations.getMyBirthdayHandler(controller, bot, message);
 
         } else if ( usersMessage.search(patterns.getWhatsMyNameRegex()) !== -1) {
