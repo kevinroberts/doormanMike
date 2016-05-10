@@ -193,6 +193,8 @@ module.exports = {
                     var birthDay = birthdayMonthDay.split('/')[1];
                     if (parseInt(birthMonth) > 12 || parseInt(birthDay) > 31) {
                         bot.reply(message, sryMsg + " You entered " + birthdayMonthDay + " which is not a valid Month / Day combination.");
+                    } else if(!moment(birthdayMonthDay, "MM/DD").isValid()) {
+                        bot.reply(message, sryMsg + " You entered " + birthdayMonthDay + " which is not a valid Month / Day combination.");
                     } else {
                         bot.startConversation(message,function(err,convo) {
 
