@@ -148,14 +148,20 @@ module.exports = {
             if (user && user.birthday) {
                 var birthdayDate = moment(user.birthday, "MM/DD");
                 var now = moment();
+                var difference, duration;
 
                 var secondPart = '';
                 if (now.isSame(birthdayDate, 'month') && now.isSame(birthdayDate, 'day')) {
                     secondPart = " AND THAT IS TODAY HAPPY GAHDAMN BIRTHDAY!!!"
                 } else if (birthdayDate.isAfter(now)) {
-                    var ms = birthdayDate.diff(now);
-                    var d = moment.duration(ms);
-                    secondPart = ", you\'ve still got " + d.humanize() + " until your birthday."
+                    difference = birthdayDate.diff(now);
+                    duration = moment.duration(difference);
+                    secondPart = ", you\'ve still got " + duration.humanize() + " until your birthday."
+                } else if (birthdayDate.isBefore(now)) {
+                    birthdayDate = birthdayDate.add(1, "years");
+                    difference = birthdayDate.diff(now);
+                    duration = moment.duration(difference);
+                    secondPart = ", you\'ve still got " + duration.humanize() + " until your birthday."
                 }
 
                 if (user.name) {
