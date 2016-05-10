@@ -43,7 +43,7 @@ var bot = controller.spawn({
 baseResponses(controller, null);
 
 // start scheduled mike messages
-scheduledResponses(bot);
+scheduledResponses(controller, bot);
 
 
 module.exports = bot;

@@ -8,6 +8,7 @@
   "dependencies": {
     "botkit": "^0.1.1",
     "botkit-storage-firebase": "1.0.0",
+    "chance": "^1.0.3",
     "cleverbot.io": "^1.0.4",
     "cron": "^1.1.0",
     "day-of-week": "^1.0.4",
@@ -15,6 +16,7 @@
     "dotenv": "^2.0.0",
     "lodash": "^4.11.1",
     "matcher": "^0.1.2",
+    "moment": "^2.13.0",
     "string": "^3.3.1",
     "yql-client": "0.0.3"
   },

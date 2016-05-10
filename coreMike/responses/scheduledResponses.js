@@ -3,6 +3,7 @@ var CronJob = require('cron').CronJob;
 var dayOfTheWeekResponses = require('./dayOfTheWeek');
 var messageUtils = require('../helpers/messageUtils');
 var vocabulary = require('../helpers/vocabulary');
+var birthday = require('../responses/birthdayResponses');
 
 var timezoneEnv = process.env.TIMEZONE;
 function getDefaultTz() {
@@ -13,7 +14,7 @@ function getDefaultTz() {
     }
 }
 
-var scheduledResponses = function(bot) {
+var scheduledResponses = function(controller, bot) {
 
     var dailyMorninJob = new CronJob({
         cronTime: '00 10 09 * * 1-5',
@@ -24,7 +25,7 @@ var scheduledResponses = function(bot) {
              * or Sunday.
              */
             messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin() + '\n' + dayOfTheWeekResponses.statementResponse());
-
+            birthday.getBirthDayMessages(controller, bot);
         },
         start: false,
         timeZone: getDefaultTz()

@@ -24,7 +24,8 @@ var os = require('os'),
     patterns = require('../helpers/regexPatterns'),
     Cleverbot = require('../helpers/cleverbot');
 const matcher = require('matcher');
-
+var Chance = require('chance'),
+    chance = new Chance();
 
 
 var baseResponses = function(controller, callback) {
@@ -42,10 +43,13 @@ var baseResponses = function(controller, callback) {
 
     // ambient responses [use sparingly]
     controller.hears(['mornin mornin', 'good morning', 'morning'], ["ambient"], function(bot, message) {
+        if (chance.bool({likelihood: 30})) {
             bot.startTyping(message);
             messageUtils.getUsernameFromController(controller, message.user, function(name) {
                 bot.reply(message, name + ' ' + dayOfTheWeekResponses.getMikeMorninTimeSensitive(null) + love.getLoveReactionForName(name));
             });
+        }
+
     });
 
     controller.hears(["doorman-mike"], ["ambient"], function(bot, message) {
@@ -120,6 +124,12 @@ var baseResponses = function(controller, callback) {
 
         } else if (matcher.isMatch(usersMessage, 'send mornin to*')) {
             conversations.sendMorninToHandler(bot, message);
+
+        } else if (matcher.isMatch(usersMessage, 'my birthday is*')) {
+            conversations.setMyBirthdayHandler(controller, bot, message);
+
+        } else if (matcher.isMatch(usersMessage, 'when is my birthday*')) {
+            conversations.getMyBirthdayHandler(controller, bot, message);
 
         } else if ( usersMessage.search(patterns.getWhatsMyNameRegex()) !== -1) {
 

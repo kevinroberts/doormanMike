@@ -20,11 +20,11 @@ var mikeMornin = [
 ];
 
 var mikeHellos = [
-    'Hey |username|! what\'s up?!',
-    'What\'s cookin |username|?!',
-    'whats up |username|!!!',
-    'Yo |username|!',
-    'Hey |username|!'
+    'Hey |USERNAME|! what\'s up?!',
+    'What\'s cookin |USERNAME|?!',
+    'whats up |USERNAME|!!!',
+    'Yo |USERNAME|!',
+    'Hey |USERNAME|!'
 ];
 
 var beerFriday = [
@@ -48,10 +48,14 @@ var lunchIntro = [
 ];
 
 var brapts = [
-    '|username| u stink dude :frog: ',
-    '|username| sick - that sounded wet',
-    '|username| sometimes you gamble and lose :game_die: '
-]
+    '|USERNAME| u stink dude :frog: ',
+    '|USERNAME| sick - that sounded wet',
+    '|USERNAME| sometimes you gamble and lose :game_die: '
+];
+
+var birthday = [
+    'YO EVERYONG TODAY IS |USERNAME| |DANG| BIRTHDAY! :birthday: :fist::skin-tone-5:'
+];
 
 var lunchDestinations = [
     'La Cocina :flag-mx: :burrito: :flag-mx:',
@@ -122,16 +126,21 @@ module.exports = {
         return _.sample(sadMikes);
     },
     getMikeHello: function getMikeHello() {
-        return _.sample(mikeHellos).replace(" |username|", "");
+        return _.sample(mikeHellos).replace(" |USERNAME|", "");
     },
     getBrapt: function getBrapt(name) {
-        return _.sample(brapts).replace("|username|", name);
+        return _.sample(brapts).replace("|USERNAME|", name);
     },
     getBeerFriday: function getBeerFriday(){
         return _.sample(beerFriday);
     },
+    getBirthdayGreeting: function getBirthdayGreeting(name) {
+        var birthdayMsg = _.sample(birthday).replace("|USERNAME|", name);
+        birthdayMsg = birthdayMsg.replace("|DANG|", _.sample(mikeDangs).toUpperCase());
+        return birthdayMsg;
+    },
     getPersonalMikeHello: function getPersonalMikeHello(name) {
-        var personalHelloMsg = _.sample(mikeHellos).replace("|username|", name);
+        var personalHelloMsg = _.sample(mikeHellos).replace("|USERNAME|", name);
         personalHelloMsg += love.getLoveReactionForName(name);
         return personalHelloMsg;
     }

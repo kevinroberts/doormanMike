@@ -4,6 +4,7 @@ var dayOfTheWeekResponses = require('../responses/dayOfTheWeek');
 var patterns = require('../helpers/regexPatterns');
 var love = require('../responses/loveMachine');
 var S = require('string');
+var moment = require('moment');
 var characterLimit = 50;
 
 module.exports = {
@@ -139,6 +140,93 @@ module.exports = {
             }
         });
 
+
+    },
+
+    getMyBirthdayHandler: function getMyBirthdayHandler(controller, bot, message) {
+        controller.storage.users.get(message.user, function(err, user) {
+            if (user && user.birthday) {
+                var birthdayDate = moment(user.birthday, "MM/DD");
+                var now = moment();
+
+                var secondPart = '';
+                if (now.isSame(birthdayDate, 'month') && now.isSame(birthdayDate, 'day')) {
+                    secondPart = " AND THAT IS TODAY HAPPY GAHDAMN BIRTHDAY!!!"
+                } else if (birthdayDate.isAfter(now)) {
+                    var ms = birthdayDate.diff(now);
+                    var d = moment.duration(ms);
+                    secondPart = ", you\'ve still got " + d.humanize() + " until your birthday."
+                }
+
+                if (user.name) {
+                    bot.reply(message, "YO " + user.name.toUpperCase() + "! Your birthday is on " + birthdayDate.format("MMMM Do") + secondPart + " :birthday: :fist::skin-tone-5:");
+                } else {
+                    bot.reply(message, "Your birthday is on " + birthdayDate.format("MMMM Do") + secondPart + " :birthday: :fist::skin-tone-5:");
+                }
+
+            } else {
+                var sryMsg = "Sorry I dont know your birthday. If you want me to remember your birthday, say `@doorman-mike my birthday is MM/DD`";
+                bot.reply(message, sryMsg);
+            }
+
+        });
+    },
+
+    setMyBirthdayHandler: function setMyBirthdayHandler(controller, bot, message) {
+        var monthDayRegex = /[0-9][0-9]\/[0-9][0-9]/;
+        var sryMsg = "Sorry I didn't get that. If you want me to remember your birthday, say `@doorman-mike my birthday is MM/DD`";
+        if (message.text.search(monthDayRegex) !== -1) {
+            var m;
+            if ((m = monthDayRegex.exec(message.text)) !== null) {
+                if (m.index === monthDayRegex.lastIndex) {
+                    re.lastIndex++;
+                }
+                var birthdayMonthDay = m[0];
+                if (birthdayMonthDay) {
+                    var birthMonth = birthdayMonthDay.split('/')[0];
+                    var birthDay = birthdayMonthDay.split('/')[1];
+                    if (parseInt(birthMonth) > 12 || parseInt(birthDay) > 31) {
+                        bot.reply(message, sryMsg + " You entered " + birthdayMonthDay + " which is not a valid Month / Day combination.");
+                    } else {
+                        bot.startConversation(message,function(err,convo) {
+
+                            convo.ask("Great. Just to confirm should I remember your birthday on `" + birthdayMonthDay + "`? Say `yes` or `no`",function(response,convo) {
+
+                                if ( response.text.match(bot.botkit.utterances.yes) ) {
+
+                                    controller.storage.users.get(message.user, function(err, user) {
+                                        if (!user) {
+                                            user = {
+                                                id: message.user,
+                                            };
+                                        }
+                                        user.birthday = birthdayMonthDay;
+
+                                        controller.storage.users.save(user, function(err, id) {
+                                            var birthdayDate = moment(birthdayMonthDay, "MM/DD");
+
+                                            bot.reply(message, "Ok I've got your birthday down as " + birthdayDate.format("MMMM Do") + " :birthday: :fist::skin-tone-5:");
+                                        });
+                                    });
+
+                                } else {
+                                    bot.reply(message, "OK. I'll pretend this never happened.");
+                                }
+
+                                convo.stop();
+                            });
+
+                        });
+
+                    }
+                } else {
+                    bot.reply(message, sryMsg);
+                }
+
+            }
+        } else {
+            bot.reply(message, sryMsg);
+        }
 
     },
 
