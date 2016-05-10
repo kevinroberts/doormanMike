@@ -42,7 +42,6 @@ module.exports = {
             });
         }
 
-
     },
     setNameHandler: function setNameHandler(controller, bot, message) {
 
@@ -127,8 +126,6 @@ module.exports = {
                                     }
 
                                 });
-
-
 
                             } else {
                                 // this happens if the conversation ended prematurely for some reason
