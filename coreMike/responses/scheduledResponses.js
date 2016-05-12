@@ -39,7 +39,7 @@ var scheduledResponses = function(controller, bot) {
              * at 11:10:00 AM. It does not run on Saturday
              * or Sunday.
              */
-            messageUtils.postMessage(bot, ['john-cena', 'general'], vocabulary.getLunchMike());
+            messageUtils.postMessage(bot, ['john-cena'], vocabulary.getLunchMike());
         },
         start: false,
         timeZone: getDefaultTz()
