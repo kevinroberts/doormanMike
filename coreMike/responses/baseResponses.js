@@ -184,6 +184,22 @@ var baseResponses = function(controller, callback) {
                 bot.reply(message, "Yes, " + name + " that's my name.");
             });
 
+
+        } else if ( usersMessage.toLowerCase() == 'help' ) {
+
+            bot.reply(message,
+                "_Basic Mike Functions_ \n\n" +
+                "Say: `Call me [nickname]` Tell Doorman Mike your nickname. Now you are friends.\n" +
+                "Say: `whats up` Doorman Mike will greet you with your nickname.\n" +
+                "Say: `what should I get for lunch?` Doorman Mike will give you a suggestion for a lunch destination\n" +
+                "Say: `Whats the weather like?` Mike tell give you the weather for today.\n\n" +
+                    "_Advanced Mike_ \n\n" +
+                "Say: `send mornin to @username in #random` Mike will send a custom mornin' mornin' message to the specified slack user in that channel.\n" +
+                "Say: `My birthday is [MM/DD]` Mike will remember your birthday and give others a shout-out on the day\n" +
+                "Say: `when is @username birthday?` / `when is my birthday?` Mike will tell you when you or your mates birthday is\n\n" +
+                    "Make sure to invite Mike into other channels using /invite @doorman-Mike!"
+                );
+
         }
         else {
             var cleverbotInstance = new Cleverbot(cleverbotio);
