@@ -150,7 +150,7 @@ var baseResponses = function(controller, callback) {
                 bot.reply(message, vocabulary.getBodies(name));
             });
 
-        } else if ( usersMessage.indexOf("uptime") > -1 | usersMessage.indexOf("identify yourself") > -1  | usersMessage.indexOf("who are you") > -1 | usersMessage.indexOf("what is your name") > -1) {
+        } else if ( matcher.isMatch(usersMessage, 'uptime') | matcher.isMatch(usersMessage, 'identify yourself')  | matcher.isMatch(usersMessage, 'who are you') | matcher.isMatch(usersMessage, 'what is your name*')) {
 
             messageUtils.postMikeFist(bot, message);
 
