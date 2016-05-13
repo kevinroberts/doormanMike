@@ -4,8 +4,6 @@
 
 var nameRegex =         new RegExp("call me (.*)|my name is (.*)", "i");
 
-var braptRegex =        new RegExp("^braa(.*)t|brappt|brapt", "i");
-
 var whatsMyNameRegex =  new RegExp("whats my name(.*)|who am i(.*)|what\'s my name(.*)|what is my name(.*)", "i");
 
 var whatDayRegex =      new RegExp("what day is it", "i");
@@ -55,9 +53,6 @@ module.exports = {
     },
     getInvalidNameRegex: function getInvalidNameRegex() {
         return invalidNameRegex;
-    },
-    getBraptRegex: function getBraptRegex() {
-        return braptRegex;
     }
 
 

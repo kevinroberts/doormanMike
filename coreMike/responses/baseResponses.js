@@ -22,6 +22,7 @@ var os = require('os'),
     weather = require('../responses/weatherResponses'),
     conversations = require('../responses/conversations'),
     patterns = require('../helpers/regexPatterns'),
+    S = require('string'),
     Cleverbot = require('../helpers/cleverbot');
 const matcher = require('matcher');
 var Chance = require('chance'),
@@ -140,6 +141,15 @@ var baseResponses = function(controller, callback) {
                 bot.reply(message, dayOfTheWeekResponses.getMikeMorninTimeSensitive(name));
             });
 
+        } else if ( matcher.isMatch(usersMessage, 'where did you * the bod*')) {
+            if (chance.bool({likelihood: 30})) {
+                messageUtils.postReaction(bot, message, 'knife');
+            }
+
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                bot.reply(message, vocabulary.getBodies(name));
+            });
+
         } else if ( usersMessage.indexOf("uptime") > -1 | usersMessage.indexOf("identify yourself") > -1  | usersMessage.indexOf("who are you") > -1 | usersMessage.indexOf("what is your name") > -1) {
 
             messageUtils.postMikeFist(bot, message);
@@ -149,7 +159,7 @@ var baseResponses = function(controller, callback) {
 
             bot.reply(message,
                 ':doorman: I am a bot named <@' + bot.identity.name +
-                '>. I have been alive for ' + uptime + ' on NONE OF YO GODANG BUSINESS SERVER. (' + hostname + ')');
+                '>. I have been alive for ' + uptime + ' on NONE OF YO GODANG BUSINESS SERVER. (' + hostname + ').\nIf you want to know more: `@doorman-mike help`');
 
         } else if ( usersMessage.toLowerCase() == "hey" | usersMessage.indexOf("sup?") > -1  | usersMessage.indexOf("hows it going") > -1 | usersMessage.toLowerCase() == "whats good" | usersMessage.toLowerCase() == "whats up") {
 
@@ -168,12 +178,17 @@ var baseResponses = function(controller, callback) {
                 bot.reply(message, vocabulary.getPersonalMikeHello(name));
             });
 
-        } else if ( usersMessage.match(patterns.getBraptRegex())) {
+        } else if ( matcher.isMatch(usersMessage, 'braa*t*') | matcher.isMatch(usersMessage, 'br*pt')) {
 
             messageUtils.postReaction(bot, message, 'poop');
+            var numberOfAs = S(usersMessage.toLowerCase()).count('a');
 
             messageUtils.getUsernameFromController(controller, message.user, function(name) {
-                bot.reply(message, vocabulary.getBrapt(name));
+                var bMsg = vocabulary.getBrapt(name);
+                if (numberOfAs > 10) {
+                    bMsg += '\n' + vocabulary.getBraptPt2();
+                }
+                bot.reply(message, bMsg);
             });
 
         } else if ( usersMessage.toLowerCase() == 'mike' | usersMessage.toLowerCase() == 'doorman') {
@@ -187,23 +202,23 @@ var baseResponses = function(controller, callback) {
 
         } else if ( usersMessage.toLowerCase() == 'help' ) {
 
-            bot.reply(message,
-                "_Basic Mike Functions_ \n\n" +
-                "Say: `Call me [nickname]` Tell Doorman Mike your nickname. Now you are friends.\n" +
-                "Say: `whats up` Doorman Mike will greet you with your nickname.\n" +
-                "Say: `what should I get for lunch?` Doorman Mike will give you a suggestion for a lunch destination\n" +
-                "Say: `Whats the weather like?` Mike tell give you the weather for today.\n\n" +
-                    "_Advanced Mike_ \n\n" +
-                "Say: `send mornin to @username in #random` Mike will send a custom mornin' mornin' message to the specified slack user in that channel.\n" +
-                "Say: `My birthday is [MM/DD]` Mike will remember your birthday and give others a shout-out on the day\n" +
-                "Say: `when is @username birthday?` / `when is my birthday?` Mike will tell you when you or your mates birthday is\n\n" +
-                    "Make sure to invite Mike into other channels using /invite @doorman-Mike!"
-                );
+            //U0WHC44R3 == doorman-mikes bot id
+
+            controller.storage.users.get('U0WHC44R3', function(err, userObj) {
+                if (userObj && userObj.helpText) {
+                    bot.reply(message, userObj.helpText);
+                } else {
+                    bot.reply(message, "no help for you");
+                }
+            });
 
         }
         else {
+            // catch all other responses
+
+            // initialize cleverbot module with a clerverbotio object
             var cleverbotInstance = new Cleverbot(cleverbotio);
-            // else ask clever bot for a response (cleverbot.io)
+            // ask clever bot for a response (cleverbot.io)
             cleverbotInstance.getCleverBotResponse(message, function(response) {
                bot.reply(message, response);
             });

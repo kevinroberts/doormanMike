@@ -53,6 +53,20 @@ var brapts = [
     '|USERNAME| sometimes you gamble and lose :game_die: '
 ];
 
+var brapts2 = [
+    'DAAAYUUM HEAVY LOAD TODAY??',
+    'GAAAHDAMMN THAT WAS AN EPIC ONE',
+    'I could hear that one from all the way downstairs yo!',
+    'DAYUMMM WHO LET YOU GOT FRESH AND FRUITY ROOTY TOOTY THERE!!1!'
+];
+
+var bodies = [
+    'in |USERNAME|\'s basement of course!',
+    'I forget but my basement is full',
+    'oh |USERNAME| you know... in a van down by the river..',
+    'I didn\'t do it |USERNAME|!'
+];
+
 var birthday = [
     'YO EVERYONG TODAY IS |USERNAME| |DANG| BIRTHDAY! :birthday: :fist::skin-tone-5:'
 ];
@@ -130,6 +144,12 @@ module.exports = {
     },
     getBrapt: function getBrapt(name) {
         return _.sample(brapts).replace("|USERNAME|", name);
+    },
+    getBraptPt2: function getBraptPt2() {
+        return _.sample(brapts2);
+    },
+    getBodies: function getBodies(name) {
+        return _.sample(bodies).replace("|USERNAME|", name);
     },
     getBeerFriday: function getBeerFriday(){
         return _.sample(beerFriday);
