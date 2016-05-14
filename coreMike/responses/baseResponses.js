@@ -222,6 +222,7 @@ var baseResponses = function(controller, callback) {
             cleverbotInstance.getCleverBotResponse(message, function(response) {
                bot.reply(message, response);
             });
+
         }
 
     });

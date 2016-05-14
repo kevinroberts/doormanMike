@@ -6,6 +6,7 @@ var love = require('../responses/loveMachine');
 var S = require('string');
 var moment = require('moment');
 var characterLimit = 50;
+var unirest = require('unirest');
 
 module.exports = {
 
@@ -28,17 +29,45 @@ module.exports = {
                     };
                 }
                 user.name = name;
+
                 controller.storage.users.save(user, function(err, id) {
                     var loveMsg = love.getLoveReactionForName(user.name);
                     if (loveMsg) {
                         loveMsg = " I kind of like that name." + loveMsg;
                     }
+
                     if (tooLong) {
                         bot.reply(message, 'woah bro that\'s a long ass name.. im gonna cut yah off and call yah `' + name + '`' );
                     } else {
                         bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
                     }
                 });
+
+                unirest.get("https://montanaflynn-gender-guesser.p.mashape.com/?name="+name)
+                    .header("X-Mashape-Key", process.env.MASHAPEKEY)
+                    .header("Accept", "application/json")
+                    .end(function (result) {
+                        var gender = '';
+                        if (result && result.status == 200) {
+                            if (result.body.gender) {
+                                gender = result.body.gender;
+                            }
+                            var genderMsg = '';
+                            if (gender) {
+                                if (gender == 'male') {
+                                    genderMsg = "\nThat's a nice manly name :muscle::skin-tone-4:";
+                                }
+                                if (gender == 'female') {
+                                    genderMsg = "\nSo you're a bad ass female! That's right we need more ladies up in here! :dancer::skin-tone-4:";
+                                }
+                            }
+                            if (genderMsg) {
+                                bot.reply(message, genderMsg);
+                            }
+                        }
+
+                    });
+
             });
         }
 
@@ -120,9 +149,31 @@ module.exports = {
                                             } else {
                                                 bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
                                             }
-
-
                                         });
+                                        unirest.get("https://montanaflynn-gender-guesser.p.mashape.com/?name="+user.name)
+                                            .header("X-Mashape-Key", process.env.MASHAPEKEY)
+                                            .header("Accept", "application/json")
+                                            .end(function (result) {
+                                                var gender = '';
+                                                if (result && result.status == 200) {
+                                                    if (result.body.gender) {
+                                                        gender = result.body.gender;
+                                                    }
+                                                    var genderMsg = '';
+                                                    if (gender) {
+                                                        if (gender == 'male') {
+                                                            genderMsg = "That's a nice manly name :muscle::skin-tone-4:";
+                                                        }
+                                                        if (gender == 'female') {
+                                                            genderMsg = "So you're a bad ass female! That's right we need more ladies up in here! :dancer::skin-tone-4:";
+                                                        }
+                                                    }
+                                                    if (genderMsg) {
+                                                        bot.reply(message, genderMsg);
+                                                    }
+                                                }
+
+                                            });
                                     }
 
                                 });

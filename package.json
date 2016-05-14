@@ -18,6 +18,7 @@
     "matcher": "^0.1.2",
     "moment": "^2.13.0",
     "string": "^3.3.1",
+    "unirest": "^0.5.0",
     "yql-client": "0.0.3"
   },
   "contributors": [
