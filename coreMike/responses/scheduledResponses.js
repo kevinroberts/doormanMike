@@ -24,7 +24,7 @@ var scheduledResponses = function(controller, bot) {
              * at 9:10:00 AM. It does not run on Saturday
              * or Sunday.
              */
-            messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin() + '\n' + dayOfTheWeekResponses.statementResponse());
+            messageUtils.postMessage(bot, 'john-cena', vocabulary.getMikeMornin() + '\n' + dayOfTheWeekResponses.statementResponse());
             birthday.getBirthDayMessages(controller, bot);
         },
         start: false,
@@ -52,7 +52,7 @@ var scheduledResponses = function(controller, bot) {
              * Runs every Friday
              * at 3 PM.
              */
-            messageUtils.postMessage(bot, ['john-cena', 'general'], vocabulary.getBeerFriday());
+            messageUtils.postMessage(bot, ['john-cena'], vocabulary.getBeerFriday());
         },
         start: false,
         timeZone: getDefaultTz()
