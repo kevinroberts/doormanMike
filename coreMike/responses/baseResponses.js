@@ -13,7 +13,6 @@ cleverbotio.create(function (err, session) {
     }
 });
 
-
 var os = require('os'),
     dayOfTheWeekResponses = require('./dayOfTheWeek'),
     messageUtils = require('../helpers/messageUtils'),
@@ -23,6 +22,7 @@ var os = require('os'),
     conversations = require('../responses/conversations'),
     patterns = require('../helpers/regexPatterns'),
     S = require('string'),
+    constants = require('../slackConstants')
     Cleverbot = require('../helpers/cleverbot');
 const matcher = require('matcher');
 var Chance = require('chance'),
@@ -202,9 +202,7 @@ var baseResponses = function(controller, callback) {
 
         } else if ( usersMessage.toLowerCase() == 'help' ) {
 
-            //U0WHC44R3 == doorman-mikes bot id
-
-            controller.storage.users.get('U0WHC44R3', function(err, userObj) {
+            controller.storage.users.get(constants.getBotUserID(), function(err, userObj) {
                 if (userObj && userObj.helpText) {
                     bot.reply(message, userObj.helpText);
                 } else {

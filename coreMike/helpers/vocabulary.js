@@ -102,6 +102,7 @@ var lunchMikes = [
 var wasters = [
     "hm...",
     "well",
+    "with a little bit of lemon and mint.",
     "interesting..."
 ];
 
