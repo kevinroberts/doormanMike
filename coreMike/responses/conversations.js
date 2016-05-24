@@ -4,13 +4,16 @@ var dayOfTheWeekResponses = require('../responses/dayOfTheWeek');
 var patterns = require('../helpers/regexPatterns');
 var love = require('../responses/loveMachine');
 var S = require('string');
+var _ = require('lodash');
 var moment = require('moment');
 var characterLimit = 50;
 var unirest = require('unirest');
 
 module.exports = {
 
-    callMeHandler: function callMeHandler(controller, bot, message) {
+    callMeHandler: function callMeHandler(appCache, controller, bot, message) {
+        var profane = appCache.get( "profane" );
+        var result = {found: false, curse: ''};
         var name = S(message.text.match(patterns.getMyNameRegex())[1]).replaceAll(":", "").s;
         var length = name.length;
         var tooLong = false;
@@ -19,8 +22,17 @@ module.exports = {
             name = S(name).left(characterLimit).s;
             tooLong = true;
         }
+        _.forEach(profane.profaneList, function (curse) {
+            if (name.indexOf(curse) > -1) {
+                result.found = true;
+                result.curse = curse;
+            }
+        });
+
         if (name.search(patterns.getInvalidNameRegex()) !== -1) {
             bot.reply(message, 'woah bro I cannot call you that.');
+        } else if (result.found) {
+            bot.reply(message, 'woah bro I cannot call you that ' + result.curse);
         } else {
             controller.storage.users.get(message.user, function(err, user) {
                 if (!user) {
@@ -72,7 +84,9 @@ module.exports = {
         }
 
     },
-    setNameHandler: function setNameHandler(controller, bot, message) {
+    setNameHandler: function setNameHandler(appCache, controller, bot, message) {
+        var profane = appCache.get( "profane" );
+        var result = {found: false, curse: ''};
 
         controller.storage.users.get(message.user, function(err, user) {
             if (user && user.name) {
@@ -135,9 +149,17 @@ module.exports = {
                                         user.name = S(user.name).left(characterLimit).s;
                                         tooLong = true;
                                     }
+                                    _.forEach(profane.profaneList, function (curse) {
+                                        if (user.name.indexOf(curse) > -1) {
+                                            result.found = true;
+                                            result.curse = curse;
+                                        }
+                                    });
 
                                     if (user.name.search(patterns.getInvalidNameRegex()) !== -1) {
                                         bot.reply(message, 'woah bro I cannot call you that.');
+                                    } else if (result.found) {
+                                        bot.reply(message, 'woah bro I cannot call you that ' + result.curse);
                                     } else {
                                         controller.storage.users.save(user, function(err, id) {
                                             var loveMsg = love.getLoveReactionForName(user.name);

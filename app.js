@@ -1,7 +1,11 @@
 var path = require('path');
-require('dotenv').config({silent: true});
-
+var _ = require('lodash');
 var Botkit = require('botkit');
+require('dotenv').config({silent: true});
+var NodeCache = require( "node-cache" );
+var constants = require('./coreMike/slackConstants');
+
+var appCache = new NodeCache();
 
 var baseResponses = require('./coreMike/responses/baseResponses');
 var scheduledResponses = require('./coreMike/responses/scheduledResponses');
@@ -40,7 +44,22 @@ var bot = controller.spawn({
     token: process.env.token
 }).startRTM();
 
-baseResponses(controller, null);
+controller.storage.users.get(constants.getBotUserID(), function (err, userObj) {
+    if (userObj && userObj.curses) {
+        var profaneList = _.words(userObj.curses);
+        obj = { profaneList: profaneList};
+        appCache.set( "profane", obj, function( err, success ) {
+            if (!err && success) {
+                console.log("loaded profanity list");
+            }
+        });
+
+    } else {
+        console.error("no curse data was found");
+    }
+});
+
+baseResponses(controller, appCache);
 
 // start scheduled mike messages
 scheduledResponses(controller, bot);

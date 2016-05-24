@@ -13,6 +13,7 @@ cleverbotio.create(function (err, session) {
     }
 });
 
+
 var os = require('os'),
     dayOfTheWeekResponses = require('./dayOfTheWeek'),
     messageUtils = require('../helpers/messageUtils'),
@@ -22,14 +23,17 @@ var os = require('os'),
     conversations = require('../responses/conversations'),
     patterns = require('../helpers/regexPatterns'),
     S = require('string'),
-    constants = require('../slackConstants')
+     _ = require('lodash'),
+    constants = require('../slackConstants'),
     Cleverbot = require('../helpers/cleverbot');
 const matcher = require('matcher');
 var Chance = require('chance'),
     chance = new Chance();
 
 
-var baseResponses = function(controller, callback) {
+
+var baseResponses = function(controller, appCache) {
+
 
     // when joins a channel
     controller.on('bot_channel_join', function (bot, message) {
@@ -103,7 +107,7 @@ var baseResponses = function(controller, callback) {
             });
 
         } else if ( usersMessage.search(patterns.getMyNameRegex()) !== -1) {
-            conversations.callMeHandler(controller, bot, message);
+            conversations.callMeHandler(appCache, controller, bot, message);
         } else if ( usersMessage.search(patterns.getWhoKilledRegex()) !== -1) {
             messageUtils.postReaction(bot, message, 'knife');
 
@@ -134,7 +138,7 @@ var baseResponses = function(controller, callback) {
 
         } else if ( usersMessage.search(patterns.getWhatsMyNameRegex()) !== -1) {
 
-            conversations.setNameHandler(controller, bot, message);
+            conversations.setNameHandler(appCache, controller, bot, message);
 
         } else if ( matcher.isMatch(usersMessage, 'mornin* mornin*') | matcher.isMatch(usersMessage, 'good mornin*') | matcher.isMatch(usersMessage, 'mornin*')) {
             messageUtils.getUsernameFromController(controller, message.user, function(name) {
@@ -213,6 +217,19 @@ var baseResponses = function(controller, callback) {
         }
         else {
             // catch all other responses
+            var profane = appCache.get( "profane" );
+            var result = {found: false, curse: ''};
+
+            _.forEach(profane.profaneList, function (curse) {
+                if (usersMessage.indexOf(curse) > -1) {
+                    result.found = true;
+                    result.curse = curse;
+                }
+            });
+
+            if (result.found) {
+                bot.reply(message, "watch your language " + result.curse);
+            }
 
             // initialize cleverbot module with a clerverbotio object
             var cleverbotInstance = new Cleverbot(cleverbotio);
