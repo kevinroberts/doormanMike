@@ -39,6 +39,13 @@ var sadMikes = [
     ':sob:'
 ];
 
+var profaneResponse = [
+    'woah. Language, bruh.',
+    'daayuum you speak to your mother with that mouth?',
+    'watch yo language',
+    'dont get me into trouble, watch your language :fist::skin-tone-5:'
+];
+
 var lunchIntro = [
     '\'bout lunch o\'clock',
     'nearin lunch time!',
@@ -148,6 +155,9 @@ module.exports = {
     },
     getBraptPt2: function getBraptPt2() {
         return _.sample(brapts2);
+    },
+    getProfaneReponse: function getProfaneReponse() {
+        return _.sample(profaneResponse);
     },
     getBodies: function getBodies(name) {
         return _.sample(bodies).replace("|USERNAME|", name);

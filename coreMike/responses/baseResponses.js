@@ -228,15 +228,22 @@ var baseResponses = function(controller, appCache) {
             });
 
             if (result.found) {
-                bot.reply(message, "watch your language " + result.curse);
+                messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                    var msg = name + ' ' + vocabulary.getProfaneReponse();
+                    bot.reply(message, msg);
+                });
+
+            } else {
+
+                // initialize cleverbot module with a clerverbotio object
+                var cleverbotInstance = new Cleverbot(cleverbotio);
+                // ask clever bot for a response (cleverbot.io)
+                cleverbotInstance.getCleverBotResponse(message, function(response) {
+                    bot.reply(message, response);
+                });
             }
 
-            // initialize cleverbot module with a clerverbotio object
-            var cleverbotInstance = new Cleverbot(cleverbotio);
-            // ask clever bot for a response (cleverbot.io)
-            cleverbotInstance.getCleverBotResponse(message, function(response) {
-               bot.reply(message, response);
-            });
+
 
         }
 
