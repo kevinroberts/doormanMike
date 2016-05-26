@@ -47,7 +47,7 @@ var bot = controller.spawn({
 controller.storage.users.get(constants.getBotUserID(), function (err, userObj) {
     if (userObj && userObj.curses) {
         var profaneList = _.words(userObj.curses);
-        obj = { profaneList: profaneList};
+        var obj = { profaneList: profaneList};
         appCache.set( "profane", obj, function( err, success ) {
             if (!err && success) {
                 console.log("loaded profanity list");

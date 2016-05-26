@@ -227,9 +227,9 @@ var baseResponses = function(controller, appCache) {
                 }
             });
 
-            if (result.found) {
+            if ( messageUtils.multiSearchOr( usersMessage, profane.profaneList) ) {
                 messageUtils.getUsernameFromController(controller, message.user, function(name) {
-                    var msg = name + ' ' + vocabulary.getProfaneReponse();
+                    var msg = name + ' ' + vocabulary.getProfaneReponse() + " " + result.curse;
                     bot.reply(message, msg);
                 });
 
@@ -242,6 +242,31 @@ var baseResponses = function(controller, appCache) {
                     bot.reply(message, response);
                 });
             }
+
+
+
+            //_.forEach(profane.profaneList, function (curse) {
+            //    if (usersMessage.indexOf(curse) > -1) {
+            //        result.found = true;
+            //        result.curse = curse;
+            //    }
+            //});
+
+            //if (result.found) {
+            //    messageUtils.getUsernameFromController(controller, message.user, function(name) {
+            //        var msg = name + ' ' + vocabulary.getProfaneReponse() + " " + result.curse;
+            //        bot.reply(message, msg);
+            //    });
+            //
+            //} else {
+            //
+            //    // initialize cleverbot module with a clerverbotio object
+            //    var cleverbotInstance = new Cleverbot(cleverbotio);
+            //    // ask clever bot for a response (cleverbot.io)
+            //    cleverbotInstance.getCleverBotResponse(message, function(response) {
+            //        bot.reply(message, response);
+            //    });
+            //}
 
 
 

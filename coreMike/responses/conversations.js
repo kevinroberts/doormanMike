@@ -31,7 +31,7 @@ module.exports = {
 
         if (name.search(patterns.getInvalidNameRegex()) !== -1) {
             bot.reply(message, 'woah bro I cannot call you that.');
-        } else if (result.found) {
+        } else if (messageUtils.multiSearchOr( name, profane.profaneList)) {
             bot.reply(message, 'woah bro I cannot call you that ' + result.curse);
         } else {
             controller.storage.users.get(message.user, function(err, user) {
@@ -158,7 +158,7 @@ module.exports = {
 
                                     if (user.name.search(patterns.getInvalidNameRegex()) !== -1) {
                                         bot.reply(message, 'woah bro I cannot call you that.');
-                                    } else if (result.found) {
+                                    } else if (messageUtils.multiSearchOr( user.name, profane.profaneList)) {
                                         bot.reply(message, 'woah bro I cannot call you that ' + result.curse);
                                     } else {
                                         controller.storage.users.save(user, function(err, id) {

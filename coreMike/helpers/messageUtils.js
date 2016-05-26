@@ -53,6 +53,16 @@ module.exports = {
         });
     },
 
+    multiSearchOr: function multiSearchOr(text, searchWords){
+        // create a regular expression from searchwords using join and |. Add "gi".
+        // Example: ["ANY", "UNATTENDED","HELLO"] becomes
+        // "ANY|UNATTENDED|HELLO","gi"
+        // | means OR. gi means GLOBALLY and CASEINSENSITIVE
+        var searchExp = new RegExp(searchWords.join("|"),"gi");
+        // regularExpression.test(string) returns true or false
+        return (searchExp.test(text));
+    },
+
     formatUptime: function formatUptime(uptime) {
         // if uptime is greater than one day
         if (uptime > 86400) {
