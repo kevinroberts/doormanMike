@@ -63,6 +63,10 @@ var baseResponses = function(controller, appCache) {
         bot.reply(message, intro);
     });
 
+    controller.hears(["whos champ?"], ["ambient"], function(bot, message) {
+        messageUtils.postReaction(bot, message, "cena");
+    });
+
 
     /*
      *    Catch all other responses that are not defined and pass it through our mike logic
@@ -242,33 +246,6 @@ var baseResponses = function(controller, appCache) {
                     bot.reply(message, response);
                 });
             }
-
-
-
-            //_.forEach(profane.profaneList, function (curse) {
-            //    if (usersMessage.indexOf(curse) > -1) {
-            //        result.found = true;
-            //        result.curse = curse;
-            //    }
-            //});
-
-            //if (result.found) {
-            //    messageUtils.getUsernameFromController(controller, message.user, function(name) {
-            //        var msg = name + ' ' + vocabulary.getProfaneReponse() + " " + result.curse;
-            //        bot.reply(message, msg);
-            //    });
-            //
-            //} else {
-            //
-            //    // initialize cleverbot module with a clerverbotio object
-            //    var cleverbotInstance = new Cleverbot(cleverbotio);
-            //    // ask clever bot for a response (cleverbot.io)
-            //    cleverbotInstance.getCleverBotResponse(message, function(response) {
-            //        bot.reply(message, response);
-            //    });
-            //}
-
-
 
         }
 
