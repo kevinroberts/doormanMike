@@ -22,7 +22,7 @@ module.exports = {
 
                                 var birthdayMessage = vocabulary.getBirthdayGreeting("<@" + member.id + ">");
 
-                                messageUtils.postMessage(bot, 'general', birthdayMessage);
+                                messageUtils.postMessage(bot, ['john-cena', 'general'], birthdayMessage);
                             }
                         }
                     });
