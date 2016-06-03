@@ -220,10 +220,10 @@ var baseResponses = function(controller, appCache) {
             var profane = appCache.get( "profane" );
             var result = {found: false, curse: ''};
 
-            _.forEach(profane.profaneList, function (curse) {
-                if (usersMessage.indexOf(curse) > -1) {
+            _.forEach(_.words(usersMessage), function (word) {
+                if (messageUtils.multiSearchOr( word, profane.profaneList)) {
                     result.found = true;
-                    result.curse = curse;
+                    result.curse = word;
                 }
             });
 

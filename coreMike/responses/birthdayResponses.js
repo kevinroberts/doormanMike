@@ -19,14 +19,10 @@ module.exports = {
                             var now = moment();
 
                             if (now.isSame(birthdayDate, 'month') && now.isSame(birthdayDate, 'day')) {
-                                var birthdayMessage = '';
-                                if (userObj.name) {
-                                    birthdayMessage = vocabulary.getBirthdayGreeting("<@" + member.id + "> (" + userObj.name + ")");
-                                } else {
-                                    birthdayMessage = vocabulary.getBirthdayGreeting("<@" + member.id + ">");
-                                }
 
-                                messageUtils.postMessage(bot, 'privatetests', birthdayMessage);
+                                var birthdayMessage = vocabulary.getBirthdayGreeting("<@" + member.id + ">");
+
+                                messageUtils.postMessage(bot, 'general', birthdayMessage);
                             }
                         }
                     });

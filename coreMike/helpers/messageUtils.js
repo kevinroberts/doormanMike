@@ -54,13 +54,23 @@ module.exports = {
     },
 
     multiSearchOr: function multiSearchOr(text, searchWords){
-        // create a regular expression from searchwords using join and |. Add "gi".
-        // Example: ["ANY", "UNATTENDED","HELLO"] becomes
-        // "ANY|UNATTENDED|HELLO","gi"
-        // | means OR. gi means GLOBALLY and CASEINSENSITIVE
-        var searchExp = new RegExp(searchWords.join("|"),"gi");
-        // regularExpression.test(string) returns true or false
-        return (searchExp.test(text));
+            // create a regular expression from searchwords using join and |. Add "gi".
+            // Example: ["ANY", "UNATTENDED","HELLO"] becomes
+            // "ANY|UNATTENDED|HELLO","gi"
+            // | means OR. gi means GLOBALLY and CASEINSENSITIVE
+            var regex = '';
+            for (var i = 0; i < searchWords.length; i++) {
+                regex += "\\b(";
+                regex += searchWords[i];
+                regex += ")\\b";
+                if (i < searchWords.length-1) {
+                    regex += "|"
+                }
+            }
+            var searchExp = new RegExp(regex,"gi");
+
+            // regularExpression.test(string) returns true or false
+            return (searchExp.test(text));
     },
 
     formatUptime: function formatUptime(uptime) {
