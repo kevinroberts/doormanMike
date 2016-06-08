@@ -11,7 +11,9 @@ module.exports = {
                 if (result && result.status == 200) {
                     if (result.body.value) {
                         var fact = result.body.value;
-                        fact = S(fact).replaceAll("chuck norris", "doorman mike").replaceAll("Chuck Norris", "Doorman Mike").s;
+                        fact = S(fact).replaceAll("chuck norris", "doorman mike")
+                            .replaceAll("Chuck Norris", "Doorman Mike")
+                            .replaceAll("Chuck norris", "Doorman Mike").s;
                         bot.reply(message, fact);
                     }
                 } else {
