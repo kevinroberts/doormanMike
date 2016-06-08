@@ -21,6 +21,7 @@ var os = require('os'),
     love = require('../responses/loveMachine'),
     weather = require('../responses/weatherResponses'),
     conversations = require('../responses/conversations'),
+    facts = require('../responses/mikeFacts'),
     patterns = require('../helpers/regexPatterns'),
     S = require('string'),
      _ = require('lodash'),
@@ -66,6 +67,12 @@ var baseResponses = function(controller, appCache) {
     controller.hears(["whos champ?"], ["ambient"], function(bot, message) {
         messageUtils.postReaction(bot, message, "cena");
     });
+
+
+    //controller.hears([":fist:"], ["ambient"], function(bot, message) {
+    //    var fistText = 'Give someone a doorman mike fist by adding it after their username, like this: *@username :fist:*';
+    //    bot.reply(message, fistText);
+    //});
 
 
     /*
@@ -136,6 +143,9 @@ var baseResponses = function(controller, appCache) {
 
         } else if (matcher.isMatch(usersMessage, 'my birthday is*')) {
             conversations.setMyBirthdayHandler(controller, bot, message);
+
+        } else if (matcher.isMatch(usersMessage, '* fact*') | matcher.isMatch(usersMessage, 'fact*')) {
+            facts.getMikeFact(bot, message);
 
         } else if (matcher.isMatch(usersMessage, 'when is * birthday*') | matcher.isMatch(usersMessage, 'when* * birthday*') | matcher.isMatch(usersMessage, 'what* * birthday*')) {
             conversations.getMyBirthdayHandler(controller, bot, message);
