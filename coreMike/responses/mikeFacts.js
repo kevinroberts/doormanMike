@@ -13,6 +13,7 @@ module.exports = {
                         var fact = result.body.value;
                         fact = S(fact).replaceAll("chuck norris", "doorman mike")
                             .replaceAll("Chuck Norris", "Doorman Mike")
+                            .replaceAll("roundhouse kick", ":fist::skin-tone-5:")
                             .replaceAll("Chuck norris", "Doorman Mike").s;
                         bot.reply(message, fact);
                     }
