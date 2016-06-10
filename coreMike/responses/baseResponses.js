@@ -48,24 +48,24 @@ var baseResponses = function(controller, appCache) {
     });
 
     // ambient responses [use sparingly]
-    controller.hears(['mornin mornin', 'good morning', 'morning'], ["ambient"], function(bot, message) {
-        if (chance.bool({likelihood: 30})) {
-            bot.startTyping(message);
-            messageUtils.getUsernameFromController(controller, message.user, function(name) {
-                bot.reply(message, name + ' ' + dayOfTheWeekResponses.getMikeMorninTimeSensitive(null) + love.getLoveReactionForName(name));
-            });
+    controller.hears('', 'ambient', function (bot, message) {
+        var usersMessage = message.text;
+
+        if (matcher.isMatch(usersMessage, 'mornin mornin') | matcher.isMatch(usersMessage, 'good morning*')  | matcher.isMatch(usersMessage, 'morning')) {
+            if (chance.bool({likelihood: 30})) {
+                bot.startTyping(message);
+                messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                    bot.reply(message, name + ' ' + dayOfTheWeekResponses.getMikeMorninTimeSensitive(null) + love.getLoveReactionForName(name));
+                });
+            }
+        } else if (usersMessage == 'doorman-mike') {
+            messageUtils.postMikeFist(bot, message);
+            var responseMsg = "<@"+message.user+"> what's up?";
+            bot.reply(message, responseMsg);
+        } else if (matcher.isMatch(usersMessage, 'who* champ*') | matcher.isMatch(usersMessage, 'who is champ*')) {
+            messageUtils.postReaction(bot, message, "cena");
         }
 
-    });
-
-    controller.hears(["doorman-mike"], ["ambient"], function(bot, message) {
-        messageUtils.postMikeFist(bot, message);
-        var intro = "<@"+message.user+"> what's up?";
-        bot.reply(message, intro);
-    });
-
-    controller.hears(["whos champ?"], ["ambient"], function(bot, message) {
-        messageUtils.postReaction(bot, message, "cena");
     });
 
 
@@ -159,7 +159,7 @@ var baseResponses = function(controller, appCache) {
                 bot.reply(message, dayOfTheWeekResponses.getMikeMorninTimeSensitive(name));
             });
 
-        } else if ( matcher.isMatch(usersMessage, 'where did you * the bod*')) {
+        } else if ( matcher.isMatch(usersMessage, 'where did you * bod*') | matcher.isMatch(usersMessage, 'what did you * bod*')) {
             if (chance.bool({likelihood: 30})) {
                 messageUtils.postReaction(bot, message, 'knife');
             }
@@ -243,7 +243,10 @@ var baseResponses = function(controller, appCache) {
 
             if ( messageUtils.multiSearchOr( usersMessage, profane.profaneList) ) {
                 messageUtils.getUsernameFromController(controller, message.user, function(name) {
-                    var msg = name + ' ' + vocabulary.getProfaneReponse() + " " + result.curse;
+                    var msg = name + ' ' + vocabulary.getProfaneReponse();
+                    if (message.user == constants.getAdminUserID()) {
+                        msg += " (you said " + result.curse + ")"
+                    }
                     bot.reply(message, msg);
                 });
 
