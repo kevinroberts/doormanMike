@@ -179,7 +179,7 @@ var baseResponses = function(controller, appCache) {
                 ':doorman: I am a bot named <@' + bot.identity.name +
                 '>. I have been alive for ' + uptime + ' on NONE OF YO GODANG BUSINESS SERVER. (' + hostname + ').\nIf you want to know more: `@doorman-mike help`');
 
-        } else if ( usersMessage.toLowerCase() == "hey" | usersMessage.indexOf("sup?") > -1  | usersMessage.indexOf("hows it going") > -1 | usersMessage.toLowerCase() == "whats good" | usersMessage.toLowerCase() == "whats up") {
+        } else if ( usersMessage.toLowerCase() == "hey" | usersMessage.indexOf("sup") > -1  | usersMessage.indexOf("hows it going") > -1 | usersMessage.toLowerCase() == "whats good" | usersMessage.toLowerCase() == "whats up") {
 
             var msgPt2 = dayOfTheWeekResponses.statementResponse();
 
