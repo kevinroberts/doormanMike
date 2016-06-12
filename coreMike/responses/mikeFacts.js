@@ -17,6 +17,8 @@ module.exports = {
                             .replaceAll("Chuck", "Mike")
                             .replaceAll("chuck", "Mike")
                             .replaceAll("roundhouse kick", ":fist::skin-tone-5:")
+                            .replaceAll("roundhouse-kicks", ":fist::skin-tone-5:s")
+                            .replaceAll("roundhouse-kick", ":fist::skin-tone-5:s")
                             .replaceAll("kick", ":fist::skin-tone-5:").s;
                         bot.reply(message, fact);
                     }
