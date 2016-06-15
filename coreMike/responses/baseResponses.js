@@ -58,7 +58,7 @@ var baseResponses = function(controller, appCache) {
                     bot.reply(message, name + ' ' + dayOfTheWeekResponses.getMikeMorninTimeSensitive(null) + love.getLoveReactionForName(name));
                 });
             }
-        } else if (usersMessage == 'doorman-mike') {
+        } else if (matcher.isMatch(usersMessage, '*doorman-mike*')) {
             messageUtils.postMikeFist(bot, message);
             var responseMsg = "<@"+message.user+"> what's up?";
             bot.reply(message, responseMsg);
