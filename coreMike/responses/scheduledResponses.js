@@ -24,7 +24,7 @@ var scheduledResponses = function(controller, bot) {
              * at 9:10:00 AM. It does not run on Saturday
              * or Sunday.
              */
-            messageUtils.postMessage(bot, 'john-cena', vocabulary.getMikeMornin() + '\n' + dayOfTheWeekResponses.statementResponse());
+            messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin() + '\n' + dayOfTheWeekResponses.statementResponse());
             birthday.getBirthDayMessages(controller, bot);
         },
         start: false,
@@ -32,14 +32,14 @@ var scheduledResponses = function(controller, bot) {
     });
 
     var dailyLunchJob = new CronJob({
-        cronTime: '00 10 11 * * 1-5',
+        cronTime: '00 00 11 * * 1-5',
         onTick: function() {
             /*
              * Runs every weekday (Monday through Friday)
-             * at 11:10:00 AM. It does not run on Saturday
+             * at 11:00:00 AM. It does not run on Saturday
              * or Sunday.
              */
-            messageUtils.postMessage(bot, ['john-cena'], vocabulary.getLunchMike());
+            messageUtils.postMessage(bot, ['general'], vocabulary.getLunchMike());
         },
         start: false,
         timeZone: getDefaultTz()
@@ -52,7 +52,7 @@ var scheduledResponses = function(controller, bot) {
              * Runs every Friday
              * at 3 PM.
              */
-            messageUtils.postMessage(bot, ['john-cena'], vocabulary.getBeerFriday());
+            messageUtils.postMessage(bot, ['general'], vocabulary.getBeerFriday());
         },
         start: false,
         timeZone: getDefaultTz()
@@ -60,7 +60,7 @@ var scheduledResponses = function(controller, bot) {
 
 
     dailyMorninJob.start();
-    dailyLunchJob.start();
+    //dailyLunchJob.start();
     beerFridayJob.start();
 
 };

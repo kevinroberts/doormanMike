@@ -1,16 +1,14 @@
 var _ = require('lodash');
 
 var catCrush = [
-    'Agnes',
-    'U0P7GGJVB', //agnes
-    'U0MKH8B7W' //belinda
+    'Agnes'
 ];
 
 var specialCrushes = [
     'vinberts',
-    'U0H0JKGLC', // vinberts user id
-    'U0H0DARFW', // kyles user id
-    'U0LN5LAQL', // jmolsen
+    'U1THK0L78', // vinberts user id
+    'U1THN8CKE', // kyles user id
+    'U1TJ14XC1', // jmolsen
     'Kevin',
     'Jeff',
     'Murl',

@@ -5,6 +5,8 @@ var mikeDangs = [
     'gawd damn',
     'gaddd dannng',
     'gad damn',
+    'gaahd doggity daang',
+    'gotdanng',
     'gahdamn',
     'gotdamn',
     'gaddanng',
@@ -75,7 +77,7 @@ var bodies = [
 ];
 
 var birthday = [
-    'YO EVERYONG TODAY IS |USERNAME| |DANG| BIRTHDAY! :birthday: :fist::skin-tone-5:'
+    'YO EVERYONE TODAY IS |USERNAME| |DANG| BIRTHDAY! :birthday: :fist::skin-tone-5:'
 ];
 
 var lunchDestinations = [

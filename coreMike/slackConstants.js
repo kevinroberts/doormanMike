@@ -5,7 +5,7 @@ module.exports = {
         return process.env.BOTID ? process.env.BOTID : 'U0WHC44R3';
     },
     getAdminUserID: function getAdminUserID() {
-        return 'U0H0JKGLC';
+        return 'U1UPQ5GBV';
     }
 
 };
