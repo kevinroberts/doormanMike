@@ -44,6 +44,19 @@ var bot = controller.spawn({
     token: process.env.token
 }).startRTM();
 
+/*
+* Manually Set storage for bot user  
+ var user = {
+ id: constants.getBotUserID(),
+ curses: "fuck",
+ helpText: "help"
+ };
+
+ controller.storage.users.save(user, function(err, id) {
+ console.log("saved bot user data");
+ });
+ */
+
 controller.storage.users.get(constants.getBotUserID(), function (err, userObj) {
     if (userObj && userObj.curses) {
         var profaneList = _.words(userObj.curses);

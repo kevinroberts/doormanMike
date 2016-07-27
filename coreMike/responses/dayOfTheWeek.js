@@ -2,6 +2,7 @@
 var dayOfWeek = require('day-of-week').get
 var vocabulary = require('../helpers/vocabulary');
 var messageUtils = require('../helpers/messageUtils');
+var _ = require('lodash');
 
 var timezoneEnv = process.env.TIMEZONE;
 function getDefaultTz() {
@@ -78,6 +79,32 @@ module.exports = {
         if (day > 5) {
             msg = "HAPPY " + vocabulary.getMikeDang().toUpperCase() + " WEEKEND BRO!!!! :fist::skin-tone-5:";
         }
+
+        return msg;
+    },
+
+
+    favoriteDayResponse: function favoriteDayResponse(user) {
+        var day = getDayOfWeek();
+
+        var mikeResponses = [
+            '|USERNAME| IT\'S DEFINITELY NOT ' + vocabulary.getMikeDang().toUpperCase() + " MONDAY... I HATE MONDAY " + vocabulary.getSadMikeReaction(),
+            "MONDAY... JUST kidding I " + vocabulary.getMikeDang().toUpperCase() + " HATE MONDAY.",
+            vocabulary.getMikeDang().toUpperCase() + ' FRRIIIDAYYYYYYYYYY! :whiskey: ',
+            'the lord made friday and should have stopped there. TGIF is my favorite place on earth. Also I got shit to do this weekend. :fist::skin-tone-5: ',
+            '|USERNAME| IT IS ' + vocabulary.getMikeDang().toUpperCase() + ' FRIDAY :heart: OF COURSE'
+        ];
+        
+        var msg = _.sample(mikeResponses).replace("|USERNAME|", user);
+
+        if (day == 1) {
+            msg += "\nugh it actually is monday *shudders*"
+        }
+
+        if (day == 5) {
+            msg = "ITS DEFINITELY " + vocabulary.getMikeDang().toUpperCase() + " TODAY - CUZ ITS FRIDAY! TGIF!"
+        }
+
 
         return msg;
     },

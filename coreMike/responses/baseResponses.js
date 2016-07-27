@@ -209,6 +209,14 @@ var baseResponses = function(controller, appCache) {
                 bot.reply(message, bMsg);
             });
 
+        } else if ( matcher.isMatch(usersMessage, '*favorite day*') | matcher.isMatch(usersMessage, 'what is * day *') | matcher.isMatch(usersMessage, 'what day * fav*')) {
+
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                var bMsg = dayOfTheWeekResponses.favoriteDayResponse(name);
+
+                bot.reply(message, bMsg);
+            });
+
         } else if ( usersMessage.toLowerCase() == 'mike' | usersMessage.toLowerCase() == 'doorman') {
 
             messageUtils.postMikeFist(bot, message);
