@@ -105,6 +105,10 @@ module.exports = {
             msg = "ITS DEFINITELY " + vocabulary.getMikeDang().toUpperCase() + " TODAY - CUZ ITS FRIDAY! TGIF!"
         }
 
+        if (day > 5) {
+            msg += "\nand its the weekend soo stop asking me silly questions."
+        }
+
 
         return msg;
     },
@@ -139,6 +143,16 @@ module.exports = {
                 return "I am " + mikeDang + " zZz :sleeping: ";
             }
         }
+    },
+
+    getMikeMondayResponse: function getMikeMondayResponse() {
+        var mikeResponses = [
+            '|USERNAME| IT\'S DEFINITELY NOT ' + vocabulary.getMikeDang().toUpperCase() + " MONDAY... I HATE MONDAY " + vocabulary.getSadMikeReaction(),
+            "MONDAY... JUST kidding I " + vocabulary.getMikeDang().toUpperCase() + " HATE MONDAY.",
+            vocabulary.getMikeDang().toUpperCase() + ' FRRIIIDAYYYYYYYYYY! :whiskey: ',
+            'the lord made friday and should have stopped there. TGIF is my favorite place on earth. Also I got shit to do this weekend. :fist::skin-tone-5: ',
+            '|USERNAME| IT IS ' + vocabulary.getMikeDang().toUpperCase() + ' FRIDAY :heart: OF COURSE'
+        ];
     },
 
     getDayOfTheWeek: function getDayOfTheWeek(timezone) {
