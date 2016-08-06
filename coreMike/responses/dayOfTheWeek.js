@@ -98,7 +98,15 @@ module.exports = {
         var msg = _.sample(mikeResponses).replace("|USERNAME|", user);
 
         if (day == 1) {
-            msg += "\nugh it actually is monday *shudders*"
+            var mikeResponses2 = [
+                "I haven't had this bad of a Monday since last Monday...",
+                "ugh it actually is monday *shudders*",
+                "God gave us Mondays to punish us for the things we did over the weekend.",
+                "...good thing i got some :whiskey: under this desk"
+            ];
+
+            msg += "\n" + _.sample(mikeResponses2);
+
         }
 
         if (day == 5) {
@@ -145,14 +153,14 @@ module.exports = {
         }
     },
 
-    getMikeMondayResponse: function getMikeMondayResponse() {
+    getMikeMondayResponse: function getMikeMondayResponse(user) {
         var mikeResponses = [
-            '|USERNAME| IT\'S DEFINITELY NOT ' + vocabulary.getMikeDang().toUpperCase() + " MONDAY... I HATE MONDAY " + vocabulary.getSadMikeReaction(),
-            "MONDAY... JUST kidding I " + vocabulary.getMikeDang().toUpperCase() + " HATE MONDAY.",
-            vocabulary.getMikeDang().toUpperCase() + ' FRRIIIDAYYYYYYYYYY! :whiskey: ',
-            'the lord made friday and should have stopped there. TGIF is my favorite place on earth. Also I got shit to do this weekend. :fist::skin-tone-5: ',
-            '|USERNAME| IT IS ' + vocabulary.getMikeDang().toUpperCase() + ' FRIDAY :heart: OF COURSE'
+            '|USERNAME| eew :scream: ' + vocabulary.getMikeDang().toUpperCase() + " MONDAY... I HATE MONDAY ",
+            "MONDAY i dont even like saying the " + vocabulary.getMikeDang() + " word",
+            "|USERNAME|, God gave us Mondays to punish us for the things we did over the weekend."
         ];
+        
+        return _.sample(mikeResponses).replace("|USERNAME|", user);
     },
 
     getDayOfTheWeek: function getDayOfTheWeek(timezone) {

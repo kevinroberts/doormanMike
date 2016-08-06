@@ -217,6 +217,14 @@ var baseResponses = function(controller, appCache) {
                 bot.reply(message, bMsg);
             });
 
+        } else if ( matcher.isMatch(usersMessage, '*Monday*') | matcher.isMatch(usersMessage, '*monday*')) {
+
+            messageUtils.getUsernameFromController(controller, message.user, function(name) {
+                var bMsg = dayOfTheWeekResponses.getMikeMondayResponse(name);
+
+                bot.reply(message, bMsg);
+            });
+
         } else if ( usersMessage.toLowerCase() == 'mike' | usersMessage.toLowerCase() == 'doorman') {
 
             messageUtils.postMikeFist(bot, message);
