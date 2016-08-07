@@ -160,7 +160,13 @@ module.exports = {
             "|USERNAME|, God gave us Mondays to punish us for the things we did over the weekend."
         ];
 
-        messageUtils.postReaction(bot, message, 'scream');
+        var mikeReactions = [
+            'omg',
+            "rage",
+            "wtf"
+        ];
+
+        messageUtils.postReaction(bot, message, _.sample(mikeReactions));
         
         return _.sample(mikeResponses).replace("|USERNAME|", user);
     },
