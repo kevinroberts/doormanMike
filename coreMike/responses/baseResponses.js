@@ -220,7 +220,7 @@ var baseResponses = function(controller, appCache) {
         } else if ( matcher.isMatch(usersMessage, '*Monday*') | matcher.isMatch(usersMessage, '*monday*')) {
 
             messageUtils.getUsernameFromController(controller, message.user, function(name) {
-                var bMsg = dayOfTheWeekResponses.getMikeMondayResponse(name);
+                var bMsg = dayOfTheWeekResponses.getMikeMondayResponse(name, bot, message);
 
                 bot.reply(message, bMsg);
             });

@@ -153,12 +153,14 @@ module.exports = {
         }
     },
 
-    getMikeMondayResponse: function getMikeMondayResponse(user) {
+    getMikeMondayResponse: function getMikeMondayResponse(user, bot, message) {
         var mikeResponses = [
             '|USERNAME| eew :scream: ' + vocabulary.getMikeDang().toUpperCase() + " MONDAY... I HATE MONDAY ",
             "MONDAY i dont even like saying the " + vocabulary.getMikeDang() + " word",
             "|USERNAME|, God gave us Mondays to punish us for the things we did over the weekend."
         ];
+
+        messageUtils.postReaction(bot, message, 'scream');
         
         return _.sample(mikeResponses).replace("|USERNAME|", user);
     },
