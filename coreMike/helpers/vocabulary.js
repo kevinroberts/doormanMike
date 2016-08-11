@@ -29,6 +29,12 @@ var mikeHellos = [
     'Hey |USERNAME|!'
 ];
 
+var insultNames = [
+    'assface',
+    'bitch',
+    'numbnuts'
+];
+
 var beerFriday = [
     'It\'s gahdamn :beer: FRIDAY time! Grabs yo self a brew!',
     ':fist::skin-tone-5: SOMEONE SAY GGAAAAAHDAMN BEER FRIDAY TIME!!!!!1@? CUZ IT IS, GRAB YOURSELF A BEER :beers: :fist::skin-tone-5: ',
@@ -163,6 +169,9 @@ module.exports = {
     },
     getBodies: function getBodies(name) {
         return _.sample(bodies).replace("|USERNAME|", name);
+    },
+    getInsultName: function getInsultName() {
+        return _.sample(insultNames);
     },
     getBeerFriday: function getBeerFriday(){
         return _.sample(beerFriday);

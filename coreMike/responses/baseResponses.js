@@ -32,7 +32,6 @@ var Chance = require('chance'),
     chance = new Chance();
 
 
-
 var baseResponses = function(controller, appCache) {
 
 
@@ -153,6 +152,9 @@ var baseResponses = function(controller, appCache) {
         } else if ( usersMessage.search(patterns.getWhatsMyNameRegex()) !== -1) {
 
             conversations.setNameHandler(appCache, controller, bot, message);
+
+        } else if (matcher.isMatch(usersMessage, '*argument*') | matcher.isMatch(usersMessage, '*argue*')) {
+            conversations.haveArgumentHandler(controller, bot, message);
 
         } else if ( matcher.isMatch(usersMessage, 'mornin* mornin*') | matcher.isMatch(usersMessage, 'good mornin*') | matcher.isMatch(usersMessage, 'mornin*')) {
             messageUtils.getUsernameFromController(controller, message.user, function(name) {

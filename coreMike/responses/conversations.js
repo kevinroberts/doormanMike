@@ -3,6 +3,7 @@ var vocabulary = require('../helpers/vocabulary');
 var dayOfTheWeekResponses = require('../responses/dayOfTheWeek');
 var patterns = require('../helpers/regexPatterns');
 var love = require('../responses/loveMachine');
+var insults = require('../helpers/getInsult');
 var S = require('string');
 var _ = require('lodash');
 var moment = require('moment');
@@ -373,7 +374,7 @@ module.exports = {
             channel = channel ? channel.split("#")[1] : false;
         channel = channel ? channel.split(">")[0] : false;
 
-        bot.startConversation(message,function(err,convo) {
+        bot.startConversation(message,function(err, convo) {
 
             if ( !user | !channel ) {
 
@@ -406,6 +407,52 @@ module.exports = {
             }
         })
 
+    },
+    haveArgumentHandler: function haveArgumentHandler (controller, bot, message) {
+        var _this = this;
+        bot.startConversation(message, function(err, argConversation) {
+
+            argConversation.ask("ok you wanna start a " + vocabulary.getMikeDang() + " beef with me? Say `yes` or `no`",function(response, argQuestion) {
+
+                if ( response.text === 'yes' | response.text === 'Yes' ) {
+
+                    _this.startArgument(bot, message);
+
+                } else {
+                    bot.reply(message, "Aww damn, alright.. I'll get yah next time.");
+                }
+
+                argQuestion.stop();
+
+            });
+
+
+        });
+
+    },
+
+    startArgument: function startArgument(bot, message) {
+
+        bot.startConversation(message, function(err, argConversation) {
+
+            argConversation.ask("ok " + vocabulary.getInsultName() + " prepare to get insulted! if you've had enough just say `stop`", function (response, mainArgConversation) {
+
+                if ( response.text.toLowerCase() !== 'stop' ) {
+
+                    insults.postMikeInsult(bot, message);
+
+                } else {
+                    bot.reply(message, "OK ok. I'm through with you.");
+
+                    mainArgConversation.stop();
+                }
+
+
+            });
+
+        });
+
     }
+
 
 };
