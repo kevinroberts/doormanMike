@@ -367,7 +367,7 @@ module.exports = {
     sendInsultToHandler: function sendInsultToHandler(bot, message) {
         var placeholder = message.text.split("send insult to ")[1];
         var user = placeholder;
-        var channel = 'private-testing';
+        var channel = 'general';
 
         bot.startConversation(message,function(err, convo) {
                 if ( !user | !channel ) {
