@@ -140,7 +140,11 @@ var baseResponses = function(controller, appCache) {
         } else if (matcher.isMatch(usersMessage, 'send mornin to*')) {
             conversations.sendMorninToHandler(bot, message);
 
-        } else if (matcher.isMatch(usersMessage, 'my birthday is*')) {
+        } else if (matcher.isMatch(usersMessage, 'send insult to*')) {
+            conversations.sendInsultToHandler(bot, message);
+
+        }
+        else if (matcher.isMatch(usersMessage, 'my birthday is*')) {
             conversations.setMyBirthdayHandler(controller, bot, message);
 
         } else if (matcher.isMatch(usersMessage, '* fact*') | matcher.isMatch(usersMessage, 'fact*')) {

@@ -364,6 +364,43 @@ module.exports = {
 
     },
 
+    sendInsultToHandler: function sendInsultToHandler(bot, message) {
+        var placeholder = message.text.split("send insult to ")[1];
+        var user = placeholder;
+        var channel = 'private-testing';
+
+        bot.startConversation(message,function(err, convo) {
+                if ( !user | !channel ) {
+
+                    bot.reply(message, "Sorry I didn't get that. If you want me to send an insult to someone, say `@doorman-mike send insult to @username`");
+                    convo.stop();
+
+                } else {
+                    convo.ask("No problem! \n Should I tell "+user+" you sent this? Say `yes` or `no`",function(response,convo) {
+
+                        if ( response.text === 'yes' | response.text === 'Yes' ) {
+
+                            bot.reply(message, "Will do! Check <#"+channel+">");
+
+                            insults.postMikeInsult(bot, message, "Yo "+user + ", <@"+message.user+"> wants me to tell yah, ", channel);
+
+                        } else {
+                            var msg = dayOfTheWeekResponses.getMikeMorninTimeSensitive(null);
+
+                            bot.reply(message, "Sneaky! Check <#"+channel+">");
+
+                            insults.postMikeInsult(bot, message, user, channel);
+
+                        }
+
+                        convo.stop();
+
+                    });
+                }
+        });
+
+    },
+
     sendMorninToHandler: function sendMorninToHandler(bot, message) {
 
         var placeholder = message.text.split("send mornin to ")[1],
@@ -439,7 +476,7 @@ module.exports = {
 
                 if ( response.text.toLowerCase() !== 'stop' ) {
 
-                    insults.postMikeInsult(bot, message);
+                    insults.postMikeInsult(bot, message, message.user, null);
 
                 } else {
                     bot.reply(message, "OK ok. I'm through with you.");
