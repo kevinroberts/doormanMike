@@ -380,14 +380,14 @@ module.exports = {
 
                         if ( response.text === 'yes' | response.text === 'Yes' ) {
 
-                            bot.reply(message, "Will do! Check <#"+channel+">");
+                            bot.reply(message, "Will do! Check #"+channel+"");
 
-                            insults.postMikeInsult(bot, message, "Yo "+user + ", <@"+message.user+"> wants me to tell yah, ", channel);
+                            insults.postMikeInsult(bot, message, "Yo "+user + ", <@"+message.user+"> wants me to tell yah,", channel);
 
                         } else {
                             var msg = dayOfTheWeekResponses.getMikeMorninTimeSensitive(null);
 
-                            bot.reply(message, "Sneaky! Check <#"+channel+">");
+                            bot.reply(message, "Sneaky! Check #"+channel+"");
 
                             insults.postMikeInsult(bot, message, user, channel);
 
