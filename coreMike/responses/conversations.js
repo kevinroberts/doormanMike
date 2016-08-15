@@ -4,6 +4,7 @@ var dayOfTheWeekResponses = require('../responses/dayOfTheWeek');
 var patterns = require('../helpers/regexPatterns');
 var love = require('../responses/loveMachine');
 var insults = require('../helpers/getInsult');
+var constants = require('../slackConstants');
 var S = require('string');
 var _ = require('lodash');
 var moment = require('moment');
@@ -367,7 +368,12 @@ module.exports = {
     sendInsultToHandler: function sendInsultToHandler(bot, message) {
         var placeholder = message.text.split("send insult to ")[1];
         var user = placeholder;
+        var development = process.env.NODE_ENV !== 'production';
+
         var channel = 'general';
+        if (development) {
+            channel = 'private-testing';
+        }
 
         bot.startConversation(message,function(err, convo) {
                 if ( !user | !channel ) {
@@ -380,14 +386,13 @@ module.exports = {
 
                         if ( response.text === 'yes' | response.text === 'Yes' ) {
 
-                            bot.reply(message, "Will do! Check #"+channel+"");
+                            bot.reply(message, "Will do! Check " + constants.getGeneralChannelLink());
 
                             insults.postMikeInsult(bot, message, "Yo "+user + ", <@"+message.user+"> wants me to tell yah,", channel);
 
                         } else {
-                            var msg = dayOfTheWeekResponses.getMikeMorninTimeSensitive(null);
 
-                            bot.reply(message, "Sneaky! Check #"+channel+"");
+                            bot.reply(message, "Sneaky! Check " + constants.getGeneralChannelLink());
 
                             insults.postMikeInsult(bot, message, user, channel);
 
