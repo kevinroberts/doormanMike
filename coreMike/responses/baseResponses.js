@@ -174,7 +174,8 @@ var baseResponses = function(controller, appCache) {
                 bot.reply(message, vocabulary.getBodies(name));
             });
 
-        } else if ( matcher.isMatch(usersMessage, 'uptime') | matcher.isMatch(usersMessage, 'identify yourself')  | matcher.isMatch(usersMessage, 'who are you') | matcher.isMatch(usersMessage, 'what is your name*')) {
+        } else if ( matcher.isMatch(usersMessage, 'uptime') | matcher.isMatch(usersMessage, 'identify yourself') |
+            matcher.isMatch(usersMessage, 'who are you') | matcher.isMatch(usersMessage, 'what is your name*')) {
 
             messageUtils.postMikeFist(bot, message);
 
@@ -202,7 +203,7 @@ var baseResponses = function(controller, appCache) {
                 bot.reply(message, vocabulary.getPersonalMikeHello(name));
             });
 
-        } else if ( matcher.isMatch(usersMessage, 'braa*t*') | matcher.isMatch(usersMessage, 'br*pt')) {
+        } else if ( matcher.isMatch(usersMessage, 'braa*t*') | matcher.isMatch(usersMessage, 'br*pt') | matcher.isMatch(usersMessage, 'diarrhea*') | matcher.isMatch(usersMessage, 'shart*')) {
 
             messageUtils.postReaction(bot, message, 'poop');
             var numberOfAs = S(usersMessage.toLowerCase()).count('a');
@@ -230,6 +231,12 @@ var baseResponses = function(controller, appCache) {
 
                 bot.reply(message, bMsg);
             });
+
+        } else if (matcher.isMatch(usersMessage, "are you really*")) {
+            var name = usersMessage.split("are you really ")[1];
+            name = name.replace(/\W+/g, "");
+
+            bot.reply(message, "No, what dumbass calls themselves " + name + "?");
 
         } else if ( usersMessage.toLowerCase() == 'mike' | usersMessage.toLowerCase() == 'doorman') {
 
