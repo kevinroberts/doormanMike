@@ -32,7 +32,7 @@ var mikeCats =  [
 
 module.exports = {
 
-    getLoveReactionForName: function getLoveReactionForName(name) {
+    getLoveReactionForName: function (name) {
         var mikeCrushMsg = '';
         _.forEach(specialCrushes, function(crush) {
             // if passed name contains a crush

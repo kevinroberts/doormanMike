@@ -2,7 +2,7 @@ var development = process.env.NODE_ENV !== 'production';
 
 module.exports = {
 
-    postMessage: function postMessage(bot, channel, message) {
+    postMessage: function (bot, channel, message) {
 
         // if you are posting to more than one channel at once
         if (channel instanceof Array) {
@@ -25,7 +25,7 @@ module.exports = {
         }
     },
 
-    postReaction: function postReaction(bot, message, emojiName) {
+    postReaction: function (bot, message, emojiName) {
 
         bot.api.reactions.add({
             timestamp: message.ts,
@@ -38,11 +38,11 @@ module.exports = {
         });
     },
 
-    postMikeFist: function postMikeFist(bot, message) {
+    postMikeFist: function (bot, message) {
        this.postReaction(bot, message, 'fist::skin-tone-5')
     },
 
-    getUsernameFromController: function getUsernameFromController(controller, user, callback) {
+    getUsernameFromController: function (controller, user, callback) {
 
         controller.storage.users.get(user, function(err, userObj) {
             if (userObj && userObj.name) {
@@ -53,7 +53,7 @@ module.exports = {
         });
     },
 
-    multiSearchOr: function multiSearchOr(text, searchWords){
+    multiSearchOr: function (text, searchWords){
             // create a regular expression from searchwords using join and |. Add "gi".
             // Example: ["ANY", "UNATTENDED","HELLO"] becomes
             // "ANY|UNATTENDED|HELLO","gi"
@@ -73,7 +73,7 @@ module.exports = {
             return (searchExp.test(text));
     },
 
-    formatUptime: function formatUptime(uptime) {
+    formatUptime: function (uptime) {
         // if uptime is greater than one day
         if (uptime > 86400) {
             var days    = Math.floor(uptime / 86400);

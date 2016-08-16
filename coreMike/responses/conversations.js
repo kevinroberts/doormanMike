@@ -13,7 +13,7 @@ var unirest = require('unirest');
 
 module.exports = {
 
-    callMeHandler: function callMeHandler(appCache, controller, bot, message) {
+    callMeHandler: function (appCache, controller, bot, message) {
         var profane = appCache.get( "profane" );
         var result = {found: false, curse: ''};
         var name = S(message.text.match(patterns.getMyNameRegex())[1]).replaceAll(":", "").s;
@@ -86,7 +86,7 @@ module.exports = {
         }
 
     },
-    setNameHandler: function setNameHandler(appCache, controller, bot, message) {
+    setNameHandler: function (appCache, controller, bot, message) {
         var profane = appCache.get( "profane" );
         var result = {found: false, curse: ''};
 
@@ -215,7 +215,7 @@ module.exports = {
 
     },
 
-    getMyBirthdayHandler: function getMyBirthdayHandler(controller, bot, message) {
+    getMyBirthdayHandler: function (controller, bot, message) {
         var myRegex = /my birthday/;
         //message.text.search(monthDayRegex)
         // check if user wants to see their birthday
@@ -305,7 +305,7 @@ module.exports = {
         }
     },
 
-    setMyBirthdayHandler: function setMyBirthdayHandler(controller, bot, message) {
+    setMyBirthdayHandler: function (controller, bot, message) {
         var monthDayRegex = /[0-9][0-9]\/[0-9][0-9]/;
         var sryMsg = "Sorry I didn't get that. If you want me to remember your birthday, say `@doorman-mike my birthday is MM/DD`";
         if (message.text.search(monthDayRegex) !== -1) {
@@ -365,7 +365,7 @@ module.exports = {
 
     },
 
-    sendInsultToHandler: function sendInsultToHandler(bot, message) {
+    sendInsultToHandler: function (bot, message) {
         var placeholder = message.text.split("send insult to ")[1];
         var user = placeholder;
         var development = process.env.NODE_ENV !== 'production';
@@ -406,7 +406,7 @@ module.exports = {
 
     },
 
-    sendMorninToHandler: function sendMorninToHandler(bot, message) {
+    sendMorninToHandler: function (bot, message) {
 
         var placeholder = message.text.split("send mornin to ")[1],
             placeholder = placeholder ? placeholder.split(" in ") : false;
@@ -450,7 +450,7 @@ module.exports = {
         })
 
     },
-    haveArgumentHandler: function haveArgumentHandler (controller, bot, message) {
+    haveArgumentHandler: function (controller, bot, message) {
         var _this = this;
         bot.startConversation(message, function(err, argConversation) {
 
@@ -473,7 +473,7 @@ module.exports = {
 
     },
 
-    startArgument: function startArgument(bot, message) {
+    startArgument: function (bot, message) {
 
         bot.startConversation(message, function(err, argConversation) {
 

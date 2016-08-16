@@ -6,7 +6,7 @@ var messageUtils = require('../helpers/messageUtils');
 
 module.exports = {
 
-    postMikeInsult: function postMikeInsult(bot, message, user, channel) {
+    postMikeInsult: function (bot, message, user, channel) {
         unirest.get("http://www.insultgenerator.org")
             .end(function (result) {
                 if (result && result.status == 200) {

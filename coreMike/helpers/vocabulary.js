@@ -114,6 +114,13 @@ var lunchMikes = [
     '|INTRO| You guys getting dat GROUP DISCOUNT!? Go to |DESTINATION| for a change! :fist::skin-tone-5:'
 ];
 
+var kidsReponses = [
+    'I don\'t run a |DANG| day care here keep dem kids away! :fist::skin-tone-5:',
+    '|DANG| kids, keep em away from me',
+    'I\'m |DANG| outta here if you\'re bringing kids around here'
+
+];
+
 var wasters = [
     "hm...",
     "well",
@@ -122,16 +129,16 @@ var wasters = [
 ];
 
 module.exports = {
-    getMikeDang: function getMikeDang() {
+    getMikeDang: function () {
         return _.sample(mikeDangs);
     },
-    getMikeMornin: function getMikeMornin() {
+    getMikeMornin: function () {
         return _.sample(mikeMornin);
     },
-    getWaster: function getWaster() {
+    getWaster: function () {
         return _.sample(wasters);
     },
-    getLunchMike: function getLunchMike() {
+    getLunchMike: function () {
         var myDate = new Date();
         var msg = _.sample(lunchMikes).replace("|DANG|", _.sample(mikeDangs));
         msg = msg.replace("|DESTINATION|", _.sample(lunchDestinations));
@@ -149,39 +156,42 @@ module.exports = {
         }
 
     },
-    getLunchDestination : function getLunchDestination() {
+    getLunchDestination : function () {
         return _.sample(lunchDestinations);
     },
-    getSadMikeReaction: function getSadMikeReaction() {
+    getSadMikeReaction: function () {
         return _.sample(sadMikes);
     },
-    getMikeHello: function getMikeHello() {
+    getMikeHello: function () {
         return _.sample(mikeHellos).replace(" |USERNAME|", "");
     },
-    getBrapt: function getBrapt(name) {
+    getBrapt: function (name) {
         return _.sample(brapts).replace("|USERNAME|", name);
     },
-    getBraptPt2: function getBraptPt2() {
+    getBraptPt2: function () {
         return _.sample(brapts2);
     },
-    getProfaneReponse: function getProfaneReponse() {
+    getProfaneReponse: function () {
         return _.sample(profaneResponse);
     },
-    getBodies: function getBodies(name) {
+    getBodies: function (name) {
         return _.sample(bodies).replace("|USERNAME|", name);
     },
-    getInsultName: function getInsultName() {
+    getInsultName: function () {
         return _.sample(insultNames);
     },
-    getBeerFriday: function getBeerFriday(){
+    getBeerFriday: function (){
         return _.sample(beerFriday);
     },
-    getBirthdayGreeting: function getBirthdayGreeting(name) {
+    getKidsReponse: function () {
+        return _.sample(kidsReponses).replace("|DANG|", _.sample(mikeDangs));
+    },
+    getBirthdayGreeting: function (name) {
         var birthdayMsg = _.sample(birthday).replace("|USERNAME|", name);
         birthdayMsg = birthdayMsg.replace("|DANG|", _.sample(mikeDangs).toUpperCase());
         return birthdayMsg;
     },
-    getPersonalMikeHello: function getPersonalMikeHello(name) {
+    getPersonalMikeHello: function (name) {
         var personalHelloMsg = _.sample(mikeHellos).replace("|USERNAME|", name);
         personalHelloMsg += love.getLoveReactionForName(name);
         return personalHelloMsg;

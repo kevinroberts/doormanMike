@@ -24,34 +24,34 @@ var whereToEat =        new RegExp("(.*) I eat(.*)|(.*)for lunch(.*)|(.*)for foo
 
 module.exports = {
 
-    getMyNameRegex: function getMyNameRegex() {
+    getMyNameRegex: function () {
         return nameRegex;
     },
-    getWhatsMyNameRegex: function getWhatsMyNameRegex() {
+    getWhatsMyNameRegex: function () {
         return whatsMyNameRegex;
     },
-    getWhatDayRegex: function getWhatDayRegex() {
+    getWhatDayRegex: function () {
         return whatDayRegex;
     },
-    getWeatherRegex: function getWeatherRegex() {
+    getWeatherRegex: function () {
         return weatherRegex;
     },
-    getTimeRegex: function getTimeRegex() {
+    getTimeRegex: function () {
         return timeRegex;
     },
-    getKidsRegex: function getKidsRegex() {
+    getKidsRegex: function () {
         return kidsRegex;
     },
-    getWhereToEatRegex: function getWhereToEatRegex() {
+    getWhereToEatRegex: function () {
         return whereToEat;
     },
-    getWhoKilledRegex: function getWhoKilledRegex() {
+    getWhoKilledRegex: function () {
         return whoKilled;
     },
-    getTacoRegex: function getTacoRegex() {
+    getTacoRegex: function () {
         return tacoRegex;
     },
-    getInvalidNameRegex: function getInvalidNameRegex() {
+    getInvalidNameRegex: function () {
         return invalidNameRegex;
     }
 

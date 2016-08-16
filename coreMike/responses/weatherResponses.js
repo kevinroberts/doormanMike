@@ -4,7 +4,7 @@ var vocabulary = require('../helpers/vocabulary');
 
 module.exports = {
 
-    getWeatherResponse: function getWeatherResponse(controller, user, callback) {
+    getWeatherResponse: function (controller, user, callback) {
         var userText = '';
 
         controller.storage.users.get(user, function(err, userObj) {

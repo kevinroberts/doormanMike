@@ -126,7 +126,7 @@ var baseResponses = function(controller, appCache) {
         } else if ( usersMessage.search(patterns.getKidsRegex()) !== -1) {
             messageUtils.postReaction(bot, message, 'scream');
 
-            bot.reply(message, 'I don\'t run a ' + vocabulary.getMikeDang() + ' day care here keep dem kids away!');
+            bot.reply(message, vocabulary.getKidsReponse());
 
         } else if ( usersMessage.search(patterns.getWhereToEatRegex()) !== -1) {
 

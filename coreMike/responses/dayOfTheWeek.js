@@ -23,7 +23,7 @@ function getDayOfWeek(timezone) {
 
 module.exports = {
 
-    questionResponse: function questionResponse(username, bot, message) {
+    questionResponse: function (username, bot, message) {
         var day = getDayOfWeek();
         var msg = '';
         if (day == 1) {
@@ -56,7 +56,7 @@ module.exports = {
         return msg;
     },
 
-    statementResponse: function statementResponse() {
+    statementResponse: function () {
 
         var day = getDayOfWeek();
 
@@ -84,7 +84,7 @@ module.exports = {
     },
 
 
-    favoriteDayResponse: function favoriteDayResponse(user) {
+    favoriteDayResponse: function (user) {
         var day = getDayOfWeek();
 
         var mikeResponses = [
@@ -121,7 +121,7 @@ module.exports = {
         return msg;
     },
 
-    getMikeMorninTimeSensitive: function getMikeMornin(user) {
+    getMikeMorninTimeSensitive: function (user) {
         var mikeDang = vocabulary.getMikeDang();
         var mikeMornin = vocabulary.getMikeMornin();
 
@@ -153,7 +153,7 @@ module.exports = {
         }
     },
 
-    getMikeMondayResponse: function getMikeMondayResponse(user, bot, message) {
+    getMikeMondayResponse: function (user, bot, message) {
         var mikeResponses = [
             '|USERNAME| eew :scream: ' + vocabulary.getMikeDang().toUpperCase() + " MONDAY... I HATE MONDAY ",
             "MONDAY i dont even like saying the " + vocabulary.getMikeDang() + " word",
@@ -171,14 +171,12 @@ module.exports = {
         return _.sample(mikeResponses).replace("|USERNAME|", user);
     },
 
-    getDayOfTheWeek: function getDayOfTheWeek(timezone) {
+    getDayOfTheWeek: function (timezone) {
         if (timezone == null) {
             return dayOfWeek(new Date(), getDefaultTz());
         } else {
             return dayOfWeek(new Date(), timezone);
         }
     }
-
-
 
 };

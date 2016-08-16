@@ -4,7 +4,7 @@ var vocabulary = require('../helpers/vocabulary');
 
 module.exports = {
 
-    getMikeFact: function getMikeFact(bot, message) {
+    getMikeFact: function (bot, message) {
         unirest.get("https://api.chucknorris.io/jokes/random")
             .header("Accept", "application/json")
             .end(function (result) {

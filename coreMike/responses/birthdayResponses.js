@@ -5,7 +5,7 @@ var vocabulary = require('../helpers/vocabulary');
 
 module.exports = {
 
-    getBirthDayMessages: function getBirthDayMessages(controller, bot) {
+    getBirthDayMessages: function (controller, bot) {
 
         bot.api.users.list({
             presence: 0
@@ -29,7 +29,6 @@ module.exports = {
                 });
             }
         });
-
 
     }
 };
