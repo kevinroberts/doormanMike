@@ -128,6 +128,14 @@ var wasters = [
     "interesting..."
 ];
 
+var farts = [
+    '_farts_ POO :poop: POO STINKY!!!!!!1!',
+    '_farts_ uh oh....STINKY!!',
+    ':monkey: :dash:  :wtf:',
+    '_toots explosively_',
+    'UH OH< I THINK I MADE A POOPIE :poop: :))))))):):) AHAHAHAHAHAHAHAHAHHAHAHHAHAHAHHAHHAH!!!!!!!!!!!!!!!!!'
+];
+
 module.exports = {
     getMikeDang: function () {
         return _.sample(mikeDangs);
@@ -164,6 +172,9 @@ module.exports = {
     },
     getMikeHello: function () {
         return _.sample(mikeHellos).replace(" |USERNAME|", "");
+    },
+    getMikeFart: function () {
+        return _.sample(farts);
     },
     getBrapt: function (name) {
         return _.sample(brapts).replace("|USERNAME|", name);

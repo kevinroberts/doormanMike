@@ -142,7 +142,6 @@ var baseResponses = function(controller, appCache) {
 
         } else if (matcher.isMatch(usersMessage, 'send insult to*')) {
             conversations.sendInsultToHandler(bot, message);
-
         }
         else if (matcher.isMatch(usersMessage, 'my birthday is*')) {
             conversations.setMyBirthdayHandler(controller, bot, message);
@@ -174,7 +173,10 @@ var baseResponses = function(controller, appCache) {
                 bot.reply(message, vocabulary.getBodies(name));
             });
 
-        } else if ( matcher.isMatch(usersMessage, 'uptime') | matcher.isMatch(usersMessage, 'identify yourself') |
+        } else if (matcher.isMatch(usersMessage, '*fart*')) {
+            bot.reply(message, vocabulary.getMikeFart());
+        }
+        else if ( matcher.isMatch(usersMessage, 'uptime') | matcher.isMatch(usersMessage, 'identify yourself') |
             matcher.isMatch(usersMessage, 'who are you') | matcher.isMatch(usersMessage, 'what is your name*')) {
 
             messageUtils.postMikeFist(bot, message);
