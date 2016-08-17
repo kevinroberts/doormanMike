@@ -173,7 +173,7 @@ var baseResponses = function(controller, appCache) {
                 bot.reply(message, vocabulary.getBodies(name));
             });
 
-        } else if (matcher.isMatch(usersMessage, '*fart*')) {
+        } else if (matcher.isMatch(usersMessage, '*fart*') | matcher.isMatch(usersMessage, '*poop*')) {
             bot.reply(message, vocabulary.getMikeFart());
         }
         else if ( matcher.isMatch(usersMessage, 'uptime') | matcher.isMatch(usersMessage, 'identify yourself') |
@@ -236,7 +236,8 @@ var baseResponses = function(controller, appCache) {
 
         } else if (matcher.isMatch(usersMessage, "are you really*")) {
             var name = usersMessage.split("are you really ")[1];
-            name = name.replace(/\W+/g, "");
+            name = S(name).stripPunctuation().s;
+
 
             bot.reply(message, "No, what dumbass calls themselves " + name + "?");
 
