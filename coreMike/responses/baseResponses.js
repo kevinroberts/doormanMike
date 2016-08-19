@@ -143,6 +143,9 @@ var baseResponses = function(controller, appCache) {
         } else if (matcher.isMatch(usersMessage, 'send insult to*')) {
             conversations.sendInsultToHandler(bot, message);
         }
+        else if (matcher.isMatch(usersMessage, 'send compliment to*')) {
+            conversations.sendComplimentHandler(bot, message);
+        }
         else if (matcher.isMatch(usersMessage, 'my birthday is*')) {
             conversations.setMyBirthdayHandler(controller, bot, message);
 

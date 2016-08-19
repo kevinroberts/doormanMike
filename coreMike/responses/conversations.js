@@ -406,6 +406,46 @@ module.exports = {
 
     },
 
+    sendComplimentHandler: function (bot, message) {
+        var placeholder = message.text.split("send compliment to ")[1];
+        var user = placeholder;
+        var development = process.env.NODE_ENV !== 'production';
+
+        var channel = 'general';
+        if (development) {
+            channel = 'private-testing';
+        }
+
+        bot.startConversation(message,function(err, convo) {
+            if ( !user | !channel ) {
+
+                bot.reply(message, "Sorry I didn't get that. If you want me to send a compliment to someone, say `@doorman-mike send compliment to @username`");
+                convo.stop();
+
+            } else {
+                convo.ask("No problem! \n Should I tell "+user+" you sent this? Say `yes` or `no`",function(response,convo) {
+
+                    if ( response.text === 'yes' | response.text === 'Yes' ) {
+
+                        bot.reply(message, "Will do! Check " + constants.getGeneralChannelLink());
+
+                        messageUtils.postMessage(bot, channel, "Yo "+user + ", <@"+message.user+"> wants me to tell yah, " + vocabulary.getMikeCompliment());
+
+                    } else {
+
+                        bot.reply(message, "Sneaky! Check " + constants.getGeneralChannelLink());
+
+                        messageUtils.postMessage(bot, channel, "Yo "+user + ", I just wanted to tell yah, " + vocabulary.getMikeCompliment());
+
+                    }
+
+                    convo.stop();
+
+                });
+            }
+        });
+    },
+
     sendMorninToHandler: function (bot, message) {
 
         var placeholder = message.text.split("send mornin to ")[1],

@@ -1,5 +1,6 @@
 var love = require('../responses/loveMachine');
 var _ = require('lodash');
+var complimentStore = require('../resources/compliments.json');
 
 var mikeDangs = [
     'gawd damn',
@@ -137,6 +138,9 @@ var farts = [
 ];
 
 module.exports = {
+    getMikeCompliment: function () {
+        return _.sample(complimentStore.compliments);
+    },
     getMikeDang: function () {
         return _.sample(mikeDangs);
     },
