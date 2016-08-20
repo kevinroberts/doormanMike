@@ -92,7 +92,7 @@ module.exports = {
             "MONDAY... JUST kidding I " + vocabulary.getMikeDang().toUpperCase() + " HATE MONDAY.",
             vocabulary.getMikeDang().toUpperCase() + ' FRRIIIDAYYYYYYYYYY! :whiskey: ',
             'the lord made friday and should have stopped there. TGIF is my favorite place on earth. Also I got shit to do this weekend. :fist::skin-tone-5: ',
-            '|USERNAME| IT IS ' + vocabulary.getMikeDang().toUpperCase() + ' FRIDAY :heart: OF COURSE'
+            '|USERNAME| IT IS ' + vocabulary.getMikeDang().toUpperCase() + ' FRIDAY :heart: OF COURSE! The welcome wagon to the weekend. '
         ];
         
         var msg = _.sample(mikeResponses).replace("|USERNAME|", user);
@@ -169,6 +169,30 @@ module.exports = {
         messageUtils.postReaction(bot, message, _.sample(mikeReactions));
         
         return _.sample(mikeResponses).replace("|USERNAME|", user);
+    },
+
+    getMikeWeekendResponse: function () {
+        var day = getDayOfWeek();
+
+        if (day > 5) {
+            var mikeResponses = [
+                "Two days is not enough time for the Weekend.",
+                "Nothing in the world is more expensive than a woman who’s free for the weekend. :dancer: :fist::skin-tone-5:",
+                "It's mah " + vocabulary.getMikeDang() + " weekend leave me alone."
+            ];
+            return _.sample(mikeResponses);
+
+        } else {
+            var mikeResponses = [
+                "Its not the weekend yet, ask me later",
+                "Why wait for the " + vocabulary.getMikeDang() + " weekend to have fun? :whiskey:",
+                "Yeah it's not the weekend bro. better days are coming."
+            ];
+
+            return _.sample(mikeResponses);
+
+        }
+
     },
 
     getDayOfTheWeek: function (timezone) {

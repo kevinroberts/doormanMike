@@ -241,8 +241,11 @@ var baseResponses = function(controller, appCache) {
             var name = usersMessage.split("are you really ")[1];
             name = S(name).stripPunctuation().s;
 
-
             bot.reply(message, "No, what dumbass calls themselves " + name + "?");
+
+        } else if (matcher.isMatch(usersMessage, "*weekend*")) {
+
+            bot.reply(message, dayOfTheWeekResponses.getMikeWeekendResponse());
 
         } else if ( usersMessage.toLowerCase() == 'mike' | usersMessage.toLowerCase() == 'doorman') {
 
