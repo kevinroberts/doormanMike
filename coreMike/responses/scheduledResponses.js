@@ -4,6 +4,7 @@ var dayOfTheWeekResponses = require('./dayOfTheWeek');
 var messageUtils = require('../helpers/messageUtils');
 var vocabulary = require('../helpers/vocabulary');
 var birthday = require('../responses/birthdayResponses');
+var fistTracker = require('../responses/fistTracker');
 
 var timezoneEnv = process.env.TIMEZONE;
 function getDefaultTz() {
@@ -15,6 +16,19 @@ function getDefaultTz() {
 }
 
 var scheduledResponses = function(controller, bot) {
+
+    var dailyResetJob = new CronJob({
+        cronTime: '00 05 00 * * 1-7',
+        onTick: function() {
+            /*
+             * Runs every day
+             * at 5:00:00 AM.
+             */
+            fistTracker.resetFistsGiven(controller, bot);
+        },
+        start: false,
+        timeZone: getDefaultTz()
+    });
 
     var dailyMorninJob = new CronJob({
         cronTime: '00 10 09 * * 1-5',
@@ -62,6 +76,7 @@ var scheduledResponses = function(controller, bot) {
     dailyMorninJob.start();
     //dailyLunchJob.start();
     beerFridayJob.start();
+    dailyResetJob.start();
 
 };
 

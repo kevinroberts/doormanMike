@@ -1,7 +1,8 @@
 var _ = require('lodash');
 
 var catCrush = [
-    'Agnes'
+    'Agnes',
+    'U254REJ05'
 ];
 
 var specialCrushes = [

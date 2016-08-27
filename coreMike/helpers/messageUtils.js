@@ -53,6 +53,10 @@ module.exports = {
         });
     },
 
+    getLinkFromUserId: function (userId) {
+      return "<@" + userId + ">";
+    },
+
     multiSearchOr: function (text, searchWords){
             // create a regular expression from searchwords using join and |. Add "gi".
             // Example: ["ANY", "UNATTENDED","HELLO"] becomes
@@ -71,6 +75,23 @@ module.exports = {
 
             // regularExpression.test(string) returns true or false
             return (searchExp.test(text));
+    },
+
+    getUserIdByUserName: function (username, bot, callback) {
+
+        bot.api.users.list({
+            presence: 0
+        }, function(err, res) {
+            if (res.members) {
+                bot.botkit.log("Found " + res.members.length + " user accounts");
+                _.forEach(res.members, function(member) {
+                    if (member.name == username) {
+                        callback(member.id);
+                    }
+                });
+            }
+        });
+
     },
 
     formatUptime: function (uptime) {

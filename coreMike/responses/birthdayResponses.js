@@ -11,7 +11,6 @@ module.exports = {
             presence: 0
         }, function(err, res) {
             if (res.members) {
-                bot.botkit.log("Found " + res.members.size + " user accounts");
                 _.forEach(res.members, function(member) {
                     controller.storage.users.get(member.id, function(err, userObj) {
                         if (userObj && userObj.birthday) {
@@ -27,6 +26,7 @@ module.exports = {
                         }
                     });
                 });
+                bot.botkit.log("Found " + res.members.length + " user accounts");
             }
         });
 

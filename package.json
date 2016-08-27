@@ -6,11 +6,12 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "async": "^2.0.1",
     "botkit": "^0.1.1",
     "botkit-storage-firebase": "1.0.0",
     "chance": "^1.0.3",
-    "cleverbot.io": "^1.0.4",
     "cheerio": "^0.20.0",
+    "cleverbot.io": "^1.0.4",
     "cron": "^1.1.0",
     "day-of-week": "^1.0.4",
     "debug": "~2.2.0",

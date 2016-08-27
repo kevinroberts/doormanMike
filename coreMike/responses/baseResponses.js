@@ -23,6 +23,7 @@ var os = require('os'),
     conversations = require('../responses/conversations'),
     facts = require('../responses/mikeFacts'),
     patterns = require('../helpers/regexPatterns'),
+    fistTracker = require('../responses/fistTracker'),
     S = require('string'),
      _ = require('lodash'),
     constants = require('../slackConstants'),
@@ -61,17 +62,14 @@ var baseResponses = function(controller, appCache) {
             messageUtils.postMikeFist(bot, message);
             var responseMsg = "<@"+message.user+"> what's up?";
             bot.reply(message, responseMsg);
+        } else if (matcher.isMatch(usersMessage, '*:fist:*')) {
+            fistTracker.handleFistMessage(controller, bot, message);
         } else if (matcher.isMatch(usersMessage, 'who* champ*') | matcher.isMatch(usersMessage, 'who is champ*')) {
             messageUtils.postReaction(bot, message, "cena");
         }
 
     });
 
-
-    //controller.hears([":fist:"], ["ambient"], function(bot, message) {
-    //    var fistText = 'Give someone a doorman mike fist by adding it after their username, like this: *@username :fist:*';
-    //    bot.reply(message, fistText);
-    //});
 
 
     /*
@@ -255,6 +253,10 @@ var baseResponses = function(controller, appCache) {
                 bot.reply(message, "Yes, " + name + " that's my name.");
             });
 
+
+        } else if ( usersMessage.toLowerCase() == 'leaderboard' ) {
+
+            fistTracker.handleLeaderBoardMessage(controller, bot, message);
 
         } else if ( usersMessage.toLowerCase() == 'help' ) {
 

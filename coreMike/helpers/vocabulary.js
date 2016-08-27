@@ -37,9 +37,9 @@ var insultNames = [
 ];
 
 var beerFriday = [
-    'It\'s gahdamn :beer: FRIDAY time! Grabs yo self a brew!',
-    ':fist::skin-tone-5: SOMEONE SAY GGAAAAAHDAMN BEER FRIDAY TIME!!!!!1@? CUZ IT IS, GRAB YOURSELF A BEER :beers: :fist::skin-tone-5: ',
-    'BRAAAPT! its :beer: Friday time! grabs yo self a beer! :fist::skin-tone-5:'
+    'It\'s gahdamn :beer: FRIDAY time! Grabs yo self a brew! \nand finish that timesheet https://webet.icfi.com/DeltekTC/TimeCollection.msv',
+    ':fist::skin-tone-5: SOMEONE SAY GGAAAAAHDAMN BEER FRIDAY TIME!!!!!1@? CUZ IT IS, GRAB YOURSELF A BEER :beers: :fist::skin-tone-5: \nand finish that timesheet https://webet.icfi.com/DeltekTC/TimeCollection.msv',
+    'BRAAAPT! its :beer: Friday time! grabs yo self a beer! :fist::skin-tone-5:\nand finish that timesheet https://webet.icfi.com/DeltekTC/TimeCollection.msv'
 ];
 
 var sadMikes = [
