@@ -254,6 +254,14 @@ var baseResponses = function(controller, appCache) {
             });
 
 
+        } else if ( matcher.isMatch(usersMessage, "*:fist:*")) {
+
+            messageUtils.postMikeFist(bot, message);
+
+            messageUtils.getUsernameFromController(controller, message.user, function (name) {
+                bot.reply(message, name + " thanks for the " + vocabulary.getMikeDang() + " fist bro.\nCheck out the leaderboard `@doormanmike leaderboard`");
+            });
+
         } else if ( usersMessage.toLowerCase() == 'leaderboard' ) {
 
             fistTracker.handleLeaderBoardMessage(controller, bot, message);

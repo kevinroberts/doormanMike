@@ -38,11 +38,15 @@ module.exports = {
                             var fistsLeft = totalFistsPerDay - totalFists;
                             var gifterMessage = '';
                             if (fistsLeft > 1) {
-                                gifterMessage = messageUtils.getLinkFromUserId(username) + " received a doorman mike fist :tm: from you. You have " + fistsLeft + " fists to give out today."
+                                gifterMessage = messageUtils.getLinkFromUserId(username) +
+                                    " received a doorman mike fist from you. You have " + fistsLeft + " fists to give out today.";
 
-                                var recipientMessage = "You just received a doorman mike :fist::skin-tone-5: from " + messageUtils.getLinkFromUserId(message.user) + "!";
+                                var recipientMessage = "You just received a doorman mike :fist::skin-tone-5: from " +
+                                    messageUtils.getLinkFromUserId(message.user) + "!";
+                                
                                 if (chance.bool({likelihood: 50})) {
-                                    recipientMessage += '\nYou could try :fist:\'n ' + messageUtils.getLinkFromUserId(message.user) + ' back for once? _every one deserves it once in a while_ :tm:'
+                                    recipientMessage += '\nYou could try :fist:\'n ' + messageUtils.getLinkFromUserId(message.user) +
+                                        ' back for once? _every one deserves it once in a while_ :tm:'
                                 }
                                 messageUtils.postMessage(bot, username, recipientMessage);
 
@@ -218,8 +222,6 @@ module.exports = {
         }
 
     }
-
-
 
 };
 
