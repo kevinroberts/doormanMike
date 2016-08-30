@@ -69,7 +69,6 @@ module.exports = {
         } else {
             // else this is just a random fist-ing
             bot.reply(message, fistText);
-            _this.resetFistsGiven(controller, bot);
         }
 
     },

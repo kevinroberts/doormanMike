@@ -44,7 +44,7 @@ Doorman Mike will give you a suggestion for a lunch destination
 Say: `"send mornin to @username in #random"`
 Mike will send a custom mornin' mornin' message to the specified slack user in that channel.
 
- Make sure to invite your bot into other channels using /invite @doorman-Mike!
+ Make sure to invite your bot into other channels using /invite @doormanMike!
 
 ## EXTEND THE BOT: ##
 Botkit was used as the base framework for doorman-Mike's construction

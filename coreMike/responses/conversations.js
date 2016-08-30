@@ -247,7 +247,7 @@ module.exports = {
                     }
 
                 } else {
-                    var sryMsg = "Sorry I dont know your birthday. If you want me to remember your birthday, say `@doorman-mike my birthday is MM/DD`";
+                    var sryMsg = "Sorry I dont know your birthday. If you want me to remember your birthday, say `@" + constants.getBotUsername() + " my birthday is MM/DD`";
                     bot.reply(message, sryMsg);
                 }
 
@@ -289,7 +289,7 @@ module.exports = {
                             }
 
                         } else {
-                            var sryMsg = "Sorry I dont know <@" + userToFind + "> birthday. Tell them to set a birthday with `@doorman-mike my birthday is MM/DD`";
+                            var sryMsg = "Sorry I dont know <@" + userToFind + "> birthday. Tell them to set a birthday with `@" + constants.getBotUsername() + " my birthday is MM/DD`";
                             bot.reply(message, sryMsg);
                         }
 
@@ -307,7 +307,7 @@ module.exports = {
 
     setMyBirthdayHandler: function (controller, bot, message) {
         var monthDayRegex = /[0-9][0-9]\/[0-9][0-9]/;
-        var sryMsg = "Sorry I didn't get that. If you want me to remember your birthday, say `@doorman-mike my birthday is MM/DD`";
+        var sryMsg = "Sorry I didn't get that. If you want me to remember your birthday, say `@" + constants.getBotUsername() + " my birthday is MM/DD`";
         if (message.text.search(monthDayRegex) !== -1) {
             var m;
             if ((m = monthDayRegex.exec(message.text)) !== null) {
@@ -378,7 +378,7 @@ module.exports = {
         bot.startConversation(message,function(err, convo) {
                 if ( !user | !channel ) {
 
-                    bot.reply(message, "Sorry I didn't get that. If you want me to send an insult to someone, say `@doorman-mike send insult to @username`");
+                    bot.reply(message, "Sorry I didn't get that. If you want me to send an insult to someone, say `@" + constants.getBotUsername() + " send insult to @username`");
                     convo.stop();
 
                 } else {
@@ -419,7 +419,7 @@ module.exports = {
         bot.startConversation(message,function(err, convo) {
             if ( !user | !channel ) {
 
-                bot.reply(message, "Sorry I didn't get that. If you want me to send a compliment to someone, say `@doorman-mike send compliment to @username`");
+                bot.reply(message, "Sorry I didn't get that. If you want me to send a compliment to someone, say `@" + constants.getBotUsername() + " send compliment to @username`");
                 convo.stop();
 
             } else {
@@ -460,7 +460,7 @@ module.exports = {
 
             if ( !user | !channel ) {
 
-                bot.reply(message, "Sorry I didn't get that. If you want me to send a mornin' mornin' to someone, say `@doorman-mike send mornin to @username in #channel`");
+                bot.reply(message, "Sorry I didn't get that. If you want me to send a mornin' mornin' to someone, say `@" + constants.getBotUsername() + " send mornin to @username in #channel`");
                 convo.stop();
 
             } else {

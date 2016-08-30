@@ -187,7 +187,7 @@ var baseResponses = function(controller, appCache) {
 
             bot.reply(message,
                 ':doorman: I am a bot named <@' + bot.identity.name +
-                '>. I have been alive for ' + uptime + ' on NONE OF YO GODANG BUSINESS SERVER. (' + hostname + ').\nIf you want to know more: `@doorman-mike help`');
+                '>. I have been alive for ' + uptime + ' on NONE OF YO GODANG BUSINESS SERVER. (' + hostname + ').\nIf you want to know more: `@' + constants.getBotUsername() + ' help`');
 
         } else if ( usersMessage.toLowerCase() == "hey" | usersMessage.indexOf("sup") > -1  | usersMessage.indexOf("hows it going") > -1 | usersMessage.toLowerCase() == "whats good" | usersMessage.toLowerCase() == "whats up") {
 
@@ -259,7 +259,7 @@ var baseResponses = function(controller, appCache) {
             messageUtils.postMikeFist(bot, message);
 
             messageUtils.getUsernameFromController(controller, message.user, function (name) {
-                bot.reply(message, name + " thanks for the " + vocabulary.getMikeDang() + " fist bro.\nCheck out the leaderboard `@doormanmike leaderboard`");
+                bot.reply(message, name + " thanks for the " + vocabulary.getMikeDang() + " fist bro.\nCheck out the leaderboard `@" + constants.getBotUsername() + " leaderboard`");
             });
 
         } else if ( usersMessage.toLowerCase() == 'leaderboard' ) {
