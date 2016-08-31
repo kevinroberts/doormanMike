@@ -1,5 +1,6 @@
 var S = require('string');
 var _ = require('lodash');
+var constants = require('../slackConstants');
 var async = require('async');
 var vocabulary = require('../helpers/vocabulary');
 var messageUtils = require('../helpers/messageUtils');
@@ -34,7 +35,7 @@ module.exports = {
                     } else {
 
                         _this.addGivenFistToUser(message.user, controller, function (totalFists) {
-                            bot.botkit.log('added fists given to users total of ' + totalFists);
+                            bot.botkit.log('updated fists given to users total of ' + totalFists);
                             var fistsLeft = totalFistsPerDay - totalFists;
                             var gifterMessage = '';
                             if (fistsLeft > 1) {
@@ -48,7 +49,9 @@ module.exports = {
                                     recipientMessage += '\nYou could try :fist:\'n ' + messageUtils.getLinkFromUserId(message.user) +
                                         ' back for once? _every one deserves it once in a while_ :tm:'
                                 }
-                                messageUtils.postMessage(bot, username, recipientMessage);
+                                if (username !== constants.getBotUserID()) {
+                                    messageUtils.postMessage(bot, username, recipientMessage);
+                                }
 
                                 _this.addFistToUser(username, controller, function (totalFists) {
                                     bot.botkit.log('added fist to users total of ' + totalFists);

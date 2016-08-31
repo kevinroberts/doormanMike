@@ -262,6 +262,8 @@ var baseResponses = function(controller, appCache) {
                 bot.reply(message, name + " thanks for the " + vocabulary.getMikeDang() + " fist bro.\nCheck out the leaderboard `@" + constants.getBotUsername() + " leaderboard`");
             });
 
+            fistTracker.handleFistMessage(controller, bot, message);
+
         } else if ( usersMessage.toLowerCase() == 'leaderboard' ) {
 
             fistTracker.handleLeaderBoardMessage(controller, bot, message);
