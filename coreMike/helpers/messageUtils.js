@@ -1,3 +1,4 @@
+var S = require('string');
 var development = process.env.NODE_ENV !== 'production';
 
 module.exports = {
@@ -55,6 +56,20 @@ module.exports = {
 
     getLinkFromUserId: function (userId) {
       return "<@" + userId + ">";
+    },
+
+    getUsernameFromUserMessage: function (userMessage, callback) {
+        // username matching regex
+        var regex = new RegExp("@[a-zA-Z0-9_]{1,21}", "g");
+        var match;
+        while ((match = regex.exec(userMessage)) != null) {
+            callback(S(match).chompLeft('@').s);
+
+            if (match.index === regex.lastIndex) {
+                ++regex.lastIndex;
+            }
+        }
+
     },
 
     multiSearchOr: function (text, searchWords){

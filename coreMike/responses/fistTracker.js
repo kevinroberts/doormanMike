@@ -27,7 +27,7 @@ module.exports = {
                 bot.reply(message, onePersonTxt);
             } else {
                 // this is a single fist-ing so proceed cautiously ;)
-                _this.getUsernameFromUserMessage(usersMessage, function (username) {
+                messageUtils.getUsernameFromUserMessage(usersMessage, function (username) {
                     // no self fist-ing plz thanks
                     if (username == message.user) {
                         var noSelfMsgs = "Woah, no self :fist::skin-tone-5:'n allowed. Spread the love and share a fist with someone who deserves it.";
@@ -234,21 +234,9 @@ module.exports = {
                 callback(totalFists);
             });
         });
-    },
-
-    getUsernameFromUserMessage: function (userMessage, callback) {
-        // username matching regex
-        var regex = new RegExp("@[a-zA-Z0-9_]{1,21}", "g");
-        var match;
-        while ((match = regex.exec(userMessage)) != null) {
-             callback(S(match).chompLeft('@').s);
-
-            if (match.index === regex.lastIndex) {
-                ++regex.lastIndex;
-            }
-        }
-
     }
+
+
 
 };
 
