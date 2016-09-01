@@ -58,18 +58,16 @@ module.exports = {
       return "<@" + userId + ">";
     },
 
-    getUsernameFromUserMessage: function (userMessage, callback) {
+    getUsernameFromUserMessage: function (userMessage) {
         // username matching regex
-        var regex = new RegExp("@[a-zA-Z0-9_]{1,21}", "g");
-        var match;
-        while ((match = regex.exec(userMessage)) != null) {
-            callback(S(match).chompLeft('@').s);
+        var myRegexp = new RegExp("@[a-zA-Z0-9_]{1,21}", "g");
+        var match = myRegexp.exec(userMessage);
 
-            if (match.index === regex.lastIndex) {
-                ++regex.lastIndex;
-            }
+        if (match && match.length > 0) {
+            return S(match[0]).chompLeft('@').s;
+        } else {
+            return '';
         }
-
     },
 
     multiSearchOr: function (text, searchWords){

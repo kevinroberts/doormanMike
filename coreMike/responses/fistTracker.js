@@ -27,45 +27,45 @@ module.exports = {
                 bot.reply(message, onePersonTxt);
             } else {
                 // this is a single fist-ing so proceed cautiously ;)
-                messageUtils.getUsernameFromUserMessage(usersMessage, function (username) {
+                var username = messageUtils.getUsernameFromUserMessage(usersMessage);
                     // no self fist-ing plz thanks
-                    if (username == message.user) {
-                        var noSelfMsgs = "Woah, no self :fist::skin-tone-5:'n allowed. Spread the love and share a fist with someone who deserves it.";
-                        bot.reply(message, noSelfMsgs);
-                    } else {
+                if (username == message.user) {
+                    var noSelfMsgs = "Woah, no self :fist::skin-tone-5:'n allowed. Spread the love and share a fist with someone who deserves it.";
+                    bot.reply(message, noSelfMsgs);
+                } else {
 
-                        _this.addGivenFistToUser(message.user, controller, function (totalFists) {
-                            bot.botkit.log('updated fists given to users total of ' + totalFists);
-                            var fistsLeft = totalFistsPerDay - totalFists;
-                            var gifterMessage = '';
-                            if (fistsLeft > 1) {
-                                gifterMessage = messageUtils.getLinkFromUserId(username) +
-                                    " received a doorman mike fist from you. You have " + fistsLeft + " fists to give out today.";
+                    _this.addGivenFistToUser(message.user, controller, function (totalFists) {
+                        bot.botkit.log('updated fists given to users total of ' + totalFists);
+                        var fistsLeft = totalFistsPerDay - totalFists;
+                        var gifterMessage = '';
+                        if (fistsLeft > 1) {
+                            gifterMessage = messageUtils.getLinkFromUserId(username) +
+                                " received a doorman mike fist from you. You have " + fistsLeft + " fists to give out today.";
 
-                                var recipientMessage = "You just received a doorman mike :fist::skin-tone-5: from " +
-                                    messageUtils.getLinkFromUserId(message.user) + "!";
-                                
-                                if (chance.bool({likelihood: 50})) {
-                                    recipientMessage += '\nYou could try :fist:\'n ' + messageUtils.getLinkFromUserId(message.user) +
-                                        ' back for once? _every one deserves it once in a while_ :tm:'
-                                }
+                            var recipientMessage = "You just received a doorman mike :fist::skin-tone-5: from " +
+                                messageUtils.getLinkFromUserId(message.user) + "!";
 
-                                messageUtils.postMessage(bot, username, recipientMessage);
-
-
-                                _this.addFistToUser(username, controller, function (totalFists) {
-                                    bot.botkit.log('added fist to users total of ' + totalFists);
-                                });
-
-                            } else {
-                                // no more fists left to give
-                                gifterMessage = "sorry, you can only give 5 doorman mike fists a day";
+                            if (chance.bool({likelihood: 50})) {
+                                recipientMessage += '\nYou could try :fist:\'n ' + messageUtils.getLinkFromUserId(message.user) +
+                                    ' back for once? _every one deserves it once in a while_ :tm:'
                             }
-                            messageUtils.postMessage(bot, message.user, gifterMessage);
-                        });
 
-                    }
-                });
+                            messageUtils.postMessage(bot, username, recipientMessage);
+
+
+                            _this.addFistToUser(username, controller, function (totalFists) {
+                                bot.botkit.log('added fist to users total of ' + totalFists);
+                            });
+
+                        } else {
+                            // no more fists left to give
+                            gifterMessage = "sorry, you can only give 5 doorman mike fists a day";
+                        }
+                        messageUtils.postMessage(bot, message.user, gifterMessage);
+                    });
+
+                }
+
 
             }
 
@@ -235,8 +235,6 @@ module.exports = {
             });
         });
     }
-
-
 
 };
 

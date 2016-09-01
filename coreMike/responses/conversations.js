@@ -382,37 +382,25 @@ module.exports = {
                     convo.stop();
 
                 } else {
+                    convo.ask("No problem! \n Should I tell "+user+" you sent this? Say `yes` or `no`",function(response,convo) {
 
-                    messageUtils.getUsernameFromUserMessage(message.text, function (username) {
-                        // doorman mike cannot be used to send insults to yourself
-                        if (message.user !== username) {
-                            convo.ask("No problem! \n Should I tell "+user+" you sent this? Say `yes` or `no`", function(response, convo2) {
+                        if ( response.text === 'yes' | response.text === 'Yes' ) {
 
-                                if ( response.text === 'yes' | response.text === 'Yes' ) {
+                            bot.reply(message, "Will do! Check " + constants.getGeneralChannelLink());
 
-                                    bot.reply(message, "Will do! Check " + constants.getGeneralChannelLink());
+                            insults.postMikeInsult(bot, message, "Yo "+user + ", <@"+message.user+"> wants me to tell yah,", channel);
 
-                                    insults.postMikeInsult(bot, message, "Yo "+user + ", <@"+message.user+"> wants me to tell yah,", channel);
-
-                                } else {
-
-                                    bot.reply(message, "Sneaky! Check " + constants.getGeneralChannelLink());
-
-                                    insults.postMikeInsult(bot, message, user, channel);
-
-                                }
-
-                                convo2.stop();
-
-                            });
                         } else {
-                            bot.reply(message, "Sorry, you sneaky asshole, you already suck.. I won\'t insult you further.");
+
+                            bot.reply(message, "Sneaky! Check " + constants.getGeneralChannelLink());
+
+                            insults.postMikeInsult(bot, message, user, channel);
+
                         }
 
+                        convo.stop();
+
                     });
-
-
-
                 }
         });
 
@@ -435,35 +423,25 @@ module.exports = {
                 convo.stop();
 
             } else {
+                convo.ask("No problem! \n Should I tell "+user+" you sent this? Say `yes` or `no`",function(response,convo) {
 
-                messageUtils.getUsernameFromUserMessage(message.text, function (username) {
-                    // doorman mike cannot be used to send compliments to yourself
-                    if (message.user !== username) {
-                        convo.ask("No problem! \n Should I tell "+user+" you sent this? Say `yes` or `no`", function(response, convo2) {
+                    if ( response.text === 'yes' | response.text === 'Yes' ) {
 
-                            if ( response.text === 'yes' | response.text === 'Yes' ) {
+                        bot.reply(message, "Will do! Check " + constants.getGeneralChannelLink());
 
-                                bot.reply(message, "Will do! Check " + constants.getGeneralChannelLink());
+                        messageUtils.postMessage(bot, channel, "Yo "+user + ", <@"+message.user+"> wants me to tell yah, " + vocabulary.getMikeCompliment());
 
-                                messageUtils.postMessage(bot, channel, "Yo "+user + ", <@"+message.user+"> wants me to tell yah, " + vocabulary.getMikeCompliment());
-
-                            } else {
-
-                                bot.reply(message, "Sneaky! Check " + constants.getGeneralChannelLink());
-
-                                messageUtils.postMessage(bot, channel, "Yo "+user + ", I just wanted to tell yah, " + vocabulary.getMikeCompliment());
-
-                            }
-
-                            convo2.stop();
-
-                        });
                     } else {
-                        bot.reply(message, "What do you think this is? A " + vocabulary.getMikeDang() + " charity? Get your compliments elsewhere.");
+
+                        bot.reply(message, "Sneaky! Check " + constants.getGeneralChannelLink());
+
+                        messageUtils.postMessage(bot, channel, "Yo "+user + ", I just wanted to tell yah, " + vocabulary.getMikeCompliment());
+
                     }
 
-                });
+                    convo.stop();
 
+                });
             }
         });
     },
