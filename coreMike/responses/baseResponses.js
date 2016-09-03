@@ -24,6 +24,7 @@ var os = require('os'),
     facts = require('../responses/mikeFacts'),
     patterns = require('../helpers/regexPatterns'),
     fistTracker = require('../responses/fistTracker'),
+    complimentInsult = require('../responses/complimentsAndInsults'),
     S = require('string'),
      _ = require('lodash'),
     constants = require('../slackConstants'),
@@ -139,10 +140,16 @@ var baseResponses = function(controller, appCache) {
             conversations.sendMorninToHandler(bot, message);
 
         } else if (matcher.isMatch(usersMessage, 'send insult to*')) {
-            conversations.sendInsultToHandler(bot, message);
+            complimentInsult.sendInsultToHandler(controller, bot, message);
         }
         else if (matcher.isMatch(usersMessage, 'send compliment to*')) {
-            conversations.sendComplimentHandler(bot, message);
+            complimentInsult.sendComplimentHandler(controller, bot, message);
+        }
+        else if (matcher.isMatch(usersMessage, '*been naughty*') | matcher.isMatch(usersMessage, '*naughty list*')) {
+            complimentInsult.handleInsultLeaderBoardMessage(controller, bot, message);
+        }
+        else if (matcher.isMatch(usersMessage, '*been nice*') | matcher.isMatch(usersMessage, '*nice list*')) {
+            complimentInsult.handleComplimentLeaderBoardMessage(controller, bot, message);
         }
         else if (matcher.isMatch(usersMessage, 'my birthday is*')) {
             conversations.setMyBirthdayHandler(controller, bot, message);

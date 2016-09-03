@@ -107,6 +107,18 @@ module.exports = {
 
     },
 
+    getUsers: function (bot, callback) {
+        bot.api.users.list({
+            presence: 0
+        }, function (err, res) {
+            if (res.members) {
+                callback(res.members);
+            } else {
+                callback(new Error("no members returned "), err)
+            }
+        });
+    },
+
     formatUptime: function (uptime) {
         // if uptime is greater than one day
         if (uptime > 86400) {

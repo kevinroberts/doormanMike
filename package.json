@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "async": "^2.0.1",
-    "botkit": "^0.1.1",
+    "botkit": "^0.2.2",
     "botkit-storage-firebase": "1.0.0",
     "chance": "^1.0.3",
     "cheerio": "^0.20.0",

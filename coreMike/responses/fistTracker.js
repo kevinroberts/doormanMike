@@ -28,7 +28,7 @@ module.exports = {
             } else {
                 // this is a single fist-ing so proceed cautiously ;)
                 var username = messageUtils.getUsernameFromUserMessage(usersMessage);
-                    // no self fist-ing plz thanks
+                // no self fist-ing plz thanks
                 if (username == message.user) {
                     var noSelfMsgs = "Woah, no self :fist::skin-tone-5:'n allowed. Spread the love and share a fist with someone who deserves it.";
                     bot.reply(message, noSelfMsgs);
@@ -76,7 +76,7 @@ module.exports = {
 
     },
 
-    handleBotFist: function(controller, bot, message) {
+    handleBotFist: function (controller, bot, message) {
         var _this = this;
 
         _this.addGivenFistToUser(message.user, controller, function (totalFists) {
@@ -102,16 +102,15 @@ module.exports = {
     },
 
     handleLeaderBoardMessage: function (controller, bot, message) {
-        var _this = this;
         var leaderboardHeader = '*211 West Wacker Hustlers :fist::skin-tone-5: Leaderboard*\n';
 
-        // first get a list of users objects back from slack
-        _this.getUsers(bot, function (users) {
+        // first get a list of user objects back from slack
+        messageUtils.getUsers(bot, function (users) {
 
             // asynchronously transform the list of users with fist data
-            async.transform(users, function(acc, user, index, callback) {
+            async.transform(users, function (acc, user, index, callback) {
 
-                controller.storage.users.get(user.id, function(err, storageUser) {
+                controller.storage.users.get(user.id, function (err, storageUser) {
                     if (storageUser) {
                         user.fists = storageUser.fists ? storageUser.fists : 0;
                         acc.push(user);
@@ -119,12 +118,12 @@ module.exports = {
                     }
                 });
 
-            }, function(err, usersWithFists) {
+            }, function (err, usersWithFists) {
                 // returned results of member objects with fist numbers
                 bot.reply(message, leaderboardHeader);
                 usersWithFists = _.orderBy(usersWithFists, ['fists'], ['desc']);
                 var i = 0;
-                _.forEach(usersWithFists, function(member) {
+                _.forEach(usersWithFists, function (member) {
                     // only output members who have fists
                     if (member.fists && member.fists > 0) {
                         i++;
@@ -138,27 +137,15 @@ module.exports = {
         });
 
     },
-    
-    getUsers: function (bot, callback) {
-            bot.api.users.list({
-                presence: 0
-            }, function(err, res) {
-                if (res.members) {
-                    callback(res.members);
-                } else {
-                    callback(new Error("no members returned "), err)
-                }
-            });
-    },
 
     resetFistsGiven: function (controller, bot) {
         var _this = this;
         bot.api.users.list({
             presence: 0
-        }, function(err, res) {
+        }, function (err, res) {
             if (res.members) {
                 bot.botkit.log("returned " + res.members.length + " user accounts");
-                _.forEach(res.members, function(member) {
+                _.forEach(res.members, function (member) {
                     _this.resetGivenFistForUser(member.id, controller);
                 });
             }
@@ -166,7 +153,7 @@ module.exports = {
     },
 
     addFistToUser: function (userId, controller, callback) {
-        controller.storage.users.get(userId, function(err, user) {
+        controller.storage.users.get(userId, function (err, user) {
             var totalFists = 1;
             if (!user) {
                 user = {
@@ -182,7 +169,7 @@ module.exports = {
                 totalFists = user.fists;
             }
 
-            controller.storage.users.save(user, function(err, id) {
+            controller.storage.users.save(user, function (err, id) {
                 callback(totalFists);
             });
         });
@@ -190,7 +177,7 @@ module.exports = {
 
     resetGivenFistForUser: function (userId, controller) {
 
-        controller.storage.users.get(userId, function(err, user) {
+        controller.storage.users.get(userId, function (err, user) {
             var resetFistTotal = 0;
             if (!user) {
                 user = {
@@ -205,7 +192,7 @@ module.exports = {
                 }
             }
 
-            controller.storage.users.save(user, function(err, id) {
+            controller.storage.users.save(user, function (err, id) {
                 if (development) {
                     console.log('reset given fist total for ' + userId);
                 }
@@ -214,7 +201,7 @@ module.exports = {
     },
 
     addGivenFistToUser: function (userId, controller, callback) {
-        controller.storage.users.get(userId, function(err, user) {
+        controller.storage.users.get(userId, function (err, user) {
             var totalFists = 1;
             if (!user) {
                 user = {
@@ -230,7 +217,7 @@ module.exports = {
                 totalFists = user.fistsGiven;
             }
 
-            controller.storage.users.save(user, function(err, id) {
+            controller.storage.users.save(user, function (err, id) {
                 callback(totalFists);
             });
         });
