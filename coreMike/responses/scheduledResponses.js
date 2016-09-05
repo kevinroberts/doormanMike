@@ -3,8 +3,12 @@ var CronJob = require('cron').CronJob;
 var dayOfTheWeekResponses = require('./dayOfTheWeek');
 var messageUtils = require('../helpers/messageUtils');
 var vocabulary = require('../helpers/vocabulary');
+var holidays = require('../helpers/getHolidays');
 var birthday = require('../responses/birthdayResponses');
 var fistTracker = require('../responses/fistTracker');
+var moment = require('moment');
+var _ = require('lodash');
+
 
 var timezoneEnv = process.env.TIMEZONE;
 function getDefaultTz() {
@@ -15,7 +19,7 @@ function getDefaultTz() {
     }
 }
 
-var scheduledResponses = function(controller, bot) {
+var scheduledResponses = function(controller, appCache, bot) {
 
     var dailyResetJob = new CronJob({
         cronTime: '00 05 00 * * 1-7',
@@ -38,7 +42,18 @@ var scheduledResponses = function(controller, bot) {
              * at 9:10:00 AM. It does not run on Saturday
              * or Sunday.
              */
-            messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin() + '\n' + dayOfTheWeekResponses.statementResponse());
+
+            holidays.checkIfCurrentDayIsHoliday(appCache, function (holidaysFound) {
+               if (holidaysFound) {
+                   messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin());
+                   _.forEach(holidaysFound, function(holidayObj) {
+                       messageUtils.postMessage(bot, 'general', "Happy " + vocabulary.getMikeDang() + " " + holidayObj.name + "!");
+                   });
+               } else {
+                   messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin() + '\n' + dayOfTheWeekResponses.statementResponse());
+               }
+            });
+
             birthday.getBirthDayMessages(controller, bot);
         },
         start: false,
@@ -66,7 +81,18 @@ var scheduledResponses = function(controller, bot) {
              * Runs every Friday
              * at 3 PM.
              */
-            messageUtils.postMessage(bot, ['general'], vocabulary.getBeerFriday());
+            holidays.checkIfCurrentDayIsHoliday(appCache, function (holidaysFound) {
+                if (holidaysFound) {
+                    messageUtils.postMessage(bot, ['general'], vocabulary.getBeerFriday());
+                    _.forEach(holidaysFound, function(holidayObj) {
+                        messageUtils.postMessage(bot, 'general', "Go celebrate " + vocabulary.getMikeDang() + " " + holidayObj.name + "! ");
+                    });
+                } else {
+                    messageUtils.postMessage(bot, ['general'], vocabulary.getBeerFriday());
+                }
+            });
+
+
         },
         start: false,
         timeZone: getDefaultTz()

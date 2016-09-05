@@ -27,8 +27,10 @@ var os = require('os'),
     complimentInsult = require('../responses/complimentsAndInsults'),
     S = require('string'),
      _ = require('lodash'),
+    holidays = require('../helpers/getHolidays'),
     constants = require('../slackConstants'),
     Cleverbot = require('../helpers/cleverbot');
+var moment = require('moment');
 const matcher = require('matcher');
 var Chance = require('chance'),
     chance = new Chance();
@@ -134,6 +136,25 @@ var baseResponses = function(controller, appCache) {
             messageUtils.getUsernameFromController(controller, message.user, function(name) {
                 var loveMessage = love.getLoveReactionForName(name);
                 bot.reply(message, name + ' ' + lunchSuggestion + loveMessage);
+            });
+
+        } else if (matcher.isMatch(usersMessage, '*holiday*')) {
+
+            holidays.checkIfCurrentDayIsHoliday(appCache, function (holidaysFound) {
+                if (holidaysFound) {
+                    var msg = "Yes, today is a holiday for " + vocabulary.getMikeDang() + " ";
+                    var i = 0;
+                    _.forEach(holidaysFound, function(holidayObj) {
+                        if (i > 0) {
+                            msg += "\n and ";
+                        }
+                        msg += holidayObj.name;
+                        i++;
+                    });
+                    bot.reply(message, msg);
+                } else {
+                    bot.reply(message, "No, there's not a recognized holiday going on today. That I know of...");
+                }
             });
 
         } else if (matcher.isMatch(usersMessage, 'send mornin to*')) {

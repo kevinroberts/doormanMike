@@ -3,7 +3,13 @@ var _ = require('lodash');
 var Botkit = require('botkit');
 require('dotenv').config({silent: true});
 var NodeCache = require( "node-cache" );
+var holidays = require('./coreMike/helpers/getHolidays.js');
 var constants = require('./coreMike/slackConstants');
+var moment = require('moment');
+
+var now = moment();
+var currentYear = now.year();
+
 
 var appCache = new NodeCache();
 
@@ -15,6 +21,11 @@ var debugMode = false;
 // Keep bot from starting if a Slack token is missing
 if (!process.env.token) {
     console.log('Error: Specify token in environment');
+    process.exit(1);
+}
+
+if (!process.env.HOLIDAYAPI) {
+    console.log('Error: Holiday API key missing');
     process.exit(1);
 }
 
@@ -72,10 +83,21 @@ controller.storage.users.get(constants.getBotUserID(), function (err, userObj) {
     }
 });
 
+holidays.getHolidaysForYear(process.env.HOLIDAYAPI, currentYear, function (holidayData) {
+   if (holidayData) {
+       appCache.set( "holidays", holidayData, function( err, success ) {
+           if (!err && success) {
+               console.log("loaded holidays list");
+               //console.log(holidayData);
+           }
+       });
+   }
+});
+
 baseResponses(controller, appCache);
 
 // start scheduled mike messages
-scheduledResponses(controller, bot);
+scheduledResponses(controller, appCache, bot);
 
 
 module.exports = bot;
