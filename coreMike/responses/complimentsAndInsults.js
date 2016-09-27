@@ -31,6 +31,9 @@ module.exports = {
                 if (recipientUser == message.user) {
                     convo.say("Sorry, you sneaky asshole, you already suck.. I won\'t insult you further.");
                     convo.next();
+                } else if (recipientUser == constants.getBotUserID()) {
+                    convo.say("Sorry, I know I already suck.. I won\'t insult myself further.");
+                    convo.next();
                 } else {
 
                     _this.addInsultToUser(recipientUser, controller, function (totalInsults) {
@@ -85,6 +88,9 @@ module.exports = {
 
                 if (recipientUser == message.user) {
                     convo.say("What do you think this is? A " + vocabulary.getMikeDang() + " charity? Get your compliments elsewhere.");
+                    convo.next();
+                } else if (recipientUser == constants.getBotUserID()) {
+                    convo.say("Sorry, I know I'm already awesome.. I don't need further compliments.");
                     convo.next();
                 } else {
 
