@@ -25,7 +25,7 @@ module.exports = {
                     if (result.body.list) {
                         if (result.body.list[0]) {
                             var def = result.body.list[0];
-                            var formattedDefinition = "*" + def.word + "*\n\n" + def.definition + "\n" + def.permalink;
+                            var formattedDefinition = "*" + def.word + "*\n\n" + def.definition;
                             callback(formattedDefinition);
                         } else {
                             callback(null);
