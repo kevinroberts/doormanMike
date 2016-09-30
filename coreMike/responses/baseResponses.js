@@ -28,6 +28,7 @@ var os = require('os'),
     S = require('string'),
      _ = require('lodash'),
     holidays = require('../helpers/getHolidays'),
+    urbandictionary = require('../helpers/urbandictionary'),
     constants = require('../slackConstants'),
     Cleverbot = require('../helpers/cleverbot');
 var moment = require('moment');
@@ -154,6 +155,16 @@ var baseResponses = function(controller, appCache) {
                     bot.reply(message, msg);
                 } else {
                     bot.reply(message, "No, there's not a recognized holiday going on today. That I know of...");
+                }
+            });
+
+        } else if (matcher.isMatch(usersMessage, 'define *')) {
+            var word = usersMessage.split("define ")[1];
+            urbandictionary.getUrbanDefinition(word, function (definition) {
+                if (definition != null) {
+                    bot.reply(message, definition);
+                } else {
+                    bot.reply(message, "Go look it up yourself! I have no idea.");
                 }
             });
 
