@@ -19,7 +19,7 @@ module.exports = {
         var fistText = 'Give someone a doorman mike fist by adding it after their username, like this: *@username :fist:*';
 
         // if this message contains an @ fist-ing
-        if (S(usersMessage).contains('@')) {
+        if (S(usersMessage).contains('@U')) {
             // complain about only sending one fist at a time
             var numberOfAts = S(usersMessage).count('@');
             if (numberOfAts > 1) {
