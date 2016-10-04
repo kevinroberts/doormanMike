@@ -298,7 +298,7 @@ var baseResponses = function(controller, appCache) {
             messageUtils.postMikeFist(bot, message);
 
             messageUtils.getUsernameFromController(controller, message.user, function (name) {
-                bot.reply(message, name + " thanks for the " + vocabulary.getMikeDang() + " fist bro.\nCheck out the leaderboard `@" + constants.getBotUsername() + " leaderboard`");
+                bot.reply(message, name + " thanks for the " + vocabulary.getMikeDang() + " fist bro.\nCheck out the leaderboard `@" + constants.getBotUsername() + " leaderboard` and over at http://transithelper.com/leaderboard");
             });
 
             fistTracker.handleBotFist(controller, bot, message);

@@ -30,7 +30,7 @@ if (!process.env.HOLIDAYAPI) {
 }
 
 if (!process.env.FIREBASEURI) {
-    console.log('Error: Specify token in environment');
+    console.log('Error: Specify FIREBASEURI in environment');
     process.exit(1);
 }
 

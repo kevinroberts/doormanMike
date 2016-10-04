@@ -103,6 +103,7 @@ module.exports = {
 
     handleLeaderBoardMessage: function (controller, bot, message) {
         var leaderboardHeader = '*211 West Wacker Hustlers :fist::skin-tone-5: Leaderboard*\n';
+        var leaderboardOutro = '\nSee the :fist::skin-tone-5: Leaderboard online at http://transithelper.com/leaderboard';
 
         // first get a list of user objects back from slack
         messageUtils.getUsers(bot, function (users) {
@@ -131,6 +132,7 @@ module.exports = {
                         bot.reply(message, rankMsg);
                     }
                 });
+                bot.reply(message, leaderboardOutro);
 
             });
 
