@@ -24,11 +24,6 @@ if (!process.env.token) {
     process.exit(1);
 }
 
-if (!process.env.HOLIDAYAPI) {
-    console.log('Error: Holiday API key missing');
-    process.exit(1);
-}
-
 if (!process.env.FIREBASEURI) {
     console.log('Error: Specify FIREBASEURI in environment');
     process.exit(1);
@@ -59,7 +54,7 @@ var bot = controller.spawn({
 * Manually Set storage for bot user  
  var user = {
  id: constants.getBotUserID(),
- curses: "fuck",
+ curses: "f***",
  helpText: "help"
  };
 
@@ -83,7 +78,7 @@ controller.storage.users.get(constants.getBotUserID(), function (err, userObj) {
     }
 });
 
-holidays.getHolidaysForYear(process.env.HOLIDAYAPI, currentYear, function (holidayData) {
+holidays.getHolidaysForYear(function (holidayData) {
    if (holidayData) {
        appCache.set( "holidays", holidayData, function( err, success ) {
            if (!err && success) {

@@ -1,24 +1,21 @@
 var unirest = require('unirest');
 var moment = require('moment');
 var _ = require('lodash');
+var ics = require('ics-parser');
+var fs = require('fs');
+var path = require('path');
 
 module.exports = {
 
-    getHolidaysForYear: function (apiKey, year, callback) {
-        unirest.get("https://holidayapi.com/v1/holidays?key=" + apiKey + '&country=US&year='+year)
-            .end(function (result) {
-                if (result && result.status == 200) {
-                    if (result.body && result.body.holidays) {
-                        callback(result.body.holidays);
-                    } else {
-                        console.log("could not get holidays for doorman mike: ", result.status);
-                        callback(null)
-                    }
-                } else {
-                    console.log("could not get holidays for doorman mike: ", result.status);
-                    callback(null)
-                }
-            });
+    getHolidaysForYear: function (callback) {
+        fs.readFile(path.join(__dirname, '/files/US-Holidays.ics'), function(err, data) {
+            if (err) {
+                callback(null);
+            } else {
+                var events = ics(data.toString());
+                callback(events);
+            }
+        });
     },
     checkIfCurrentDayIsHoliday: function (appCache, callback) {
         var now = moment();

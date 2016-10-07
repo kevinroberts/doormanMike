@@ -16,6 +16,7 @@
     "day-of-week": "^1.0.4",
     "debug": "~2.2.0",
     "dotenv": "^2.0.0",
+    "ics-parser": "^0.1.5",
     "lodash": "^4.11.1",
     "matcher": "^0.1.2",
     "moment": "^2.13.0",
