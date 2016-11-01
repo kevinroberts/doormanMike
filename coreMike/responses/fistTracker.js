@@ -14,7 +14,6 @@ var totalFistsPerDay = 5;
 module.exports = {
 
     handleFistMessage: function (controller, bot, message) {
-        var _this = this;
         var usersMessage = message.text;
         var fistText = 'Give someone a doorman mike fist by adding it after their username, like this: *@username :fist:*';
 
@@ -34,7 +33,7 @@ module.exports = {
                     bot.reply(message, noSelfMsgs);
                 } else {
 
-                    _this.addGivenFistToUser(message.user, controller, function (totalFists) {
+                    this.addGivenFistToUser(message.user, controller, function (totalFists) {
                         bot.botkit.log('updated fists given to users total of ' + totalFists);
                         var fistsLeft = totalFistsPerDay - totalFists;
                         var gifterMessage = '';
@@ -53,7 +52,7 @@ module.exports = {
                             messageUtils.postMessage(bot, username, recipientMessage);
 
 
-                            _this.addFistToUser(username, controller, function (totalFists) {
+                            this.addFistToUser(username, controller, function (totalFists) {
                                 bot.botkit.log('added fist to users total of ' + totalFists);
                             });
 
@@ -62,7 +61,7 @@ module.exports = {
                             gifterMessage = "sorry, you can only give 5 doorman mike fists a day";
                         }
                         messageUtils.postMessage(bot, message.user, gifterMessage);
-                    });
+                    }.bind(this));
 
                 }
 
@@ -77,9 +76,7 @@ module.exports = {
     },
 
     handleBotFist: function (controller, bot, message) {
-        var _this = this;
-
-        _this.addGivenFistToUser(message.user, controller, function (totalFists) {
+        this.addGivenFistToUser(message.user, controller, function (totalFists) {
             bot.botkit.log('updated fists given to users total of ' + totalFists);
             var fistsLeft = totalFistsPerDay - totalFists;
             var gifterMessage = '';
@@ -88,7 +85,7 @@ module.exports = {
                     " received a doorman mike fist from you. You have " + fistsLeft + " fists to give out today.";
 
 
-                _this.addFistToUser(constants.getBotUserID(), controller, function (totalFists) {
+                this.addFistToUser(constants.getBotUserID(), controller, function (totalFists) {
                     bot.botkit.log('added fist to bots total of ' + totalFists);
                 });
 
@@ -97,7 +94,7 @@ module.exports = {
                 gifterMessage = "sorry, you can only give 5 doorman mike fists a day";
             }
             messageUtils.postMessage(bot, message.user, gifterMessage);
-        });
+        }.bind(this));
 
     },
 
@@ -141,17 +138,16 @@ module.exports = {
     },
 
     resetFistsGiven: function (controller, bot) {
-        var _this = this;
         bot.api.users.list({
             presence: 0
         }, function (err, res) {
             if (res.members) {
                 bot.botkit.log("returned " + res.members.length + " user accounts");
                 _.forEach(res.members, function (member) {
-                    _this.resetGivenFistForUser(member.id, controller);
-                });
+                    this.resetGivenFistForUser(member.id, controller);
+                }.bind(this));
             }
-        });
+        }.bind(this));
     },
 
     addFistToUser: function (userId, controller, callback) {

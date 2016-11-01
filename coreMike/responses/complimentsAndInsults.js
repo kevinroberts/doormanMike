@@ -10,7 +10,6 @@ const development = process.env.NODE_ENV !== 'production';
 module.exports = {
 
     sendInsultToHandler: function (controller, bot, message) {
-        var _this = this;
         var user = message.text.split("send insult to ")[1];
 
         var channel = 'general';
@@ -36,7 +35,7 @@ module.exports = {
                     convo.next();
                 } else {
 
-                    _this.addInsultToUser(recipientUser, controller, function (totalInsults) {
+                    this.addInsultToUser(recipientUser, controller, function (totalInsults) {
                         bot.botkit.log("Total insults for " + recipientUser + " is: " + totalInsults);
                     });
 
@@ -62,12 +61,11 @@ module.exports = {
 
                 }
             }
-        });
+        }.bind(this));
 
     },
 
     sendComplimentHandler: function (controller, bot, message) {
-        var _this = this;
         var user = message.text.split("send compliment to ")[1];
 
         var channel = 'general';
@@ -94,7 +92,7 @@ module.exports = {
                     convo.next();
                 } else {
 
-                    _this.addComplimentToUser(recipientUser, controller, function (totalInsults) {
+                    this.addComplimentToUser(recipientUser, controller, function (totalInsults) {
                         bot.botkit.log("Total insults for " + recipientUser + " is: " + totalInsults);
                     });
 
@@ -121,7 +119,7 @@ module.exports = {
 
 
             }
-        });
+        }.bind(this));
     },
     handleInsultLeaderBoardMessage: function (controller, bot, message) {
         var leaderboardHeader = '*Mike\'s Naughty List Leaders :angry: *\nRanked by total insults received\n';
