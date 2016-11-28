@@ -83,7 +83,7 @@ holidays.getHolidaysForYear(function (holidayData) {
        appCache.set( "holidays", holidayData, function( err, success ) {
            if (!err && success) {
                console.log("loaded holidays list");
-               //console.log(holidayData);
+               console.log(holidayData);
            }
        });
    }

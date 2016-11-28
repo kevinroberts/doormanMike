@@ -18,14 +18,30 @@ module.exports = {
             }
         });
     },
+    getUpcomingHolidays: function (appCache) {
+        var now = moment();
+        var upcoming = [];
+
+        _.forEach(appCache.get( "holidays" ), function(value, key) {
+            var holidayDate = moment(value.startDate);
+            // if holiday is after current date
+            if (holidayDate.isAfter(now)) {
+                upcoming.push(value);
+            }
+        });
+
+        return upcoming;
+    },
     checkIfCurrentDayIsHoliday: function (appCache, callback) {
         var now = moment();
         var formattedDateString = now.format('YYYY-MM-DD');
         var holidayFound = false;
 
         _.forEach(appCache.get( "holidays" ), function(value, key) {
-            // if passed name contains a crush
-            if (formattedDateString == key) {
+            var holidayDate = moment(value.startDate);
+            var formattedHolidayDate = holidayDate.format('YYYY-MM-DD');
+            // if current date matches holiday date
+            if (formattedDateString === formattedHolidayDate) {
                 callback(value);
                 holidayFound = true;
             }

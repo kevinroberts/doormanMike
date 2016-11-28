@@ -139,6 +139,26 @@ var baseResponses = function (controller, appCache) {
         bot.reply(message, name + ' ' + lunchSuggestion + loveMessage);
       });
 
+    } else if (matcher.isMatch(usersMessage, '*upcoming holiday*') | matcher.isMatch(usersMessage, '*holidays*')) {
+
+      var msg;
+
+      var upcomingHolidays = holidays.getUpcomingHolidays(appCache);
+
+      if (upcomingHolidays.length > 0) {
+        msg = "I know of " + upcomingHolidays.length + " "  + vocabulary.getMikeDang() + " holidays coming up: ";
+
+        _.forEach(upcomingHolidays, function (holiday) {
+          var holidayDate = moment(holiday.startDate).format("dddd, MMMM Do YYYY");
+          msg += "\n" + holiday.name + " on " + holidayDate;
+        });
+
+      } else {
+        msg = "I don't know of any upcoming holidays.";
+      }
+
+      bot.reply(message, msg);
+
     } else if (matcher.isMatch(usersMessage, '*holiday*')) {
 
       holidays.checkIfCurrentDayIsHoliday(appCache, function (holidaysFound) {
