@@ -9,6 +9,7 @@ module.exports = {
 
     getHolidaysForYear: function (callback) {
         // sources http://www.calendarlabs.com/templates/ical/US-Holidays.ics
+        // editor http://apps.marudot.com/ical/
         fs.readFile(path.join(__dirname, '/files/US-Holidays.ics'), function(err, data) {
             if (err) {
                 callback(null);
@@ -25,7 +26,7 @@ module.exports = {
         _.forEach(appCache.get( "holidays" ), function(value, key) {
             var holidayDate = moment(value.startDate);
             // if holiday is after current date
-            if (holidayDate.isAfter(now)) {
+            if (holidayDate.isAfter(now) && value.name) {
                 upcoming.push(value);
             }
         });
@@ -41,7 +42,7 @@ module.exports = {
             var holidayDate = moment(value.startDate);
             var formattedHolidayDate = holidayDate.format('YYYY-MM-DD');
             // if current date matches holiday date
-            if (formattedDateString === formattedHolidayDate) {
+            if (formattedDateString === formattedHolidayDate && value.name) {
                 callback(value);
                 holidayFound = true;
             }
