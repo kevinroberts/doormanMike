@@ -16,6 +16,8 @@ module.exports = {
                             .replaceAll("Chuck norris", "Doorman Mike")
                             .replaceAll("Chuck", "Mike")
                             .replaceAll("chuck", "Mike")
+                            .replaceAll("Norris'", "Mike")
+                            .replaceAll("Norris", "Mike")
                             .replaceAll("roundhouse kick", ":fist::skin-tone-5:")
                             .replaceAll("roundhouse-kicks", ":fist::skin-tone-5:s")
                             .replaceAll("roundhouse-kick", ":fist::skin-tone-5:s")
@@ -24,7 +26,7 @@ module.exports = {
                     }
                 } else {
                     console.log("could not get fact for doorman mike: ", result.status);
-                    bot.reply(message, vocabulary.getWaster())
+                    bot.reply(message, vocabulary.getWaster());
                 }
             });
     }
