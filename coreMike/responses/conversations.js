@@ -410,13 +410,14 @@ module.exports = {
 
     },
     haveArgumentHandler: function (controller, bot, message) {
+        var _this = this;
         bot.startConversation(message, function (err, argConversation) {
 
             argConversation.ask("ok you wanna start a " + vocabulary.getMikeDang() + " beef with me? Say `yes` or `no`", function (response, argQuestion) {
 
                 if (response.text === 'yes' | response.text === 'Yes') {
 
-                    this.startArgument(bot, message);
+                    _this.startArgument(bot, message);
 
                 } else {
                     bot.reply(message, "Aww damn, alright.. I'll get yah next time.");
