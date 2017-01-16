@@ -164,14 +164,7 @@ var baseResponses = function (controller, appCache) {
       holidays.checkIfCurrentDayIsHoliday(appCache, function (holidaysFound) {
         if (holidaysFound) {
           var msg = "Yes, today is a holiday for " + vocabulary.getMikeDang() + " ";
-          var i = 0;
-          _.forEach(holidaysFound, function (holidayObj) {
-            if (i > 0) {
-              msg += "\n and ";
-            }
-            msg += holidayObj.name;
-            i++;
-          });
+          msg += holidaysFound.name;
           bot.reply(message, msg);
         } else {
           bot.reply(message, "No, there's not a recognized holiday going on today. That I know of...");
