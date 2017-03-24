@@ -43,12 +43,12 @@ var scheduledResponses = function(controller, appCache, bot) {
              * or Sunday.
              */
 
-            holidays.checkIfCurrentDayIsHoliday(appCache, function (holidaysFound) {
-               if (holidaysFound) {
+            holidays.checkIfCurrentDayIsHoliday(appCache, function (holidayFound) {
+               if (holidayFound) {
                    messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin());
-                   _.forEach(holidaysFound, function(holidayObj) {
-                       messageUtils.postMessage(bot, 'general', "Happy " + vocabulary.getMikeDang() + " " + holidayObj.name + "!");
-                   });
+
+                   messageUtils.postMessage(bot, 'general', "Happy " + vocabulary.getMikeDang() + " " + holidayFound.name + "!");
+
                } else {
                    messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin() + '\n' + dayOfTheWeekResponses.statementResponse());
                }
