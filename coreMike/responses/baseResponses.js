@@ -29,6 +29,7 @@ var os = require('os'),
   _ = require('lodash'),
   holidays = require('../helpers/getHolidays'),
   urbandictionary = require('../helpers/urbandictionary'),
+  dictionary = require('../helpers/wordDictionary'),
   trumpism = require('../helpers/getTrumpism'),
   constants = require('../slackConstants'),
   Cleverbot = require('../helpers/cleverbot');
@@ -174,6 +175,33 @@ var baseResponses = function (controller, appCache) {
     } else if (matcher.isMatch(usersMessage, 'define *')) {
       var word = usersMessage.split("define ")[1];
       urbandictionary.getUrbanDefinition(word, function (definition) {
+        if (definition != null) {
+          bot.reply(message, definition);
+        } else {
+          dictionary.getDefinition(word, function (wordDef) {
+            if (wordDef != null) {
+              bot.reply(message, wordDef);
+            } else {
+              bot.reply(message, "Go look it up yourself! I have no idea.");
+            }
+          });
+
+        }
+      });
+
+    } else if (matcher.isMatch(usersMessage, ':nerd_face: define *')) {
+      var word = usersMessage.split(":nerd_face: define ")[1];
+      dictionary.getDefinition(word, function (definition) {
+        if (definition != null) {
+          bot.reply(message, definition);
+        } else {
+          bot.reply(message, "Go look it up yourself! I have no idea.");
+        }
+      });
+
+    } else if (matcher.isMatch(usersMessage, ':nerd_face: *')) {
+      var word = usersMessage.split(":nerd_face: ")[1];
+      dictionary.getDefinition(word, function (definition) {
         if (definition != null) {
           bot.reply(message, definition);
         } else {
