@@ -270,16 +270,16 @@ module.exports = {
 
                             var secondPart = '';
                             if (now.isSame(birthdayDate, 'month') && now.isSame(birthdayDate, 'day')) {
-                                secondPart = " AND THAT IS TODAY HAPPY GAHDAMN BIRTHDAY!!!"
+                                secondPart = " AND THAT IS TODAY HAPPY GAHDAMN BIRTHDAY!!!";
                             } else if (birthdayDate.isAfter(now)) {
                                 difference = birthdayDate.diff(now);
                                 duration = moment.duration(difference);
-                                secondPart = ", bro\'s still got " + duration.humanize() + " until their birthday."
+                                secondPart = ", bro\'s still got " + duration.humanize() + " until their birthday.";
                             } else if (birthdayDate.isBefore(now)) {
                                 birthdayDate = birthdayDate.add(1, "years");
                                 difference = birthdayDate.diff(now);
                                 duration = moment.duration(difference);
-                                secondPart = ", bro\'s still got " + duration.humanize() + " until their birthday."
+                                secondPart = ", bro\'s still got " + duration.humanize() + " until their birthday.";
                             }
 
                             if (user.name) {
@@ -386,7 +386,7 @@ module.exports = {
 
                 convo.ask("No problem! Do make sure I've been invited to that channel first though. \n Should I tell " + user + " you requested this? Say `yes` or `no`", function (response, convo) {
 
-                    if (response.text === 'yes' | response.text === 'Yes') {
+                    if (response.text === 'yes' || response.text === 'Yes') {
 
                         bot.reply(message, "Will do! Check <#" + channel + ">");
                         var morninMessage = dayOfTheWeekResponses.getMikeMorninTimeSensitive(null);
@@ -415,7 +415,7 @@ module.exports = {
 
             argConversation.ask("ok you wanna start a " + vocabulary.getMikeDang() + " beef with me? Say `yes` or `no`", function (response, argQuestion) {
 
-                if (response.text === 'yes' | response.text === 'Yes') {
+                if (response.text === 'yes' || response.text === 'Yes') {
 
                     _this.startArgument(bot, message);
 

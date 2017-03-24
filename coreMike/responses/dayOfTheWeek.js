@@ -171,6 +171,23 @@ module.exports = {
         return _.sample(mikeResponses).replace("|USERNAME|", user);
     },
 
+    getMikeFridayResponse: function (user, bot, message) {
+    var mikeResponses = [
+      '|USERNAME| fucck yea' + vocabulary.getMikeDang().toUpperCase() + " FRIDAY... I LOVE IT ",
+      "FRIDAY i could marry the " + vocabulary.getMikeDang() + " word",
+      "|USERNAME|, you tryna start a party? cuz if you say Friday a couple more times, im bring up the :tequila:"
+    ];
+
+    var mikeReactions = [
+      'dark_sunglasses',
+      'dancers',
+      'megusta'
+    ];
+
+    messageUtils.postReaction(bot, message, _.sample(mikeReactions));
+
+    return _.sample(mikeResponses).replace("|USERNAME|", user);
+  },
     getMikeWeekendResponse: function () {
         var day = getDayOfWeek();
 

@@ -56,7 +56,7 @@ var baseResponses = function (controller, appCache) {
   controller.hears('', 'ambient', function (bot, message) {
     var usersMessage = message.text;
 
-    if (matcher.isMatch(usersMessage, 'mornin mornin') | matcher.isMatch(usersMessage, 'good morning*') | matcher.isMatch(usersMessage, 'morning')) {
+    if (matcher.isMatch(usersMessage, 'mornin mornin') || matcher.isMatch(usersMessage, 'good morning*') || matcher.isMatch(usersMessage, 'morning')) {
       if (chance.bool({likelihood: 30})) {
         bot.startTyping(message);
         messageUtils.getUsernameFromController(controller, message.user, function (name) {
@@ -290,6 +290,14 @@ var baseResponses = function (controller, appCache) {
 
       messageUtils.getUsernameFromController(controller, message.user, function (name) {
         var bMsg = dayOfTheWeekResponses.getMikeMondayResponse(name, bot, message);
+
+        bot.reply(message, bMsg);
+      });
+
+    } else if (matcher.isMatch(usersMessage, '*Friday*') | matcher.isMatch(usersMessage, '*friday*')) {
+
+      messageUtils.getUsernameFromController(controller, message.user, function (name) {
+        var bMsg = dayOfTheWeekResponses.getMikeFridayResponse(name, bot, message);
 
         bot.reply(message, bMsg);
       });
