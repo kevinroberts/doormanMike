@@ -7,13 +7,15 @@ var messageUtils = require('../helpers/messageUtils');
 module.exports = {
 
     postMikeInsult: function (bot, message, user, channel) {
-        unirest.get("http://www.insultgenerator.org")
+        unirest.get("http://www.pangloss.com/seidel/Shaker/index.html")
             .end(function (result) {
                 if (result && result.status == 200) {
                     if (result.body) {
                         var $ = cheerio.load(result.body);
-                        var insult = $('div.wrap').text();
+                        var insult = $('p:first-of-type').text();
+                        var from = $('p').text().split('\n\n')[1];
                         insult = S(insult).replaceAll("\n", "").s;
+                        insult += '\n' + from;
                         if (channel != null) {
                             messageUtils.postMessage(bot, channel, user + " " + insult);
                         } else {
