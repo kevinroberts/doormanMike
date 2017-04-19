@@ -12,26 +12,20 @@ Cleverbot.prototype.getCleverBotResponse = function(message, callback) {
         console.error("no cleverbotIO was configured");
         return '';
     }
-    this._cleverbotIO.ask(message.text, function (err, response) {
-        if (!err) {
-            var msg = response;
+    this._cleverbotIO.request(message.text).then( function (response) {
+      var msg = response.output;
 
-            if (response.indexOf('HAL') !== -1) {
-                msg = response.replace('HAL', "<@"+message.user+">")
-            }
-            if (response.indexOf('Cleverbot') !== -1) {
-                msg = response.replace('Cleverbot', "Mike")
-            }
+      if (msg.indexOf('HAL') !== -1) {
+        msg = msg.replace('HAL', "<@"+message.user+">");
+      }
+      if (msg.indexOf('Cleverbot') !== -1) {
+        msg = msg.replace('Cleverbot', "Mike");
+      }
+      callback(msg);
+    }).catch(function (error) {
+      // if no cleverbot response just respond with a generic one
+      console.log('cleverbot err received', error);
 
-
-            callback(msg);
-
-        } else {
-            // if no cleverbot response just respond with a generic one
-            console.log('cleverbot err: ' + err);
-
-            callback(vocabulary.getWaster());
-
-        }
+      callback(vocabulary.getWaster());
     });
 };

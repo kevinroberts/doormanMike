@@ -2,17 +2,9 @@
  *   defines all the basic mike responses
  */
 
-var cleverbotio = require("cleverbot.io"),
-  cleverbotio = new cleverbotio(process.env.CLEVERBOTUSER, process.env.CLEVERBOTAPI);
-cleverbotio.setNick("Mike");
-cleverbotio.create(function (err, session) {
-  if (err) {
-    console.log('Cleverbot create fail', err);
-  } else {
-    console.log('cleverbot create success.');
-  }
-});
+var Cleverbot = require("cleverbot-api-node")
 
+var Clever = new Cleverbot(process.env.CLEVERBOTAPI);
 
 var os = require('os'),
   dayOfTheWeekResponses = require('./dayOfTheWeek'),
@@ -32,7 +24,7 @@ var os = require('os'),
   dictionary = require('../helpers/wordDictionary'),
   trumpism = require('../helpers/getTrumpism'),
   constants = require('../slackConstants'),
-  Cleverbot = require('../helpers/cleverbot');
+  CleverbotImpl = require('../helpers/cleverbot');
 var moment = require('moment');
 const matcher = require('matcher');
 var Chance = require('chance'),
@@ -402,8 +394,8 @@ var baseResponses = function (controller, appCache) {
 
       } else {
 
-        // initialize cleverbot module with a clerverbotio object
-        var cleverbotInstance = new Cleverbot(cleverbotio);
+        // initialize cleverbot module with a clerverbot instance
+        var cleverbotInstance = new CleverbotImpl(Clever);
         // ask clever bot for a response (cleverbot.io)
         cleverbotInstance.getCleverBotResponse(message, function (response) {
           bot.reply(message, response);
