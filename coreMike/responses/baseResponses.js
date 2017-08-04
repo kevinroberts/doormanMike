@@ -245,10 +245,10 @@ var baseResponses = function (controller, appCache) {
       messageUtils.getUsernameFromController(controller, message.user, function (name) {
         bot.reply(message, vocabulary.getBodies(name));
       });
-
-    } else if (matcher.isMatch(usersMessage, '*fart*') | matcher.isMatch(usersMessage, '*poop*')) {
-      bot.reply(message, vocabulary.getMikeFart());
     }
+    // } else if (matcher.isMatch(usersMessage, '*fart*') | matcher.isMatch(usersMessage, '*poop*')) {
+    //   bot.reply(message, vocabulary.getMikeFart());
+    // }
     else if (matcher.isMatch(usersMessage, 'uptime') | matcher.isMatch(usersMessage, 'identify yourself') |
       matcher.isMatch(usersMessage, 'who are you') | matcher.isMatch(usersMessage, 'what is your name*')) {
 
