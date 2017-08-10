@@ -64,7 +64,18 @@ var baseResponses = function (controller, appCache) {
       fistTracker.handleFistMessage(controller, bot, message);
     } else if (matcher.isMatch(usersMessage, 'who* champ*') | matcher.isMatch(usersMessage, 'who is champ*')) {
       messageUtils.postReaction(bot, message, "cena");
+    } else if (matcher.isMatch(usersMessage, 'clear')) {
+      messageUtils.postReaction(bot, message, "zap");
+      messageUtils.postReaction(bot, message, "hearts");
+      messageUtils.postReaction(bot, message, "ambulance");
+      messageUtils.postMessage(bot, message.channel, "\n ------ clearing ------- \n");
+      messageUtils.postMessage(bot, message.channel, "-\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-");
+      messageUtils.postMessage(bot, message.channel, "-\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-");
+      messageUtils.postMessage(bot, message.channel, "-\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-");
+      messageUtils.postMessage(bot, message.channel, "-\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-");
+      messageUtils.postMessage(bot, message.channel, "-\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-");
     }
+
 
   });
 
