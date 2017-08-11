@@ -54,6 +54,7 @@ module.exports = {
           "You are proof that evolution *CAN* go in reverse.",
           "You're the reason the gene pool needs a lifeguard.",
           "You are living proof that manure can sprout legs and walk.",
+          "You're so " + vocabulary.getMikeDang() + " old that you get nostalgic when you see Neolithic cave paintings.",
           "You so ugly when who were born the doctor threw you out the window and the window threw you back.",
           "Yo're so ugly, when your mom dropped you off at school she got a fine for littering.",
           vocabulary.getMikeDang() + " you look like you got struck with a Titanic sized ugly stick ya ugly ass bitch!"];
