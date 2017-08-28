@@ -16,7 +16,12 @@ module.exports = {
     callMeHandler: function (appCache, controller, bot, message) {
         var profane = appCache.get("profane");
         var result = {found: false, curse: ''};
-        var name = S(message.text.match(patterns.getMyNameRegex())[1]).replaceAll(":", "").s;
+        var nameExtracted = message.text.match(patterns.getMyNameRegex())[1];
+        var name = '';
+        if (nameExtracted) {
+            name = S(nameExtracted).replaceAll(":", "").s;
+        }
+
         var length = name.length;
         var tooLong = false;
 
@@ -204,7 +209,7 @@ module.exports = {
 
                             } else {
                                 // this happens if the conversation ended prematurely for some reason
-                                bot.reply(message, 'OK, nevermind!');
+                                bot.reply(message, 'OK, never mind!');
                             }
                         });
                     }

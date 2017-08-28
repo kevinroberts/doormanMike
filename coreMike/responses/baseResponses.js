@@ -398,7 +398,7 @@ var baseResponses = function (controller, appCache) {
         messageUtils.getUsernameFromController(controller, message.user, function (name) {
           var msg = name + ' ' + vocabulary.getProfaneReponse();
           if (message.user == constants.getAdminUserID()) {
-            msg += " (you said " + result.curse + ")"
+            msg += " (you said " + result.curse + ")";
           }
           bot.reply(message, msg);
         });
