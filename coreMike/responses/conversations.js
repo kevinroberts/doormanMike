@@ -179,30 +179,6 @@ module.exports = {
                                                 bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.' + loveMsg);
                                             }
                                         });
-                                        unirest.get("https://montanaflynn-gender-guesser.p.mashape.com/?name=" + user.name)
-                                            .header("X-Mashape-Key", process.env.MASHAPEKEY)
-                                            .header("Accept", "application/json")
-                                            .end(function (result) {
-                                                var gender = '';
-                                                if (result && result.status == 200) {
-                                                    if (result.body.gender) {
-                                                        gender = result.body.gender;
-                                                    }
-                                                    var genderMsg = '';
-                                                    if (gender) {
-                                                        if (gender == 'male') {
-                                                            genderMsg = "That's a nice manly name :muscle::skin-tone-4:";
-                                                        }
-                                                        if (gender == 'female') {
-                                                            genderMsg = "So you're a bad ass female! That's right we need more ladies up in here! :dancer::skin-tone-4:";
-                                                        }
-                                                    }
-                                                    if (genderMsg) {
-                                                        bot.reply(message, genderMsg);
-                                                    }
-                                                }
-
-                                            });
                                     }
 
                                 });
