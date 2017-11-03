@@ -18,6 +18,7 @@ module.exports = {
                             .replaceAll("chuck", "Mike")
                             .replaceAll("Norris'", "Mike")
                             .replaceAll("Norris", "Mike")
+                            .replaceAll("CHUCK NORRIS", "DOORMAN MIKE")
                             .replaceAll("roundhouse kick", ":fist::skin-tone-5:")
                             .replaceAll("roundhouse-kicks", ":fist::skin-tone-5:s")
                             .replaceAll("roundhouse-kick", ":fist::skin-tone-5:s")

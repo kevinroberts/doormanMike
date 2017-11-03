@@ -19,6 +19,7 @@ var mikeDangs = [
 var mikeMornin = [
     "Mornin Mornin!",
     'MOOORNIN MOORNIN!!!1',
+    'SOMEONE JUST OPENED A FRESH CAN OF BRAAPPT! IT\'s OFFICIALLY A MORNIN MORNIN!',
     '\'Mornin \'Mornin',
     'Buenos DANG días días! :flag-mx:',
     'Morning Morning!!!'

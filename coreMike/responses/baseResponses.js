@@ -36,7 +36,7 @@ var baseResponses = function (controller, appCache) {
 
   // when joins a channel
   controller.on('bot_channel_join', function (bot, message) {
-    bot.reply(message, "Mike is here! :fist::skin-tone-5:")
+    bot.reply(message, "Mike is here! :fist::skin-tone-5: Someone order some lemon and mint?")
   });
 
   controller.on("user_channel_join", function (bot, message) {
