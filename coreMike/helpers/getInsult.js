@@ -7,7 +7,7 @@ module.exports = {
 
     postMikeInsult: function (bot, message, user, channel) {
 
-        var insults = [  "At least when I do a handstand my stomach does not hit me in the face.",
+        var insults = [  "At least when I do a handstand my stomach does not hit me in the " + vocabulary.getMikeDang() + " face.",
           "You have something on your chin... no, the 3rd one down",
           "How many times do I need to flush to get rid of you?",
           "I bet your brain feels as good as new, seeing that you never use it.",
@@ -46,7 +46,6 @@ module.exports = {
           "Your birth certificate is an apology letter from the condom factory.",
           "Your family tree must be a cactus because everybody on it is a prick.",
           "Two wrongs don't make a right, take your parents as an example.",
-          "Your birth certificate is an apology letter from the condom factory.",
           "If laughter is the best medicine, your face must be curing the world.",
           "You must have been born on a highway because that's where most accidents happen.",
           "It looks like your face caught on fire and someone tried to put it out with a hammer.",
@@ -66,9 +65,12 @@ module.exports = {
           "You are living proof that manure can sprout legs and walk.",
           "You're so fat you need cheat codes to play Wii Fit.",
           "Is that your face? Or did your neck just throw up? :sick:",
+          "You have the perfect face for radio. :radio: ",
           "Why don't you slip into something more comfortable? Like a coma.",
+          "If I had a face like yours, I'd sue my parents.",
           "Are you in a costume? It's not Halloween yet... oh, never mind.",
           "You're a stupid doo doo head. ... sorry",
+          "You're worse than Google Drive.",
           "You're so " + vocabulary.getMikeDang() + " old that you get nostalgic when you see Neolithic cave paintings.",
           "You so ugly when who were born the doctor threw you out the window and the window threw you back.",
           vocabulary.getMikeDang() + " you look like you got struck with a Titanic sized ugly stick ya ugly ass bitch!"];
