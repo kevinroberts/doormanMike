@@ -43,6 +43,7 @@ var firebaseStorage = require('botkit-storage-firebase')({firebase_uri: process.
 
 var controller = Botkit.slackbot({
     debug: debugMode,
+    retry: 5,
     storage: firebaseStorage
 });
 
