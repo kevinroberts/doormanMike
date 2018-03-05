@@ -71,6 +71,7 @@ module.exports = {
           "Are you in a costume? It's not Halloween yet... oh, never mind.",
           "You're a stupid doo doo head. ... sorry",
           "You're as useful as a poop :poop: flavored lollipop",
+          "You should be " + vocabulary.getMikeDang() + " forced to eat White Castle without any Pepto! :peach: :volcano:",
           "You're worse than Google Drive.",
           "You're so " + vocabulary.getMikeDang() + " old that you get nostalgic when you see Neolithic cave paintings.",
           "You so ugly when who were born the doctor threw you out the window and the window threw you back.",
