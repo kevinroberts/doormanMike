@@ -348,19 +348,15 @@ module.exports = {
 
     sendMorninToHandler: function (bot, message) {
 
-        var placeholder = message.text.split("send mornin to ")[1],
-            placeholder = placeholder ? placeholder.split(" in ") : false;
-
+        var placeholder = message.text.split("send mornin to ")[1];
         var user = placeholder[0];
-        var channel = placeholder[1],
-            channel = channel ? channel.split("#")[1] : false;
-        channel = channel ? channel.split(">")[0] : false;
+        var channel = 'general';
 
         bot.startConversation(message, function (err, convo) {
 
-            if (!user | !channel) {
+            if (!user) {
 
-                bot.reply(message, "Sorry I didn't get that. If you want me to send a mornin' mornin' to someone, say `@" + constants.getBotUsername() + " send mornin to @username in #channel`");
+                bot.reply(message, "Sorry I didn't get that. If you want me to send a mornin' mornin' to someone, say `@" + constants.getBotUsername() + " send mornin to @username`");
                 convo.stop();
 
             } else {

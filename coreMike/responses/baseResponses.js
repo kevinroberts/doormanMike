@@ -129,11 +129,6 @@ var baseResponses = function (controller, appCache) {
 
       bot.reply(message, 'I did! And it\'s NONE OF YOUR ' + vocabulary.getMikeDang().toUpperCase() + ' BUSINESS ');
 
-    } else if (usersMessage.search(patterns.getKidsRegex()) !== -1) {
-      messageUtils.postReaction(bot, message, 'scream');
-
-      bot.reply(message, vocabulary.getKidsReponse());
-
     } else if (usersMessage.search(patterns.getWhereToEatRegex()) !== -1) {
 
       messageUtils.postReaction(bot, message, 'fork_and_knife');
@@ -203,8 +198,8 @@ var baseResponses = function (controller, appCache) {
       });
 
     } else if (matcher.isMatch(usersMessage, ':nerd_face: *')) {
-      var word = usersMessage.split(":nerd_face: ")[1];
-      dictionary.getDefinition(word, function (definition) {
+      var wordToDefine = usersMessage.split(":nerd_face: ")[1];
+      dictionary.getDefinition(wordToDefine, function (definition) {
         if (definition != null) {
           bot.reply(message, definition);
         } else {
@@ -404,6 +399,12 @@ var baseResponses = function (controller, appCache) {
         });
 
       } else {
+
+       if (usersMessage.search(patterns.getKidsRegex()) !== -1 && chance.bool({likelihood: 50})) {
+         messageUtils.postReaction(bot, message, 'scream');
+
+         bot.reply(message, vocabulary.getKidsReponse());
+       }
 
         // initialize cleverbot module with a clerverbot instance
         var cleverbotInstance = new CleverbotImpl(Clever);
