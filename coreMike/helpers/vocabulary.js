@@ -37,6 +37,7 @@ var mikeHellos = [
 var insultNames = [
   'assface',
   'bitch',
+  'motha fucka',
   'numbnuts'
 ];
 

@@ -123,7 +123,7 @@ module.exports = {
     }.bind(this));
   },
   handleInsultLeaderBoardMessage: function (controller, bot, message) {
-    var leaderboardHeader = '*Mike\'s Naughty List Leaders :angry: *\nRanked by total insults received\n';
+    var leaderboardHeader = '*Mike\'s Naughty List Leaders :rage: * :: Ranked by total insults received\n';
 
     // first get a list of user objects back from slack
     messageUtils.getUsers(bot, function (users) {
@@ -141,7 +141,7 @@ module.exports = {
 
       }, function (err, usersWithInsults) {
         // returned results of member objects with fist numbers
-        bot.reply(message, leaderboardHeader);
+        var leaderboardMessage = leaderboardHeader;
         usersWithInsults = _.orderBy(usersWithInsults, ['insulted'], ['desc']);
         var i = 0;
         _.forEach(usersWithInsults, function (member) {
@@ -149,9 +149,13 @@ module.exports = {
           if (member.insulted && member.insulted > 0) {
             i++;
             var rankMsg = i + '). ' + member.name + ' *' + member.insulted + '*';
-            bot.reply(message, rankMsg);
+            if (member.insulted > 30) {
+              rankMsg += " ... " + vocabulary.getMikeDang() + " you're a " + vocabulary.getInsultName();
+            }
+            leaderboardMessage += rankMsg + '\n';
           }
         });
+        bot.reply(message, leaderboardMessage);
 
       });
 
@@ -160,7 +164,7 @@ module.exports = {
   },
 
   handleComplimentLeaderBoardMessage: function (controller, bot, message) {
-    var leaderboardHeader = '*Mike\'s Good List :angel: *\nRanked by total compliments received\n';
+    var leaderboardHeader = '*Mike\'s Good List :angel: * :: Ranked by total compliments received\n';
 
     // first get a list of user objects back from slack
     messageUtils.getUsers(bot, function (users) {
@@ -178,7 +182,7 @@ module.exports = {
 
       }, function (err, usersWithCompliments) {
         // returned results of member objects with fist numbers
-        bot.reply(message, leaderboardHeader);
+        var leaderboardMessage = leaderboardHeader;
         usersWithCompliments = _.orderBy(usersWithCompliments, ['complimented'], ['desc']);
         var i = 0;
         _.forEach(usersWithCompliments, function (member) {
@@ -186,9 +190,10 @@ module.exports = {
           if (member.complimented && member.complimented > 0) {
             i++;
             var rankMsg = i + '). ' + member.name + ' *' + member.complimented + '*';
-            bot.reply(message, rankMsg);
+            leaderboardMessage += rankMsg + '\n';
           }
         });
+        bot.reply(message, leaderboardMessage);
 
       });
 
