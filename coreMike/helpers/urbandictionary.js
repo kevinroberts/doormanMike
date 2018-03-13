@@ -85,13 +85,13 @@ module.exports = {
             "short": tags.length < 5
           });
         }
-        if (result.author) {
-          fields.push({
-            "title": "Author",
-            "value": result.author,
-            "short": true
-          });
-        }
+        // if (result.author) {
+        //   fields.push({
+        //     "title": "Author",
+        //     "value": result.author,
+        //     "short": true
+        //   });
+        // }
 
 
         bot.reply(message, {
