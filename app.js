@@ -5,11 +5,6 @@ require('dotenv').config({silent: true});
 var NodeCache = require( "node-cache" );
 var holidays = require('./coreMike/helpers/getHolidays.js');
 var constants = require('./coreMike/slackConstants');
-var moment = require('moment');
-
-var now = moment();
-var currentYear = now.year();
-
 
 var appCache = new NodeCache();
 

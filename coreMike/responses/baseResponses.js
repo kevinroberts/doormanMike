@@ -172,10 +172,8 @@ var baseResponses = function (controller, appCache) {
 
     } else if (matcher.isMatch(usersMessage, 'define *')) {
       var word = usersMessage.split("define ")[1];
-      urbandictionary.getUrbanDefinition(word, function (definition) {
-        if (definition != null) {
-          bot.reply(message, definition);
-        } else {
+      urbandictionary.postFormattedDefinition(bot, message, word, function (definition) {
+        if (!definition) {
           dictionary.getDefinition(word, function (wordDef) {
             if (wordDef != null) {
               bot.reply(message, wordDef);
@@ -183,7 +181,6 @@ var baseResponses = function (controller, appCache) {
               bot.reply(message, "Go look it up yourself! I have no idea.");
             }
           });
-
         }
       });
 
