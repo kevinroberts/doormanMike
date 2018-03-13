@@ -3,7 +3,6 @@ var vocabulary = require('../helpers/vocabulary');
 var dayOfTheWeekResponses = require('../responses/dayOfTheWeek');
 var patterns = require('../helpers/regexPatterns');
 var love = require('../responses/loveMachine');
-var insults = require('../helpers/getInsult');
 var constants = require('../slackConstants');
 var S = require('string');
 var _ = require('lodash');
@@ -417,7 +416,7 @@ module.exports = {
 
                 if (response.text.toLowerCase() !== 'stop') {
 
-                    insults.postMikeInsult(bot, message, message.user, null);
+                    bot.reply(message, "<@"+message.user+"> " + vocabulary.getMikeInsult());
 
                 } else {
                     bot.reply(message, "OK ok. I'm through with you.");
