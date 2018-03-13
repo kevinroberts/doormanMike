@@ -51,7 +51,7 @@ module.exports = {
       if (result) {
         var msgText = result.definition;
         // replace all the bracketed definitions with actual links
-        var linkExtractor = new RegExp(/\[([a-zA-Z0-9!@#$ ]+)\]/g);
+        var linkExtractor = new RegExp(/\[([a-zA-Z0-9!@#$\- ]+)\]/g);
         if (linkExtractor.test(msgText)) {
           var res = msgText.match(linkExtractor);
           for (var i = 0; i < res.length; i++) {
@@ -62,11 +62,20 @@ module.exports = {
         }
         var fields = [];
         if (result.example) {
+          var exTxt = result.example;
+          if (linkExtractor.test(exTxt)) {
+            var results = exTxt.match(linkExtractor);
+            for (var j = 0; j < results.length; j++) {
+              var ltor = results[j];
+              var linkwoBrackets = ltor.replace(/\[|\]/g, '');
+              exTxt = exTxt.replace(ltor, '<https://www.urbandictionary.com/define.php?term=' + linkwoBrackets + '|' + linkwoBrackets + '>')
+            }
+          }
           fields.push({
             "title": "Example",
-            "value": result.example,
+            "value": exTxt,
             "short": false
-          })
+          });
         }
         if (result.tags.length > 0) {
           var tags = _.uniq(result.tags);
@@ -74,14 +83,14 @@ module.exports = {
             "title": "tags",
             "value": tags.join(", "),
             "short": tags.length < 5
-          })
+          });
         }
         if (result.author) {
           fields.push({
             "title": "Author",
             "value": result.author,
             "short": true
-          })
+          });
         }
 
 
