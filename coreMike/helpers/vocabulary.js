@@ -110,6 +110,7 @@ var lunchDestinations = [
   'Taza for some Mediterranean -> https://goo.gl/maps/NCUk1w3E2am',
   'boring :sleeping: Caffe Baci -> https://goo.gl/maps/wiCXCFehbq72',
   'Specialty\'s bakery :bread: -> https://goo.gl/maps/XvJmgaGH9852',
+  'High Tide Poke -> https://goo.gl/maps/ymvhyhNBWYU2',
   'Costa Vida for some Baja-style :burrito:\'s -> https://goo.gl/maps/L1MtEmRdeYE2',
   'Mixed Greens :leaves: -> https://goo.gl/maps/LkRp5Lq46UJ2'
 ];
@@ -168,14 +169,14 @@ module.exports = {
     msg = msg.replace("|INTRO|", _.sample(lunchIntro));
 
     // if the hour is between 5 and 10 am Mike is in breakfast mode
-    if (myDate.getHours() > 5 && myDate.getHours() <= 10) {
-      return "it's " + _.sample(mikeDangs) + " breakfast time. Go to dunkin dohnuts or make yourself a bagel."
-    }
-    else if (myDate.getHours() >= 10 && myDate.getHours() <= 15) {
+    // if (myDate.getHours() > 5 && myDate.getHours() <= 10) {
+    //   return "it's " + _.sample(mikeDangs) + " breakfast time. Go to dunkin dohnuts or make yourself a bagel."
+    // }
+    if (myDate.getHours() > 5 && myDate.getHours() <= 15) {
       return msg;
     }/* Hour is past 3pm is like totes Dinner time for Mike*/
     else if (myDate.getHours() >= 15) {
-      return "it's " + _.sample(mikeDangs) + " past lunch time. Go to monks pub or make yourself some dinner."
+      return "it's " + _.sample(mikeDangs) + " past lunch time. Go to monks pub or make yourself some dinner.";
     }
 
   },
