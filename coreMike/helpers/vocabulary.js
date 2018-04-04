@@ -110,7 +110,6 @@ var lunchDestinations = [
   'Taza for some Mediterranean -> https://goo.gl/maps/NCUk1w3E2am',
   'boring :sleeping: Caffe Baci -> https://goo.gl/maps/wiCXCFehbq72',
   'Specialty\'s bakery :bread: -> https://goo.gl/maps/XvJmgaGH9852',
-  'High Tide Poke -> https://goo.gl/maps/ymvhyhNBWYU2',
   'Costa Vida for some Baja-style :burrito:\'s -> https://goo.gl/maps/L1MtEmRdeYE2',
   'Mixed Greens :leaves: -> https://goo.gl/maps/LkRp5Lq46UJ2'
 ];

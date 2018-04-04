@@ -5,6 +5,12 @@ var messageUtils = require('../helpers/messageUtils');
 var _ = require('lodash');
 
 var timezoneEnv = process.env.TIMEZONE;
+
+var mikeWednesdays = [
+  'HAPPY |MIKE_DANG| :camel: HUMPDAY :camel: !!!! :fist::skin-tone-5:',
+  'IT\'S WEDNESDAY MAH DUDES!! https://storage.googleapis.com/unleash-the-shart.appspot.com/wednesday.png'
+];
+
 function getDefaultTz() {
     if (timezoneEnv == null) {
         return 'America/Chicago';
@@ -33,10 +39,11 @@ module.exports = {
             msg = "it's " + vocabulary.getMikeDang().toUpperCase() + " HUMPDAY'S EVE!! :fist::skin-tone-5:";
         }
         if (day == 3) {
-            msg = "it's " + vocabulary.getMikeDang().toUpperCase() + " :camel: HUMPDAY :camel: !!!! :fist::skin-tone-5:";
-            if (bot != null && message != null) {
-                messageUtils.postReaction(bot, message, 'camel');
-            }
+          msg = _.sample(mikeWednesdays);
+          msg = msg.replace("|MIKE_DANG|", vocabulary.getMikeDang().toUpperCase());
+          if (bot != null && message != null) {
+              messageUtils.postReaction(bot, message, 'camel');
+          }
         }
         if (day == 4) {
             msg = "it's " + vocabulary.getMikeDang().toUpperCase() + " FRIDAY'S EVE!!!! :fist::skin-tone-5:";
@@ -68,7 +75,8 @@ module.exports = {
             msg = "HAPPY " + vocabulary.getMikeDang().toUpperCase() + " HUMPDAY'S EVE!! :fist::skin-tone-5:";
         }
         if (day == 3) {
-            msg = "HAPPY " + vocabulary.getMikeDang().toUpperCase() + " :camel: HUMPDAY :camel: !!!! :fist::skin-tone-5:";
+          msg = _.sample(mikeWednesdays);
+          msg = msg.replace("|MIKE_DANG|", vocabulary.getMikeDang().toUpperCase());
         }
         if (day == 4) {
             msg = "HAPPY " + vocabulary.getMikeDang().toUpperCase() + " FRIDAY'S EVE!!!! :fist::skin-tone-5:";
