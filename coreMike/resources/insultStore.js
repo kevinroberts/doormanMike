@@ -20,7 +20,7 @@ function insertRows() {
       var stmt = db.prepare("INSERT INTO insults VALUES (?, ?)");
 
       for (var i = 0; i < insultStore.insults.length; i++) {
-        stmt.run(insultStore.insults[i], 1);
+        stmt.run(insultStore.insults[i], 0);
       }
 
       stmt.finalize(readAllRows);
