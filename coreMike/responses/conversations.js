@@ -417,9 +417,9 @@ module.exports = {
       argConversation.ask("ok " + vocabulary.getInsultName() + " prepare to get insulted! if you've had enough just say `stop`", function (response, mainArgConversation) {
 
         if (response.text.toLowerCase() !== 'stop') {
-
-          bot.reply(message, "<@" + message.user + "> " + vocabulary.getMikeInsult());
-
+          vocabulary.getMikeInsult(function (insult) {
+            bot.reply(message, "<@" + message.user + "> " + insult);
+          });
         } else {
           bot.reply(message, "OK ok. I'm through with you.");
 

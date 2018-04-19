@@ -44,14 +44,17 @@ module.exports = {
 
               bot.reply(message, "Will do! Check " + constants.getGeneralChannelLink());
 
-              messageUtils.postMessage(bot, channel, "Yo " + user + ", <@" + message.user + "> wants me to tell yah, "
-                + vocabulary.getMikeInsultLowercase(), channel);
+              vocabulary.getMikeInsultLowercase(function (insult) {
+                messageUtils.postMessage(bot, channel, "Yo " + user + ", <@" + message.user + "> wants me to tell yah, " + insult, channel);
+              });
 
             } else {
 
               bot.reply(message, "Sneaky! Check " + constants.getGeneralChannelLink());
+              vocabulary.getMikeInsultLowercase(function (insult) {
+                messageUtils.postMessage(bot, channel, "Yo " + user + ", I just wanted to tell yah, " + insult);
+              });
 
-              messageUtils.postMessage(bot, channel, "Yo " + user + ", I just wanted to tell yah, " + vocabulary.getMikeInsultLowercase());
 
             }
 

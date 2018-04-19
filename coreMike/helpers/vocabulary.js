@@ -1,7 +1,49 @@
 var love = require('../responses/loveMachine');
 var _ = require('lodash');
 var complimentStore = require('../resources/compliments.json');
-var insultStore = require('../resources/insults.json');
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('insults');
+
+
+function getTotalNumberOfInsults (cb) {
+  db.get("SELECT count(*) as total FROM insults WHERE used < 1", function (err, result) {
+    if (result.total) {
+      cb(result.total);
+    } else {
+      cb(0);
+    }
+  });
+}
+
+function getInsultById (id, cb) {
+  db.get("SELECT insult from insults WHERE rowid = ?", id, function (err, result) {
+    if (result) {
+      cb(result.insult);
+    } else {
+      cb('');
+    }
+  });
+}
+
+function updateInsultUsedStatus (id, used, cb) {
+  db.run("UPDATE insults SET used = $used WHERE rowid = $id", {
+    $id: id,
+    $used: used
+  }, cb);
+}
+
+function resetInsultUsedCount (cb) {
+  console.log("resetting insults to 0 used.");
+  db.all("SELECT rowid AS id, insult, used FROM insults WHERE used > 0", function(err, rows) {
+    rows.forEach(function (row) {
+      updateInsultUsedStatus(row.id, 0, function (result) {
+        console.log(result);
+      });
+    });
+    cb("done");
+  });
+}
+
 
 var timesheetResponse = 'and finish that timesheet https://webet.icfi.com/DeltekTC/welcome.msv';
 
@@ -140,17 +182,62 @@ module.exports = {
   getMikeCompliment: function () {
     return _.sample(complimentStore.compliments);
   },
-  getMikeInsult: function () {
-    var insult = _.sample(insultStore.insults);
-    insult = insult.replace("|MIKE_DANG|", _.sample(mikeDangs));
-    return insult;
+  getMikeInsult: function (cb) {
+    getTotalNumberOfInsults(function (number) {
+      if (number > 0) {
+        var randomInsultInt = Math.floor(Math.random() * Math.floor(number));
+        console.log("getting random joke with ID: " + randomInsultInt);
+        getInsultById(randomInsultInt, function (insult) {
+          updateInsultUsedStatus(randomInsultInt, 1, function (result) {
+            cb(insult.replace("|MIKE_DANG|", _.sample(mikeDangs)));
+          });
+        });
+      } else {
+        // time to reset insult in DB
+        resetInsultUsedCount(function (result) {
+          if (result) {
+            getTotalNumberOfInsults(function (numOfInsults) {
+              var randomInsultInt = Math.floor(Math.random() * Math.floor(numOfInsults));
+              getInsultById(randomInsultInt, function (insult) {
+                updateInsultUsedStatus(randomInsultInt, 1, function (result) {
+                  cb(insult.replace("|MIKE_DANG|", _.sample(mikeDangs)));
+                });
+              });
+            });
+          }
+        });
+      }
+    });
   },
-  getMikeInsultLowercase: function () {
-    var insult = _.sample(insultStore.insults);
-    insult = insult.replace("|MIKE_DANG|", _.sample(mikeDangs));
-    // lower case first letter
-    insult = insult.charAt(0).toLowerCase() + insult.slice(1);
-    return insult;
+  getMikeInsultLowercase: function (cb) {
+    getTotalNumberOfInsults(function (number) {
+      if (number > 0) {
+        var randomInsultInt = Math.floor(Math.random() * Math.floor(number));
+        console.log("getting random joke with ID: " + randomInsultInt);
+        getInsultById(randomInsultInt, function (insult) {
+          var randomInsult = insult.replace("|MIKE_DANG|", _.sample(mikeDangs));
+          randomInsult = randomInsult.charAt(0).toLowerCase() + randomInsult.slice(1);
+          updateInsultUsedStatus(randomInsultInt, 1, function (result) {
+            cb(randomInsult);
+          });
+        });
+      } else {
+        resetInsultUsedCount(function (result) {
+          if (result) {
+            getTotalNumberOfInsults(function (numOfInsults) {
+              var randomInsultInt = Math.floor(Math.random() * Math.floor(numOfInsults));
+              getInsultById(randomInsultInt, function (insult) {
+                var randomInsult = insult.replace("|MIKE_DANG|", _.sample(mikeDangs));
+                randomInsult = randomInsult.charAt(0).toLowerCase() + randomInsult.slice(1);
+                updateInsultUsedStatus(randomInsultInt, 1, function (result) {
+                  cb(randomInsult);
+                });
+              });
+            });
+          }
+        });
+      }
+    });
   },
   getMikeDang: function () {
     return _.sample(mikeDangs);
