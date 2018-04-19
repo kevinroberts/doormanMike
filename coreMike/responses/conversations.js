@@ -62,8 +62,7 @@ module.exports = {
           }
         });
 
-        unirest.get("https://montanaflynn-gender-guesser.p.mashape.com/?name=" + name)
-          .header("X-Mashape-Key", process.env.MASHAPEKEY)
+        unirest.get("https://gender-api.com/get?name=" + name + "&key=" + process.env.GENDER_KEY)
           .header("Accept", "application/json")
           .end(function (result) {
             var gender = '';
