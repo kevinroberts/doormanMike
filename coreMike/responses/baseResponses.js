@@ -1,11 +1,6 @@
 /*
  *   defines all the basic mike responses
  */
-
-var Cleverbot = require("cleverbot-api-node")
-
-var Clever = new Cleverbot(process.env.CLEVERBOTAPI);
-
 var os = require('os'),
   dayOfTheWeekResponses = require('./dayOfTheWeek'),
   messageUtils = require('../helpers/messageUtils'),
@@ -389,7 +384,7 @@ var baseResponses = function (controller, appCache) {
       if (messageUtils.multiSearchOr(usersMessage, profane.profaneList)) {
         messageUtils.getUsernameFromController(controller, message.user, function (name) {
           var msg = name + ' ' + vocabulary.getProfaneReponse();
-          if (message.user == constants.getAdminUserID()) {
+          if (message.user === constants.getAdminUserID()) {
             msg += " (you said " + result.curse + ")";
           }
           bot.reply(message, msg);
@@ -404,9 +399,8 @@ var baseResponses = function (controller, appCache) {
        }
 
         // initialize cleverbot module with a clerverbot instance
-        var cleverbotInstance = new CleverbotImpl(Clever);
         // ask clever bot for a response (cleverbot.io)
-        cleverbotInstance.getCleverBotResponse(message, function (response) {
+        CleverbotImpl.getCleverBotResponse(message, function (response) {
           bot.reply(message, response);
         });
       }
