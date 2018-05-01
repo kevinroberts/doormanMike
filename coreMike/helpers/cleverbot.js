@@ -16,14 +16,20 @@ module.exports = {
 
         callback(vocabulary.getWaster());
       } else {
-        var msg = response.output;
-        if (msg.indexOf('HAL') !== -1) {
-          msg = msg.replace('HAL', "<@"+message.user+">");
+        let msg = response.output;
+        if (msg) {
+          if (msg.indexOf('HAL') !== -1) {
+            msg = msg.replace('HAL', "<@"+message.user+">");
+          }
+          if (msg.indexOf('Cleverbot') !== -1) {
+            msg = msg.replace('Cleverbot', "Mike");
+          }
+          callback(msg);
+        } else {
+          console.log("clever bot response was empty: ", response);
+          callback(vocabulary.getWaster());
+
         }
-        if (msg.indexOf('Cleverbot') !== -1) {
-          msg = msg.replace('Cleverbot', "Mike");
-        }
-        callback(msg);
       }
   });
   }
