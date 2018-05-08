@@ -1,25 +1,34 @@
-var insultStore = require('./insults.json');
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('insults');
+const insultStore = require('./insults.json');
+const sqlite3 = require('sqlite3').verbose();
 
+const db = new sqlite3.Database('insults');
 
-function createTable() {
-  console.log("createTable insult");
-  db.run("CREATE TABLE IF NOT EXISTS insults (insult TEXT, used INT)", insertRows);
+function closeDb() {
+  console.log('closeDb');
+  db.close();
+}
+
+function readAllRows() {
+  console.log('readAllRows insults');
+  db.all('SELECT rowid AS id, insult, used FROM insults', (err, rows) => {
+    rows.forEach((row) => {
+      console.log(`${row.id}: ${row.insult} used: ${row.used}`);
+    });
+    closeDb();
+  });
 }
 
 function insertRows() {
+  console.log('check if insult table is populated already');
 
-  console.log("check if insult table is populated already");
-
-  db.get("SELECT count(*) as total FROM insults", function (err, result) {
+  db.get('SELECT count(*) as total FROM insults', (err, result) => {
     if (result.total && result.total > 0) {
-      console.log("insult table already populated: ", result);
+      console.log('insult table already populated: ', result);
     } else {
-      console.log("insertRows insult i");
-      var stmt = db.prepare("INSERT INTO insults VALUES (?, ?)");
+      console.log('insertRows insult i');
+      const stmt = db.prepare('INSERT INTO insults VALUES (?, ?)');
 
-      for (var i = 0; i < insultStore.insults.length; i++) {
+      for (let i = 0; i < insultStore.insults.length; i += 1) {
         stmt.run(insultStore.insults[i], 0);
       }
 
@@ -28,19 +37,9 @@ function insertRows() {
   });
 }
 
-function readAllRows() {
-  console.log("readAllRows insults");
-  db.all("SELECT rowid AS id, insult, used FROM insults", function(err, rows) {
-    rows.forEach(function (row) {
-      console.log(row.id + ": " + row.insult + " used: " + row.used);
-    });
-    closeDb();
-  });
-}
-
-function closeDb() {
-  console.log("closeDb");
-  db.close();
+function createTable() {
+  console.log('createTable insult');
+  db.run('CREATE TABLE IF NOT EXISTS insults (insult TEXT, used INT)', insertRows);
 }
 
 function runInsultsInit() {

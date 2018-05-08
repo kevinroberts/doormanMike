@@ -1,252 +1,220 @@
-var messageUtils = require('../helpers/messageUtils');
-var vocabulary = require('../helpers/vocabulary');
-var constants = require('../slackConstants');
-var S = require('string');
-var async = require('async');
-var _ = require('lodash');
+const messageUtils = require('../helpers/messageUtils');
+const vocabulary = require('../helpers/vocabulary');
+const constants = require('../slackConstants');
+const S = require('string');
+const async = require('async');
+const _ = require('lodash');
+
 const development = process.env.NODE_ENV !== 'production';
 
 module.exports = {
 
-  sendInsultToHandler: function (controller, bot, message) {
-    var user = message.text.split("send insult to ")[1];
+  sendInsultToHandler(controller, bot, message) {
+    const user = message.text.split('send insult to ')[1];
 
-    var channel = 'general';
+    let channel = 'general';
     if (development) {
       channel = 'private-testing';
     }
 
-    bot.startConversation(message, function (err, convo) {
+    bot.startConversation(message, (err, convo) => {
       if (!user | !channel) {
-
-        convo.say("Sorry I didn't get that. If you want me to send an insult to someone, say `@" + constants.getBotUsername() + " send insult to @username`");
+        convo.say(`Sorry I didn't get that. If you want me to send an insult to someone, say \`@${constants.getBotUsername()} send insult to @username\``);
         convo.next();
-
       } else {
-
-        var recipientUser = messageUtils.getUsernameFromUserMessage(message.text);
+        const recipientUser = messageUtils.getUsernameFromUserMessage(message.text);
 
         if (recipientUser === message.user) {
-          convo.say("Sorry, you sneaky asshole, you already suck.. I won\'t insult you further.");
+          convo.say('Sorry, you sneaky asshole, you already suck.. I won\'t insult you further.');
           convo.next();
         } else if (recipientUser === constants.getBotUserID()) {
-          convo.say("Sorry, I know I already suck.. I won\'t insult myself further.");
+          convo.say('Sorry, I know I already suck.. I won\'t insult myself further.');
           convo.next();
         } else {
-
-          this.addInsultToUser(recipientUser, controller, function (totalInsults) {
-            bot.botkit.log("Total insults for " + recipientUser + " is: " + totalInsults);
+          this.addInsultToUser(recipientUser, controller, (totalInsults) => {
+            bot.botkit.log(`Total insults for ${recipientUser} is: ${totalInsults}`);
           });
 
-          convo.ask("No problem! \n Should I tell " + user + " you sent this? Say `yes` or `no`", function (response, convo) {
+          convo.ask(`No problem! \n Should I tell ${user} you sent this? Say \`yes\` or \`no\``, (response, convo) => {
+            if (response.text === 'yes' || response.text === 'Yes') {
+              bot.reply(message, `Will do! Check ${constants.getGeneralChannelLink()}`);
 
-            if (response.text === 'yes' | response.text === 'Yes') {
-
-              bot.reply(message, "Will do! Check " + constants.getGeneralChannelLink());
-
-              vocabulary.getMikeInsultLowercase(function (insult) {
-                messageUtils.postMessage(bot, channel, "Yo " + user + ", <@" + message.user + "> wants me to tell yah, " + insult, channel);
+              vocabulary.getMikeInsultLowercase((insult) => {
+                messageUtils.postMessage(bot, channel, `Yo ${user}, <@${message.user}> wants me to tell yah, ${insult}`, channel);
               });
-
             } else {
-
-              bot.reply(message, "Sneaky! Check " + constants.getGeneralChannelLink());
-              vocabulary.getMikeInsultLowercase(function (insult) {
-                messageUtils.postMessage(bot, channel, "Yo " + user + ", I just wanted to tell yah, " + insult);
+              bot.reply(message, `Sneaky! Check ${constants.getGeneralChannelLink()}`);
+              vocabulary.getMikeInsultLowercase((insult) => {
+                messageUtils.postMessage(bot, channel, `Yo ${user}, I just wanted to tell yah, ${insult}`);
               });
-
-
             }
 
             convo.next();
-
           });
-
         }
       }
-    }.bind(this));
-
+    });
   },
 
-  sendComplimentHandler: function (controller, bot, message) {
-    var user = message.text.split("send compliment to ")[1];
+  sendComplimentHandler(controller, bot, message) {
+    const user = message.text.split('send compliment to ')[1];
 
-    var channel = 'general';
+    let channel = 'general';
     if (development) {
       channel = 'private-testing';
     }
 
-    bot.startConversation(message, function (err, convo) {
-      if (!user | !channel) {
-
-        convo.say("Sorry I didn't get that. If you want me to send a compliment " +
-          "to someone, say `@" + constants.getBotUsername() + " send compliment to @username`");
+    bot.startConversation(message, (err, convo) => {
+      if (!user || !channel) {
+        convo.say(`${"Sorry I didn't get that. If you want me to send a compliment " +
+          'to someone, say `@'}${constants.getBotUsername()} send compliment to @username\``);
         convo.next();
-
       } else {
+        const recipientUser = messageUtils.getUsernameFromUserMessage(message.text);
 
-        var recipientUser = messageUtils.getUsernameFromUserMessage(message.text);
-
-        if (recipientUser == message.user) {
-          convo.say("What do you think this is? A " + vocabulary.getMikeDang() + " charity? Get your compliments elsewhere.");
+        if (recipientUser === message.user) {
+          convo.say(`What do you think this is? A ${vocabulary.getMikeDang()} charity? Get your compliments elsewhere.`);
           convo.next();
-        } else if (recipientUser == constants.getBotUserID()) {
+        } else if (recipientUser === constants.getBotUserID()) {
           convo.say("Sorry, I know I'm already awesome.. I don't need further compliments.");
           convo.next();
         } else {
-
-          this.addComplimentToUser(recipientUser, controller, function (totalInsults) {
-            bot.botkit.log("Total insults for " + recipientUser + " is: " + totalInsults);
+          this.addComplimentToUser(recipientUser, controller, (totalInsults) => {
+            bot.botkit.log(`Total insults for ${recipientUser} is: ${totalInsults}`);
           });
 
-          convo.ask("No problem! \n Should I tell " + user + " you sent this? Say `yes` or `no`", function (response, convo) {
+          convo.ask(`No problem! \n Should I tell ${user} you sent this? Say \`yes\` or \`no\``, (response, nextConvo) => {
+            if (response.text === 'yes' || response.text === 'Yes') {
+              bot.reply(message, `Will do! Check ${constants.getGeneralChannelLink()}`);
 
-            if (response.text === 'yes' | response.text === 'Yes') {
-
-              bot.reply(message, "Will do! Check " + constants.getGeneralChannelLink());
-
-              messageUtils.postMessage(bot, channel, "Yo " + user + ", <@" + message.user + "> wants me to tell yah, "
-                + vocabulary.getMikeCompliment());
-
+              messageUtils.postMessage(bot, channel, `Yo ${user}, <@${message.user}> wants me to tell yah, ${
+                vocabulary.getMikeCompliment()}`);
             } else {
+              bot.reply(message, `Sneaky! Check ${constants.getGeneralChannelLink()}`);
 
-              bot.reply(message, "Sneaky! Check " + constants.getGeneralChannelLink());
-
-              messageUtils.postMessage(bot, channel, "Yo " + user + ", I just wanted to tell yah, " + vocabulary.getMikeCompliment());
-
+              messageUtils.postMessage(bot, channel, `Yo ${user}, I just wanted to tell yah, ${vocabulary.getMikeCompliment()}`);
             }
 
-            convo.stop();
-
+            nextConvo.stop();
           });
         }
-
-
       }
-    }.bind(this));
+    });
   },
-  handleInsultLeaderBoardMessage: function (controller, bot, message) {
-    var leaderboardHeader = '*Mike\'s Naughty List Leaders :rage: * :: Ranked by total insults received\n';
+  handleInsultLeaderBoardMessage(controller, bot, message) {
+    const leaderboardHeader = '*Mike\'s Naughty List Leaders :rage: * :: Ranked by total insults received\n';
 
     // first get a list of user objects back from slack
-    messageUtils.getUsers(bot, function (users) {
-
+    messageUtils.getUsers(bot, (users) => {
       // asynchronously transform the list of users with fist data
-      async.transform(users, function (acc, user, index, callback) {
-
-        controller.storage.users.get(user.id, function (err, storageUser) {
+      async.transform(users, (acc, user, index, callback) => {
+        const updatedUser = user;
+        controller.storage.users.get(user.id, (err, storageUser) => {
           if (storageUser) {
-            user.insulted = storageUser.insulted ? storageUser.insulted : 0;
-            acc.push(user);
+            updatedUser.insulted = storageUser.insulted ? storageUser.insulted : 0;
+            acc.push(updatedUser);
             callback(null);
           }
         });
-
-      }, function (err, usersWithInsults) {
+      }, (err, usersWithInsults) => {
         // returned results of member objects with fist numbers
-        var leaderboardMessage = leaderboardHeader;
-        usersWithInsults = _.orderBy(usersWithInsults, ['insulted'], ['desc']);
-        var i = 0;
-        _.forEach(usersWithInsults, function (member) {
+        let leaderboardMessage = leaderboardHeader;
+        const usersWithInsultsOrdered = _.orderBy(usersWithInsults, ['insulted'], ['desc']);
+        let i = 0;
+        _.forEach(usersWithInsultsOrdered, (member) => {
           // only output members who have fists
           if (member.insulted && member.insulted > 0) {
-            i++;
-            var rankMsg = i + '). ' + member.name + ' *' + member.insulted + '*';
+            i += 1;
+            let rankMsg = `${i}). ${member.name} *${member.insulted}*`;
             if (member.insulted > 30) {
-              rankMsg += " ... " + vocabulary.getMikeDang() + " you're a " + vocabulary.getInsultName();
+              rankMsg += ` ... ${vocabulary.getMikeDang()} you're a ${vocabulary.getInsultName()}`;
             }
-            leaderboardMessage += rankMsg + '\n';
+            leaderboardMessage += `${rankMsg}\n`;
           }
         });
         bot.reply(message, leaderboardMessage);
-
       });
-
     });
-
   },
 
-  handleComplimentLeaderBoardMessage: function (controller, bot, message) {
-    var leaderboardHeader = '*Mike\'s Good List :angel: * :: Ranked by total compliments received\n';
+  handleComplimentLeaderBoardMessage(controller, bot, message) {
+    const leaderboardHeader = '*Mike\'s Good List :angel: * :: Ranked by total compliments received\n';
 
     // first get a list of user objects back from slack
-    messageUtils.getUsers(bot, function (users) {
-
+    messageUtils.getUsers(bot, (users) => {
       // asynchronously transform the list of users with fist data
-      async.transform(users, function (acc, user, index, callback) {
-
-        controller.storage.users.get(user.id, function (err, storageUser) {
+      async.transform(users, (acc, user, index, callback) => {
+        const updatedUser = user;
+        controller.storage.users.get(user.id, (err, storageUser) => {
           if (storageUser) {
-            user.complimented = storageUser.complimented ? storageUser.complimented : 0;
-            acc.push(user);
+            updatedUser.complimented = storageUser.complimented ? storageUser.complimented : 0;
+            acc.push(updatedUser);
             callback(null);
           }
         });
-
-      }, function (err, usersWithCompliments) {
+      }, (err, usersWithCompliments) => {
         // returned results of member objects with fist numbers
-        var leaderboardMessage = leaderboardHeader;
-        usersWithCompliments = _.orderBy(usersWithCompliments, ['complimented'], ['desc']);
-        var i = 0;
-        _.forEach(usersWithCompliments, function (member) {
+        let leaderboardMessage = leaderboardHeader;
+        const usersWithComplimentsOrdered = _.orderBy(usersWithCompliments, ['complimented'], ['desc']);
+        let i = 0;
+        _.forEach(usersWithComplimentsOrdered, (member) => {
           // only output members who have fists
           if (member.complimented && member.complimented > 0) {
-            i++;
-            var rankMsg = i + '). ' + member.name + ' *' + member.complimented + '*';
-            leaderboardMessage += rankMsg + '\n';
+            i += 1;
+            const rankMsg = `${i}). ${member.name} *${member.complimented}*`;
+            leaderboardMessage += `${rankMsg}\n`;
           }
         });
         bot.reply(message, leaderboardMessage);
-
       });
-
     });
-
   },
 
-  addInsultToUser: function (userId, controller, callback) {
-    controller.storage.users.get(userId, function (err, user) {
-      var totalInsults = 1;
+  addInsultToUser(userId, controller, callback) {
+    controller.storage.users.get(userId, (err, user) => {
+      let totalInsults = 1;
+      let updatedUser = user;
       if (!user) {
-        user = {
+        updatedUser = {
           id: userId,
-          insulted: 1
+          insulted: 1,
         };
       } else {
         if (user.insulted) {
-          user.insulted = user.insulted + 1;
+          updatedUser.insulted += 1;
         } else {
-          user.insulted = 1;
+          updatedUser.insulted = 1;
         }
         totalInsults = user.insulted;
       }
 
-      controller.storage.users.save(user, function (err, id) {
+      controller.storage.users.save(updatedUser, (storErr, id) => {
         callback(totalInsults);
       });
     });
   },
 
-  addComplimentToUser: function (userId, controller, callback) {
-    controller.storage.users.get(userId, function (err, user) {
-      var totalCompliments = 1;
+  addComplimentToUser(userId, controller, callback) {
+    controller.storage.users.get(userId, (err, user) => {
+      let totalCompliments = 1;
+      let updatedUser = user;
       if (!user) {
-        user = {
+        updatedUser = {
           id: userId,
-          complimented: 1
+          complimented: 1,
         };
       } else {
         if (user.complimented) {
-          user.complimented = user.complimented + 1;
+          updatedUser.complimented += 1;
         } else {
-          user.complimented = 1;
+          updatedUser.complimented = 1;
         }
         totalCompliments = user.complimented;
       }
 
-      controller.storage.users.save(user, function (err, id) {
+      controller.storage.users.save(updatedUser, (storErr, id) => {
         callback(totalCompliments);
       });
     });
-  }
+  },
 };

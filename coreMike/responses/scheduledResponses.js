@@ -1,107 +1,101 @@
-var CronJob = require('cron').CronJob;
+const CronJob = require('cron').CronJob;
 
-var dayOfTheWeekResponses = require('./dayOfTheWeek');
-var messageUtils = require('../helpers/messageUtils');
-var vocabulary = require('../helpers/vocabulary');
-var holidays = require('../helpers/getHolidays');
-var birthday = require('../responses/birthdayResponses');
-var fistTracker = require('../responses/fistTracker');
-var moment = require('moment');
-var _ = require('lodash');
+const dayOfTheWeekResponses = require('./dayOfTheWeek');
+const messageUtils = require('../helpers/messageUtils');
+const vocabulary = require('../helpers/vocabulary');
+const holidays = require('../helpers/getHolidays');
+const birthday = require('../responses/birthdayResponses');
+const fistTracker = require('../responses/fistTracker');
+const moment = require('moment');
+const _ = require('lodash');
 
 
-var timezoneEnv = process.env.TIMEZONE;
+const timezoneEnv = process.env.TIMEZONE;
 function getDefaultTz() {
-    if (timezoneEnv == null) {
-        return 'America/Chicago';
-    } else {
-        return timezoneEnv;
-    }
+  if (timezoneEnv == null) {
+    return 'America/Chicago';
+  }
+  return timezoneEnv;
 }
 
-var scheduledResponses = function(controller, appCache, bot) {
-
-    var dailyResetJob = new CronJob({
-        cronTime: '00 05 00 * * 1-7',
-        onTick: function() {
-            /*
+const scheduledResponses = function (controller, appCache, bot) {
+  const dailyResetJob = new CronJob({
+    cronTime: '00 05 00 * * 1-7',
+    onTick() {
+      /*
              * Runs every day
              * at 5:00:00 AM.
              */
-            fistTracker.resetFistsGiven(controller, bot);
-        },
-        start: false,
-        timeZone: getDefaultTz()
-    });
+      fistTracker.resetFistsGiven(controller, bot);
+    },
+    start: false,
+    timeZone: getDefaultTz(),
+  });
 
-    var dailyMorninJob = new CronJob({
-        cronTime: '00 10 09 * * 1-5',
-        onTick: function() {
-            /*
+  const dailyMorninJob = new CronJob({
+    cronTime: '00 10 09 * * 1-5',
+    onTick() {
+      /*
              * Runs every weekday (Monday through Friday)
              * at 9:10:00 AM. It does not run on Saturday
              * or Sunday.
              */
 
-            holidays.checkIfCurrentDayIsHoliday(appCache, function (holidayFound) {
-               if (holidayFound) {
-                   messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin());
+      holidays.checkIfCurrentDayIsHoliday(appCache, (holidayFound) => {
+        if (holidayFound) {
+          messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin());
 
-                   messageUtils.postMessage(bot, 'general', "Happy " + vocabulary.getMikeDang() + " " + holidayFound.name + "!");
+          messageUtils.postMessage(bot, 'general', `Happy ${vocabulary.getMikeDang()} ${holidayFound.name}!`);
+        } else {
+          messageUtils.postMessage(bot, 'general', `${vocabulary.getMikeMornin()}\n${dayOfTheWeekResponses.statementResponse()}`);
+        }
+      });
 
-               } else {
-                   messageUtils.postMessage(bot, 'general', vocabulary.getMikeMornin() + '\n' + dayOfTheWeekResponses.statementResponse());
-               }
-            });
+      birthday.getBirthDayMessages(controller, bot);
+    },
+    start: false,
+    timeZone: getDefaultTz(),
+  });
 
-            birthday.getBirthDayMessages(controller, bot);
-        },
-        start: false,
-        timeZone: getDefaultTz()
-    });
+  // const dailyLunchJob = new CronJob({
+  //   cronTime: '00 00 11 * * 1-5',
+  //   onTick() {
+  //     /*
+  //            * Runs every weekday (Monday through Friday)
+  //            * at 11:00:00 AM. It does not run on Saturday
+  //            * or Sunday.
+  //            */
+  //     messageUtils.postMessage(bot, ['general'], vocabulary.getLunchMike());
+  //   },
+  //   start: false,
+  //   timeZone: getDefaultTz(),
+  // });
 
-    var dailyLunchJob = new CronJob({
-        cronTime: '00 00 11 * * 1-5',
-        onTick: function() {
-            /*
-             * Runs every weekday (Monday through Friday)
-             * at 11:00:00 AM. It does not run on Saturday
-             * or Sunday.
-             */
-            messageUtils.postMessage(bot, ['general'], vocabulary.getLunchMike());
-        },
-        start: false,
-        timeZone: getDefaultTz()
-    });
-
-    var beerFridayJob = new CronJob({
-        cronTime: '00 10 15 * * 5',
-        onTick: function() {
-            /*
+  const beerFridayJob = new CronJob({
+    cronTime: '00 10 15 * * 5',
+    onTick() {
+      /*
              * Runs every Friday
              * at 3 PM.
              */
-            holidays.checkIfCurrentDayIsHoliday(appCache, function (holidaysFound) {
-                if (holidaysFound) {
-                    messageUtils.postMessage(bot, ['general'], vocabulary.getBeerFriday());
-                    messageUtils.postMessage(bot, ['general'], "Go celebrate " + vocabulary.getMikeDang() + " " + holidaysFound.name + "! ");
-                } else {
-                    messageUtils.postMessage(bot, ['general'], vocabulary.getBeerFriday());
-                }
-            });
+      holidays.checkIfCurrentDayIsHoliday(appCache, (holidaysFound) => {
+        if (holidaysFound) {
+          messageUtils.postMessage(bot, ['general'], vocabulary.getBeerFriday());
+          messageUtils.postMessage(bot, ['general'], `Go celebrate ${vocabulary.getMikeDang()} ${holidaysFound.name}! `);
+        } else {
+          messageUtils.postMessage(bot, ['general'], vocabulary.getBeerFriday());
+        }
+      });
+    },
+    start: false,
+    timeZone: getDefaultTz(),
+  });
 
 
-        },
-        start: false,
-        timeZone: getDefaultTz()
-    });
-
-
-    dailyMorninJob.start();
-    //dailyLunchJob.start();
-    beerFridayJob.start();
-    dailyResetJob.start();
-
+  dailyMorninJob.start();
+  // dailyLunchJob.start();
+  beerFridayJob.start();
+  dailyResetJob.start();
 };
 
 module.exports = scheduledResponses;

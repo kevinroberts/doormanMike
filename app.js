@@ -1,53 +1,53 @@
-var path = require('path');
-var _ = require('lodash');
-var Botkit = require('botkit');
-require('dotenv').config({silent: true});
-var NodeCache = require( "node-cache" );
-var holidays = require('./coreMike/helpers/getHolidays.js');
-var constants = require('./coreMike/slackConstants');
+const _ = require('lodash');
+const Botkit = require('botkit');
+const NodeCache = require('node-cache');
+const holidays = require('./coreMike/helpers/getHolidays.js');
+const constants = require('./coreMike/slackConstants');
+require('dotenv').config({ silent: true });
 require('./coreMike/resources/insultStore');
-var appCache = new NodeCache();
 
-var baseResponses = require('./coreMike/responses/baseResponses');
-var scheduledResponses = require('./coreMike/responses/scheduledResponses');
+const appCache = new NodeCache();
 
-var debugMode = false;
+const baseResponses = require('./coreMike/responses/baseResponses');
+const scheduledResponses = require('./coreMike/responses/scheduledResponses');
+
+let debugMode = false;
 
 // Keep bot from starting if a Slack token is missing
 if (!process.env.token) {
-    console.log('Error: Specify token in environment');
-    process.exit(1);
+  console.log('Error: Specify token in environment');
+  process.exit(1);
 }
 
 if (!process.env.FIREBASEURI) {
-    console.log('Error: Specify FIREBASEURI in environment');
-    process.exit(1);
+  console.log('Error: Specify FIREBASEURI in environment');
+  process.exit(1);
 }
 
 if (!process.env.NODE_ENV) {
   console.warn('Warning: Specify an environment mode');
 } else {
-  var development = process.env.NODE_ENV !== 'production';
+  const development = process.env.NODE_ENV !== 'production';
 
   if (development) {
-      debugMode = true;
+    debugMode = true;
   }
 }
 
-var firebaseStorage = require('botkit-storage-firebase')({firebase_uri: process.env.FIREBASEURI});
+const firebaseStorage = require('botkit-storage-firebase')({ firebase_uri: process.env.FIREBASEURI });
 
-var controller = Botkit.slackbot({
-    debug: debugMode,
-    retry: 5,
-    storage: firebaseStorage
+const controller = Botkit.slackbot({
+  debug: debugMode,
+  retry: 5,
+  storage: firebaseStorage,
 });
 
-var bot = controller.spawn({
-    token: process.env.token
+const bot = controller.spawn({
+  token: process.env.token,
 }).startRTM();
 
 /*
-* Manually Set storage for bot user  
+* Manually Set storage for bot user
  var user = {
  id: constants.getBotUserID(),
  curses: "f***",
@@ -59,30 +59,29 @@ var bot = controller.spawn({
  });
  */
 
-controller.storage.users.get(constants.getBotUserID(), function (err, userObj) {
-    if (userObj && userObj.curses) {
-        var profaneList = _.words(userObj.curses);
-        var obj = { profaneList: profaneList};
-        appCache.set( "profane", obj, function( err, success ) {
-            if (!err && success) {
-                console.log("loaded profanity list");
-            }
-        });
-
-    } else {
-        console.error("no curse data was found");
-    }
+controller.storage.users.get(constants.getBotUserID(), (err, userObj) => {
+  if (userObj && userObj.curses) {
+    const profaneList = _.words(userObj.curses);
+    const obj = { profaneList };
+    appCache.set('profane', obj, (cacheErr, success) => {
+      if (!cacheErr && success) {
+        console.log('loaded profanity list');
+      }
+    });
+  } else {
+    console.error('no curse data was found');
+  }
 });
 
-holidays.getHolidaysForYear(function (holidayData) {
-   if (holidayData) {
-       appCache.set( "holidays", holidayData, function( err, success ) {
-           if (!err && success) {
-               console.log("loaded holidays list");
-               console.log(holidayData);
-           }
-       });
-   }
+holidays.getHolidaysForYear((holidayData) => {
+  if (holidayData) {
+    appCache.set('holidays', holidayData, (err, success) => {
+      if (!err && success) {
+        console.log('loaded holidays list');
+        console.log(holidayData);
+      }
+    });
+  }
 });
 
 baseResponses(controller, appCache);

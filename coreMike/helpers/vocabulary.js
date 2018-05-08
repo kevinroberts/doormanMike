@@ -1,12 +1,13 @@
-var love = require('../responses/loveMachine');
-var _ = require('lodash');
-var complimentStore = require('../resources/compliments.json');
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('insults');
+const love = require('../responses/loveMachine');
+const _ = require('lodash');
+const complimentStore = require('../resources/compliments.json');
+const sqlite3 = require('sqlite3').verbose();
+
+const db = new sqlite3.Database('insults');
 
 
-function getTotalNumberOfInsults (cb) {
-  db.get("SELECT count(*) as total FROM insults WHERE used < 1", function (err, result) {
+function getTotalNumberOfInsults(cb) {
+  db.get('SELECT count(*) as total FROM insults WHERE used < 1', (err, result) => {
     if (result.total) {
       cb(result.total);
     } else {
@@ -15,8 +16,8 @@ function getTotalNumberOfInsults (cb) {
   });
 }
 
-function getInsultById (id, cb) {
-  db.get("SELECT insult from insults WHERE rowid = ?", id, function (err, result) {
+function getInsultById(id, cb) {
+  db.get('SELECT insult from insults WHERE rowid = ?', id, (err, result) => {
     if (result) {
       cb(result.insult);
     } else {
@@ -25,29 +26,29 @@ function getInsultById (id, cb) {
   });
 }
 
-function updateInsultUsedStatus (id, used, cb) {
-  db.run("UPDATE insults SET used = $used WHERE rowid = $id", {
+function updateInsultUsedStatus(id, used, cb) {
+  db.run('UPDATE insults SET used = $used WHERE rowid = $id', {
     $id: id,
-    $used: used
+    $used: used,
   }, cb);
 }
 
-function resetInsultUsedCount (cb) {
-  console.log("resetting insults to 0 used.");
-  db.all("SELECT rowid AS id, insult, used FROM insults WHERE used > 0", function(err, rows) {
-    rows.forEach(function (row) {
-      updateInsultUsedStatus(row.id, 0, function (result) {
+function resetInsultUsedCount(cb) {
+  console.log('resetting insults to 0 used.');
+  db.all('SELECT rowid AS id, insult, used FROM insults WHERE used > 0', (err, rows) => {
+    rows.forEach((row) => {
+      updateInsultUsedStatus(row.id, 0, (result) => {
         console.log(result);
       });
     });
-    cb("done");
+    cb('done');
   });
 }
 
 
-var timesheetResponse = 'and finish that timesheet https://webet.icfi.com/DeltekTC/welcome.msv';
+const timesheetResponse = 'and finish that timesheet https://webet.icfi.com/DeltekTC/welcome.msv';
 
-var mikeDangs = [
+const mikeDangs = [
   'gawd damn',
   'gaddd dannng',
   'gad damn',
@@ -56,87 +57,87 @@ var mikeDangs = [
   'gahdamn',
   'gotdamn',
   'gaddanng',
-  'goddamn'
+  'goddamn',
 ];
 
-var mikeMornin = [
-  "Mornin Mornin!",
+const mikeMornin = [
+  'Mornin Mornin!',
   'MOOORNIN MOORNIN!!!1',
   'SOMEONE JUST OPENED A FRESH CAN OF BRAAPPT! IT\'s OFFICIALLY A MORNIN MORNIN!',
   '\'Mornin \'Mornin',
   'Buenos DANG días días! :flag-mx:',
-  'Morning Morning!!!'
+  'Morning Morning!!!',
 ];
 
-var mikeHellos = [
+const mikeHellos = [
   'Hey |USERNAME|! what\'s up?!',
   'What\'s cookin |USERNAME|?!',
   'whats up |USERNAME|!!!',
   'Yo |USERNAME|!',
-  'Hey |USERNAME|!'
+  'Hey |USERNAME|!',
 ];
 
-var insultNames = [
+const insultNames = [
   'assface',
   'bitch',
   'motha fucka',
-  'numbnuts'
+  'numbnuts',
 ];
 
-var beerFriday = [
-  'It\'s gahdamn :beer: FRIDAY time! Grabs yo self a brew! \n' + timesheetResponse,
-  'It\'s gahdamn :beer: FRIDAY time! Grabs yo self a brew! I bet Tyler has got a dope ass movie playin!\n' + timesheetResponse,
-  'It\'s gahdamn :beer: FRIDAY time! Grabs yo self a brew! AND yo JMOLSEN its time to getttt crunk! \n' + timesheetResponse,
-  ':fist::skin-tone-5: SOMEONE SAY GGAAAAAHDAMN BEER FRIDAY TIME!!!!!1@? CUZ IT IS, GRAB YOURSELF A BEER :beers: :fist::skin-tone-5: \n' + timesheetResponse,
-  'BRAAAPT! its :beer: Friday time! grabs yo self a beer! :fist::skin-tone-5:\n' + timesheetResponse
+const beerFriday = [
+  `It's gahdamn :beer: FRIDAY time! Grabs yo self a brew! \n${timesheetResponse}`,
+  `It's gahdamn :beer: FRIDAY time! Grabs yo self a brew! I bet Tyler has got a dope ass movie playin!\n${timesheetResponse}`,
+  `It's gahdamn :beer: FRIDAY time! Grabs yo self a brew! AND yo JMOLSEN its time to getttt crunk! \n${timesheetResponse}`,
+  `:fist::skin-tone-5: SOMEONE SAY GGAAAAAHDAMN BEER FRIDAY TIME!!!!!1@? CUZ IT IS, GRAB YOURSELF A BEER :beers: :fist::skin-tone-5: \n${timesheetResponse}`,
+  `BRAAAPT! its :beer: Friday time! grabs yo self a beer! :fist::skin-tone-5:\n${timesheetResponse}`,
 ];
 
-var sadMikes = [
+const sadMikes = [
   ':thumbsdown::skin-tone-5:',
   ':rage:',
-  ':sob:'
+  ':sob:',
 ];
 
-var profaneResponse = [
+const profaneResponse = [
   'woah. Language, bruh.',
   'daayuum you speak to your mother with that mouth?',
   'watch yo language',
-  'dont get me into trouble, watch your language :fist::skin-tone-5:'
+  'dont get me into trouble, watch your language :fist::skin-tone-5:',
 ];
 
-var lunchIntro = [
+const lunchIntro = [
   '\'bout lunch o\'clock',
   'nearin lunch time!',
   'LUNCH!!!',
   'nearin lunch o\'clock!',
-  'almost lunch!'
+  'almost lunch!',
 ];
 
-var brapts = [
+const brapts = [
   '|USERNAME| u stink dude :frog: ',
   '|USERNAME| sick - that sounded wet',
-  '|USERNAME| sometimes you gamble and lose :game_die: '
+  '|USERNAME| sometimes you gamble and lose :game_die: ',
 ];
 
-var brapts2 = [
+const brapts2 = [
   'DAAAYUUM HEAVY LOAD TODAY??',
   'GAAAHDAMMN THAT WAS AN EPIC ONE',
   'I could hear that one from all the way downstairs yo!',
-  'DAYUMMM WHO LET YOU GOT FRESH AND FRUITY ROOTY TOOTY THERE!!1!'
+  'DAYUMMM WHO LET YOU GOT FRESH AND FRUITY ROOTY TOOTY THERE!!1!',
 ];
 
-var bodies = [
+const bodies = [
   'in |USERNAME|\'s basement of course!',
   'I forget but my basement is full',
   'oh |USERNAME| you know... in a van down by the river..',
-  'I didn\'t do it |USERNAME|!'
+  'I didn\'t do it |USERNAME|!',
 ];
 
-var birthday = [
-  'YO EVERYONE TODAY IS |USERNAME| |DANG| BIRTHDAY! :birthday: :fist::skin-tone-5:'
+const birthday = [
+  'YO EVERYONE TODAY IS |USERNAME| |DANG| BIRTHDAY! :birthday: :fist::skin-tone-5:',
 ];
 
-var lunchDestinations = [
+const lunchDestinations = [
   'La Cocina :flag-mx: :burrito: :flag-mx:',
   'Tommy\'s Place -> https://goo.gl/maps/m2hR5yT8gS52',
   'Blackwoods BBQ :meat_on_bone: -> https://goo.gl/maps/7BaCbKpUbLn',
@@ -153,54 +154,54 @@ var lunchDestinations = [
   'boring :sleeping: Caffe Baci -> https://goo.gl/maps/wiCXCFehbq72',
   'Specialty\'s bakery :bread: -> https://goo.gl/maps/XvJmgaGH9852',
   'Costa Vida for some Baja-style :burrito:\'s -> https://goo.gl/maps/L1MtEmRdeYE2',
-  'Mixed Greens :leaves: -> https://goo.gl/maps/LkRp5Lq46UJ2'
+  'Mixed Greens :leaves: -> https://goo.gl/maps/LkRp5Lq46UJ2',
 ];
 
-var lunchMikes = [
+const lunchMikes = [
   '|INTRO| I don\'t know about you guy\'s but i\'m cravin some |DESTINATION| :fist::skin-tone-5:',
   '|INTRO| might I suggest you go to |DESTINATION|!?',
   '|INTRO| why don\'t you all take a trip to the |DANG| |DESTINATION|? ',
   '|INTRO| might I suggest some |DANG| |DESTINATION|!?',
-  '|INTRO| You guys getting dat GROUP DISCOUNT!? Go to |DESTINATION| for a change! :fist::skin-tone-5:'
+  '|INTRO| You guys getting dat GROUP DISCOUNT!? Go to |DESTINATION| for a change! :fist::skin-tone-5:',
 ];
 
-var kidsReponses = [
+const kidsReponses = [
   'I don\'t run a |DANG| day care here keep dem kids away! :fist::skin-tone-5:',
   '|DANG| kids, keep em away from me',
-  'I\'m |DANG| outta here if you\'re bringing kids around here'
+  'I\'m |DANG| outta here if you\'re bringing kids around here',
 
 ];
 
-var wasters = [
-  "hm...",
-  "well",
-  "with a little bit of lemon and mint.",
-  "interesting..."
+const wasters = [
+  'hm...',
+  'well',
+  'with a little bit of lemon and mint.',
+  'interesting...',
 ];
 
 module.exports = {
-  getMikeCompliment: function () {
+  getMikeCompliment() {
     return _.sample(complimentStore.compliments);
   },
-  getMikeInsult: function (cb) {
-    getTotalNumberOfInsults(function (number) {
+  getMikeInsult(cb) {
+    getTotalNumberOfInsults((number) => {
       if (number > 0) {
-        var randomInsultInt = Math.floor(Math.random() * Math.floor(number));
-        console.log("getting random joke with ID: " + randomInsultInt);
-        getInsultById(randomInsultInt, function (insult) {
-          updateInsultUsedStatus(randomInsultInt, 1, function (result) {
-            cb(insult.replace("|MIKE_DANG|", _.sample(mikeDangs)));
+        const randomInsultInt = Math.floor(Math.random() * Math.floor(number));
+        console.log(`getting random insult with ID: ${randomInsultInt}`);
+        getInsultById(randomInsultInt, (insult) => {
+          updateInsultUsedStatus(randomInsultInt, 1, () => {
+            cb(insult.replace('|MIKE_DANG|', _.sample(mikeDangs)));
           });
         });
       } else {
         // time to reset insult in DB
-        resetInsultUsedCount(function (result) {
+        resetInsultUsedCount((result) => {
           if (result) {
-            getTotalNumberOfInsults(function (numOfInsults) {
-              var randomInsultInt = Math.floor(Math.random() * Math.floor(numOfInsults));
-              getInsultById(randomInsultInt, function (insult) {
-                updateInsultUsedStatus(randomInsultInt, 1, function (result) {
-                  cb(insult.replace("|MIKE_DANG|", _.sample(mikeDangs)));
+            getTotalNumberOfInsults((numOfInsults) => {
+              const randomInsultInt = Math.floor(Math.random() * Math.floor(numOfInsults));
+              getInsultById(randomInsultInt, (insult) => {
+                updateInsultUsedStatus(randomInsultInt, 1, () => {
+                  cb(insult.replace('|MIKE_DANG|', _.sample(mikeDangs)));
                 });
               });
             });
@@ -209,27 +210,27 @@ module.exports = {
       }
     });
   },
-  getMikeInsultLowercase: function (cb) {
-    getTotalNumberOfInsults(function (number) {
+  getMikeInsultLowercase(cb) {
+    getTotalNumberOfInsults((number) => {
       if (number > 0) {
-        var randomInsultInt = Math.floor(Math.random() * Math.floor(number));
-        console.log("getting random joke with ID: " + randomInsultInt);
-        getInsultById(randomInsultInt, function (insult) {
-          var randomInsult = insult.replace("|MIKE_DANG|", _.sample(mikeDangs));
+        const randomInsultInt = Math.floor(Math.random() * Math.floor(number));
+        console.log(`getting random insult with ID: ${randomInsultInt}`);
+        getInsultById(randomInsultInt, (insult) => {
+          let randomInsult = insult.replace('|MIKE_DANG|', _.sample(mikeDangs));
           randomInsult = randomInsult.charAt(0).toLowerCase() + randomInsult.slice(1);
-          updateInsultUsedStatus(randomInsultInt, 1, function (result) {
+          updateInsultUsedStatus(randomInsultInt, 1, () => {
             cb(randomInsult);
           });
         });
       } else {
-        resetInsultUsedCount(function (result) {
+        resetInsultUsedCount((result) => {
           if (result) {
-            getTotalNumberOfInsults(function (numOfInsults) {
-              var randomInsultInt = Math.floor(Math.random() * Math.floor(numOfInsults));
-              getInsultById(randomInsultInt, function (insult) {
-                var randomInsult = insult.replace("|MIKE_DANG|", _.sample(mikeDangs));
+            getTotalNumberOfInsults((numOfInsults) => {
+              const randomInsultInt = Math.floor(Math.random() * Math.floor(numOfInsults));
+              getInsultById(randomInsultInt, (insult) => {
+                let randomInsult = insult.replace('|MIKE_DANG|', _.sample(mikeDangs));
                 randomInsult = randomInsult.charAt(0).toLowerCase() + randomInsult.slice(1);
-                updateInsultUsedStatus(randomInsultInt, 1, function (result) {
+                updateInsultUsedStatus(randomInsultInt, 1, () => {
                   cb(randomInsult);
                 });
               });
@@ -239,71 +240,67 @@ module.exports = {
       }
     });
   },
-  getMikeDang: function () {
+  getMikeDang() {
     return _.sample(mikeDangs);
   },
-  getMikeMornin: function () {
+  getMikeMornin() {
     return _.sample(mikeMornin);
   },
-  getWaster: function () {
+  getWaster() {
     return _.sample(wasters);
   },
-  getLunchMike: function () {
-    var myDate = new Date();
-    var msg = _.sample(lunchMikes).replace("|DANG|", _.sample(mikeDangs));
-    msg = msg.replace("|DESTINATION|", _.sample(lunchDestinations));
-    msg = msg.replace("|INTRO|", _.sample(lunchIntro));
+  getLunchMike() {
+    const myDate = new Date();
+    let msg = _.sample(lunchMikes).replace('|DANG|', _.sample(mikeDangs));
+    msg = msg.replace('|DESTINATION|', _.sample(lunchDestinations));
+    msg = msg.replace('|INTRO|', _.sample(lunchIntro));
 
-    // if the hour is between 5 and 10 am Mike is in breakfast mode
-    // if (myDate.getHours() > 5 && myDate.getHours() <= 10) {
-    //   return "it's " + _.sample(mikeDangs) + " breakfast time. Go to dunkin dohnuts or make yourself a bagel."
-    // }
     if (myDate.getHours() > 5 && myDate.getHours() <= 15) {
       return msg;
-    }/* Hour is past 3pm is like totes Dinner time for Mike*/
-    else if (myDate.getHours() >= 15) {
-      return "it's " + _.sample(mikeDangs) + " past lunch time. Go to monks pub or make yourself some dinner.";
+      /* Else if hour is past 3pm it is like totes Dinner time for Mike */
+    } else if (myDate.getHours() >= 15) {
+      return `it's ${_.sample(mikeDangs)} past lunch time. Go to monks pub or make yourself some dinner.`;
     }
-
+    return msg;
   },
-  getLunchDestination: function () {
+  getLunchDestination() {
     return _.sample(lunchDestinations);
   },
-  getSadMikeReaction: function () {
+  getSadMikeReaction() {
     return _.sample(sadMikes);
   },
-  getMikeHello: function () {
-    return _.sample(mikeHellos).replace(" |USERNAME|", "");
+  getMikeHello() {
+    return _.sample(mikeHellos).replace(' |USERNAME|', '');
   },
-  getBrapt: function (name) {
-    return _.sample(brapts).replace("|USERNAME|", name);
+  getBrapt(name) {
+    return _.sample(brapts).replace('|USERNAME|', name);
   },
-  getBraptPt2: function () {
+  getBraptPt2() {
     return _.sample(brapts2);
   },
-  getProfaneReponse: function () {
+  getProfaneReponse() {
     return _.sample(profaneResponse);
   },
-  getBodies: function (name) {
-    return _.sample(bodies).replace("|USERNAME|", name);
+  getBodies(name) {
+    return _.sample(bodies).replace('|USERNAME|', name);
   },
-  getInsultName: function () {
+  getInsultName() {
     return _.sample(insultNames);
   },
-  getBeerFriday: function () {
+  getBeerFriday() {
     return _.sample(beerFriday);
   },
-  getKidsReponse: function () {
-    return _.sample(kidsReponses).replace("|DANG|", _.sample(mikeDangs));
+  getKidsReponse() {
+    return _.sample(kidsReponses).replace('|DANG|', _.sample(mikeDangs));
   },
-  getBirthdayGreeting: function (name) {
-    var birthdayMsg = _.sample(birthday).replace("|USERNAME|", name);
-    birthdayMsg = birthdayMsg.replace("|DANG|", _.sample(mikeDangs).toUpperCase());
+  getBirthdayGreeting(name) {
+    let birthdayMsg = _.sample(birthday).replace('|USERNAME|', name);
+    birthdayMsg = birthdayMsg.replace('|DANG|', _.sample(mikeDangs).toUpperCase());
     return birthdayMsg;
   },
-  getPersonalMikeHello: function (name) {
-    var personalHelloMsg = _.sample(mikeHellos).replace("|USERNAME|", name);
+  getPersonalMikeHello(name) {
+    let personalHelloMsg = _.sample(mikeHellos).replace('|USERNAME|', name);
     personalHelloMsg += love.getLoveReactionForName(name);
     return personalHelloMsg;
-  }
+  },
 };
