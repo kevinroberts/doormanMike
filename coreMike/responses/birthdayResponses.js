@@ -11,7 +11,7 @@ module.exports = {
     }, (err, res) => {
       if (res.members) {
         _.forEach(res.members, (member) => {
-          controller.storage.users.get(member.id, (err, userObj) => {
+          controller.storage.users.get(member.id, (storageErr, userObj) => {
             if (userObj && userObj.birthday) {
               const birthdayDate = moment(userObj.birthday, 'MM/DD');
               const now = moment();

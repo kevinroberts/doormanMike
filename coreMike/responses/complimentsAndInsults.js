@@ -1,7 +1,6 @@
 const messageUtils = require('../helpers/messageUtils');
 const vocabulary = require('../helpers/vocabulary');
 const constants = require('../slackConstants');
-const S = require('string');
 const async = require('async');
 const _ = require('lodash');
 
@@ -18,7 +17,7 @@ module.exports = {
     }
 
     bot.startConversation(message, (err, convo) => {
-      if (!user | !channel) {
+      if (!user || !channel) {
         convo.say(`Sorry I didn't get that. If you want me to send an insult to someone, say \`@${constants.getBotUsername()} send insult to @username\``);
         convo.next();
       } else {
@@ -35,7 +34,7 @@ module.exports = {
             bot.botkit.log(`Total insults for ${recipientUser} is: ${totalInsults}`);
           });
 
-          convo.ask(`No problem! \n Should I tell ${user} you sent this? Say \`yes\` or \`no\``, (response, convo) => {
+          convo.ask(`No problem! \n Should I tell ${user} you sent this? Say \`yes\` or \`no\``, (response, nextConvo) => {
             if (response.text === 'yes' || response.text === 'Yes') {
               bot.reply(message, `Will do! Check ${constants.getGeneralChannelLink()}`);
 
@@ -49,7 +48,7 @@ module.exports = {
               });
             }
 
-            convo.next();
+            nextConvo.next();
           });
         }
       }
@@ -188,7 +187,10 @@ module.exports = {
         totalInsults = user.insulted;
       }
 
-      controller.storage.users.save(updatedUser, (storErr, id) => {
+      controller.storage.users.save(updatedUser, (storageErr, id) => {
+        if (storageErr) {
+          console.error(`Storage error occurred for user id: ${id}`, storageErr);
+        }
         callback(totalInsults);
       });
     });
@@ -212,7 +214,10 @@ module.exports = {
         totalCompliments = user.complimented;
       }
 
-      controller.storage.users.save(updatedUser, (storErr, id) => {
+      controller.storage.users.save(updatedUser, (storageErr, id) => {
+        if (storageErr) {
+          console.error(`Storage error occurred for user id: ${id}`, storageErr);
+        }
         callback(totalCompliments);
       });
     });

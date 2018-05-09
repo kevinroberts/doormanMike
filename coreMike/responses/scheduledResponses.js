@@ -1,4 +1,4 @@
-const CronJob = require('cron').CronJob;
+const { CronJob } = require('cron');
 
 const dayOfTheWeekResponses = require('./dayOfTheWeek');
 const messageUtils = require('../helpers/messageUtils');
@@ -6,19 +6,17 @@ const vocabulary = require('../helpers/vocabulary');
 const holidays = require('../helpers/getHolidays');
 const birthday = require('../responses/birthdayResponses');
 const fistTracker = require('../responses/fistTracker');
-const moment = require('moment');
-const _ = require('lodash');
 
 
 const timezoneEnv = process.env.TIMEZONE;
 function getDefaultTz() {
-  if (timezoneEnv == null) {
+  if (timezoneEnv === null) {
     return 'America/Chicago';
   }
   return timezoneEnv;
 }
 
-const scheduledResponses = function (controller, appCache, bot) {
+const scheduledResponses = (controller, appCache, bot) => {
   const dailyResetJob = new CronJob({
     cronTime: '00 05 00 * * 1-7',
     onTick() {

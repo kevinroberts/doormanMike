@@ -195,8 +195,7 @@ module.exports = {
 
   getMyBirthdayHandler(controller, bot, message) {
     const myRegex = /my birthday/;
-    // message.text.search(monthDayRegex)
-    // check if user wants to see their birthday
+    // check if user wants to see when their own birthday is
     if (message.text.search(myRegex) !== -1) {
       controller.storage.users.get(message.user, (err, user) => {
         if (user && user.birthday) {
@@ -230,28 +229,27 @@ module.exports = {
         }
       });
     } else {
-      const re = /<@(.*)>/g;
+      // user want to see when another users birthday is...
+      const re = /<@([a-zA-Z0-9_]*)>/g;
       let m;
       if (message.text.search(re) !== -1) {
-        while ((m = re.exec(message.text)) !== null) {
-          if (m.index === re.lastIndex) {
-            re.lastIndex++;
-          }
-          var userToFind = m[1];
+        do {
+          // Loop through username matches
+          m = re.exec(message.text);
+          const userToFind = m[1];
           controller.storage.users.get(userToFind, (err, user) => {
             if (user && user.birthday) {
-              let birthdayDate = moment(user.birthday, 'MM/DD');
               const now = moment();
-              let difference,
-                duration;
-
+              let birthdayDate = moment(user.birthday, 'MM/DD');
+              let difference;
+              let duration;
               let secondPart = '';
               if (now.isSame(birthdayDate, 'month') && now.isSame(birthdayDate, 'day')) {
                 secondPart = ' AND THAT IS TODAY HAPPY GAHDAMN BIRTHDAY!!!';
               } else if (birthdayDate.isAfter(now)) {
                 difference = birthdayDate.diff(now);
                 duration = moment.duration(difference);
-                secondPart = `, bro's still got ${duration.humanize()} until their birthday.`;
+                secondPart = `, brah's still got ${duration.humanize()} until their birthday.`;
               } else if (birthdayDate.isBefore(now)) {
                 birthdayDate = birthdayDate.add(1, 'years');
                 difference = birthdayDate.diff(now);
@@ -269,7 +267,7 @@ module.exports = {
               bot.reply(message, sryMsg);
             }
           });
-        }
+        } while (m);
       } else {
         const sryMsg = 'Sorry I dont know what you are asking';
         bot.reply(message, sryMsg);
@@ -281,48 +279,47 @@ module.exports = {
     const monthDayRegex = /[0-9][0-9]\/[0-9][0-9]/;
     const sryMsg = `Sorry I didn't get that. If you want me to remember your birthday, say \`@${constants.getBotUsername()} my birthday is MM/DD\``;
     if (message.text.search(monthDayRegex) !== -1) {
-      let m;
-      if ((m = monthDayRegex.exec(message.text)) !== null) {
-        if (m.index === monthDayRegex.lastIndex) {
-          re.lastIndex++;
-        }
-        const birthdayMonthDay = m[0];
-        if (birthdayMonthDay) {
-          const birthMonth = birthdayMonthDay.split('/')[0];
-          const birthDay = birthdayMonthDay.split('/')[1];
-          if (parseInt(birthMonth, 10) > 12 || parseInt(birthDay, 10) > 31) {
-            bot.reply(message, `${sryMsg} You entered ${birthdayMonthDay} which is not a valid Month / Day combination.`);
-          } else if (!moment(birthdayMonthDay, 'MM/DD').isValid()) {
-            bot.reply(message, `${sryMsg} You entered ${birthdayMonthDay} which is not a valid Month / Day combination.`);
-          } else {
-            bot.startConversation(message, (err, convo) => {
-              convo.ask(`Great. Just to confirm should I remember your birthday on \`${birthdayMonthDay}\`? Say \`yes\` or \`no\``, (response, convo) => {
-                if (response.text.match(bot.botkit.utterances.yes)) {
-                  controller.storage.users.get(message.user, (err, user) => {
-                    if (!user) {
-                      user = {
-                        id: message.user,
-                      };
-                    }
-                    user.birthday = birthdayMonthDay;
-
-                    controller.storage.users.save(user, (err, id) => {
-                      const birthdayDate = moment(birthdayMonthDay, 'MM/DD');
-
-                      bot.reply(message, `Ok I've got your birthday down as ${birthdayDate.format('MMMM Do')} :birthday: :fist::skin-tone-5:`);
-                    });
-                  });
-                } else {
-                  bot.reply(message, "OK. I'll pretend this never happened.");
-                }
-
-                convo.stop();
-              });
-            });
-          }
+      const matches = monthDayRegex.exec(message.text);
+      const birthdayMonthDay = matches[0];
+      if (birthdayMonthDay) {
+        const birthMonth = birthdayMonthDay.split('/')[0];
+        const birthDay = birthdayMonthDay.split('/')[1];
+        if (parseInt(birthMonth, 10) > 12 || parseInt(birthDay, 10) > 31) {
+          bot.reply(message, `${sryMsg} You entered ${birthdayMonthDay} which is not a valid Month / Day combination.`);
+        } else if (!moment(birthdayMonthDay, 'MM/DD').isValid()) {
+          bot.reply(message, `${sryMsg} You entered ${birthdayMonthDay} which is not a valid Month / Day combination.`);
         } else {
-          bot.reply(message, sryMsg);
+          bot.startConversation(message, (err, convo) => {
+            convo.ask(`Great. Just to confirm should I remember your birthday on \`${birthdayMonthDay}\`? Say \`yes\` or \`no\``, (response, nextConvo) => {
+              if (response.text.match(bot.botkit.utterances.yes)) {
+                controller.storage.users.get(message.user, (retrieveErr, user) => {
+                  let updatedUser = user;
+                  if (!user) {
+                    updatedUser = {
+                      id: message.user,
+                    };
+                  }
+                  updatedUser.birthday = birthdayMonthDay;
+
+                  controller.storage.users.save(updatedUser, (storageErr, id) => {
+                    if (storageErr) {
+                      console.error(`Storage error occurred for user id: ${id}`, storageErr);
+                    }
+                    const birthdayDate = moment(birthdayMonthDay, 'MM/DD');
+
+                    bot.reply(message, `Ok I've got your birthday down as ${birthdayDate.format('MMMM Do')} :birthday: :fist::skin-tone-5:`);
+                  });
+                });
+              } else {
+                bot.reply(message, "OK. I'll pretend this never happened.");
+              }
+
+              nextConvo.stop();
+            });
+          });
         }
+      } else {
+        bot.reply(message, sryMsg);
       }
     } else {
       bot.reply(message, sryMsg);
@@ -341,7 +338,7 @@ module.exports = {
         bot.reply(message, `Sorry I didn't get that. If you want me to send a mornin' mornin' to someone, say \`@${constants.getBotUsername()} send mornin to @username\``);
         convo.stop();
       } else {
-        convo.ask(`No problem! \n Should I tell ${user} you requested this? Say \`yes\` or \`no\``, (response, convo) => {
+        convo.ask(`No problem! \n Should I tell ${user} you requested this? Say \`yes\` or \`no\``, (response, nextConvo) => {
           if (response.text === 'yes' || response.text === 'Yes') {
             bot.reply(message, `Will do! Check ${constants.getGeneralChannelLink()}`);
             const morninMessage = dayOfTheWeekResponses.getMikeMorninTimeSensitive(null);
@@ -355,17 +352,17 @@ module.exports = {
             messageUtils.postMessage(bot, channel, `Yo ${user}, I was requested to tell you ${msg}`);
           }
 
-          convo.stop();
+          nextConvo.stop();
         });
       }
     });
   },
   haveArgumentHandler(controller, bot, message) {
-    const _this = this;
+    const outerThis = this;
     bot.startConversation(message, (err, argConversation) => {
       argConversation.ask(`ok you wanna start a ${vocabulary.getMikeDang()} beef with me? Say \`yes\` or \`no\``, (response, argQuestion) => {
         if (response.text === 'yes' || response.text === 'Yes') {
-          _this.startArgument(bot, message);
+          outerThis.startArgument(bot, message);
         } else {
           bot.reply(message, "Aww damn, alright.. I'll get yah next time.");
         }

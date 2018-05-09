@@ -4,9 +4,7 @@ const constants = require('../slackConstants');
 const async = require('async');
 const vocabulary = require('../helpers/vocabulary');
 const messageUtils = require('../helpers/messageUtils');
-const matcher = require('matcher');
-let Chance = require('chance'),
-  chance = new Chance();
+const Chance = require('chance');
 
 const development = process.env.NODE_ENV !== 'production';
 
@@ -15,6 +13,7 @@ const totalFistsPerDay = 5;
 module.exports = {
 
   handleFistMessage(controller, bot, message) {
+    const chance = new Chance();
     const usersMessage = message.text;
     const fistText = 'Give someone a doorman mike fist by adding it after their username, like this: *@username :fist:*';
 
@@ -29,7 +28,7 @@ module.exports = {
         // this is a single fist-ing so proceed cautiously ;)
         const username = messageUtils.getUsernameFromUserMessage(usersMessage);
         // no self fist-ing plz thanks
-        if (username == message.user) {
+        if (username === message.user) {
           const noSelfMsgs = "Woah, no self :fist::skin-tone-5:'n allowed. Spread the love and share a fist with someone who deserves it.";
           bot.reply(message, noSelfMsgs);
         } else {
@@ -52,8 +51,8 @@ module.exports = {
               messageUtils.postMessage(bot, username, recipientMessage);
 
 
-              this.addFistToUser(username, controller, (totalFists) => {
-                bot.botkit.log(`added fist to users total of ${totalFists}`);
+              this.addFistToUser(username, controller, (totalFistsReceived) => {
+                bot.botkit.log(`added fist to users total of ${totalFistsReceived}`);
               });
             } else {
               // no more fists left to give
@@ -79,8 +78,8 @@ module.exports = {
         } received a doorman mike fist from you. You have ${fistsLeft} fists to give out today.`;
 
 
-        this.addFistToUser(constants.getBotUserID(), controller, (totalFists) => {
-          bot.botkit.log(`added fist to bots total of ${totalFists}`);
+        this.addFistToUser(constants.getBotUserID(), controller, (totalFistsReceived) => {
+          bot.botkit.log(`added fist to bots total of ${totalFistsReceived}`);
         });
       } else {
         // no more fists left to give
@@ -100,20 +99,21 @@ module.exports = {
       async.transform(users, (acc, user, index, callback) => {
         controller.storage.users.get(user.id, (err, storageUser) => {
           if (storageUser) {
-            user.fists = storageUser.fists ? storageUser.fists : 0;
-            acc.push(user);
+            const updatedUser = user;
+            updatedUser.fists = storageUser.fists ? storageUser.fists : 0;
+            acc.push(updatedUser);
             callback(null);
           }
         });
       }, (err, usersWithFists) => {
         // returned results of member objects with fist numbers
         let leaderboardMessage = leaderboardHeader;
-        usersWithFists = _.orderBy(usersWithFists, ['fists'], ['desc']);
+        const usersWithFistsOrdered = _.orderBy(usersWithFists, ['fists'], ['desc']);
         let i = 0;
-        _.forEach(usersWithFists, (member) => {
+        _.forEach(usersWithFistsOrdered, (member) => {
           // only output members who have fists
           if (member.fists && member.fists > 0) {
-            i++;
+            i += 1;
             const rankMsg = `${i}). ${member.name} *${member.fists}*`;
             leaderboardMessage += `${rankMsg}\n`;
           }
@@ -140,21 +140,25 @@ module.exports = {
   addFistToUser(userId, controller, callback) {
     controller.storage.users.get(userId, (err, user) => {
       let totalFists = 1;
+      let updatedUser = user;
       if (!user) {
-        user = {
+        updatedUser = {
           id: userId,
           fists: 1,
         };
       } else {
-        if (user.fists) {
-          user.fists += 1;
+        if (updatedUser.fists) {
+          updatedUser.fists += 1;
         } else {
-          user.fists = 1;
+          updatedUser.fists = 1;
         }
-        totalFists = user.fists;
+        totalFists = updatedUser.fists;
       }
 
-      controller.storage.users.save(user, (err, id) => {
+      controller.storage.users.save(updatedUser, (storageErr, id) => {
+        if (storageErr) {
+          console.error('Storage error for user id: ', id);
+        }
         callback(totalFists);
       });
     });
@@ -163,20 +167,21 @@ module.exports = {
   resetGivenFistForUser(userId, controller) {
     controller.storage.users.get(userId, (err, user) => {
       const resetFistTotal = 0;
+      let updatedUser = user;
       if (!user) {
-        user = {
+        updatedUser = {
           id: userId,
           fistsGiven: resetFistTotal,
         };
       } else if (user.fistsGiven) {
-        user.fistsGiven = resetFistTotal;
+        updatedUser.fistsGiven = resetFistTotal;
       } else {
-        user.fistsGiven = resetFistTotal;
+        updatedUser.fistsGiven = resetFistTotal;
       }
 
-      controller.storage.users.save(user, (err, id) => {
+      controller.storage.users.save(updatedUser, (storageErr, id) => {
         if (development) {
-          console.log(`reset given fist total for ${userId}`);
+          console.log(`reset given fist total for ${id}`);
         }
       });
     });
@@ -185,21 +190,25 @@ module.exports = {
   addGivenFistToUser(userId, controller, callback) {
     controller.storage.users.get(userId, (err, user) => {
       let totalFists = 1;
+      let updatedUser = user;
       if (!user) {
-        user = {
+        updatedUser = {
           id: userId,
           fistsGiven: 1,
         };
       } else {
         if (user.fistsGiven) {
-          user.fistsGiven += 1;
+          updatedUser.fistsGiven += 1;
         } else {
-          user.fistsGiven = 1;
+          updatedUser.fistsGiven = 1;
         }
         totalFists = user.fistsGiven;
       }
 
-      controller.storage.users.save(user, (err, id) => {
+      controller.storage.users.save(updatedUser, (storageErr, id) => {
+        if (storageErr) {
+          console.error(`Storage error occurred for user id: ${id}`, storageErr);
+        }
         callback(totalFists);
       });
     });

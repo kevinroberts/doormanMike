@@ -8,7 +8,7 @@ module.exports = {
     unirest.get('https://api.chucknorris.io/jokes/random')
       .header('Accept', 'application/json')
       .end((result) => {
-        if (result && result.status == 200) {
+        if (result && result.status === 200) {
           if (result.body.value) {
             let fact = result.body.value;
             fact = S(fact).replaceAll('chuck norris', 'doorman mike')

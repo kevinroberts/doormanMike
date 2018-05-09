@@ -23,13 +23,17 @@ module.exports = {
     const upcoming = [];
     let limit = 15;
     _.forEach(appCache.get('holidays'), (value, key) => {
-      const holidayDate = moment(value.startDate);
-      // if holiday is after current date
-      if (holidayDate.isAfter(now) && value.name) {
-        if (limit > 0) {
-          upcoming.push(value);
+      if (!value) {
+        console.log(`no holiday value found for key: ${key}`);
+      } else {
+        const holidayDate = moment(value.startDate);
+        // if holiday is after current date
+        if (holidayDate.isAfter(now) && value.name) {
+          if (limit > 0) {
+            upcoming.push(value);
+          }
+          limit -= 1;
         }
-        limit -= 1;
       }
     });
 
@@ -41,12 +45,16 @@ module.exports = {
     let holidayFound = false;
 
     _.forEach(appCache.get('holidays'), (value, key) => {
-      const holidayDate = moment(value.startDate);
-      const formattedHolidayDate = holidayDate.format('YYYY-MM-DD');
-      // if current date matches holiday date
-      if (formattedDateString === formattedHolidayDate && value.name) {
-        callback(value);
-        holidayFound = true;
+      if (!value) {
+        console.log(`no holiday value found for key: ${key}`);
+      } else {
+        const holidayDate = moment(value.startDate);
+        const formattedHolidayDate = holidayDate.format('YYYY-MM-DD');
+        // if current date matches holiday date
+        if (formattedDateString === formattedHolidayDate && value.name) {
+          callback(value);
+          holidayFound = true;
+        }
       }
     });
 

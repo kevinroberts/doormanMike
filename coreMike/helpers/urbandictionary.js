@@ -53,7 +53,7 @@ module.exports = {
         const linkExtractor = new RegExp(/\[([a-zA-Z0-9!@#$\- ]+)\]/g);
         if (linkExtractor.test(msgText)) {
           const res = msgText.match(linkExtractor);
-          for (let i = 0; i < res.length; i++) {
+          for (let i = 0; i < res.length; i += 1) {
             const linkToReplace = res[i];
             const linkWithoutBrackets = linkToReplace.replace(/\[|\]/g, '');
             msgText = msgText.replace(linkToReplace, `<https://www.urbandictionary.com/define.php?term=${linkWithoutBrackets}|${linkWithoutBrackets}>`);
@@ -64,7 +64,7 @@ module.exports = {
           let exTxt = result.example;
           if (linkExtractor.test(exTxt)) {
             const results = exTxt.match(linkExtractor);
-            for (let j = 0; j < results.length; j++) {
+            for (let j = 0; j < results.length; j += 1) {
               const ltor = results[j];
               const linkwoBrackets = ltor.replace(/\[|\]/g, '');
               exTxt = exTxt.replace(ltor, `<https://www.urbandictionary.com/define.php?term=${linkwoBrackets}|${linkwoBrackets}>`);

@@ -1,4 +1,5 @@
 const S = require('string');
+const _ = require('lodash');
 
 const development = process.env.NODE_ENV !== 'production';
 
@@ -79,7 +80,7 @@ module.exports = {
     // "ANY|UNATTENDED|HELLO","gi"
     // | means OR. gi means GLOBALLY and CASEINSENSITIVE
     let regex = '';
-    for (let i = 0; i < searchWords.length; i++) {
+    for (let i = 0; i < searchWords.length; i += 1) {
       regex += '\\b(';
       regex += searchWords[i];
       regex += ')\\b';
