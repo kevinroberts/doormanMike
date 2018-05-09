@@ -111,7 +111,7 @@ module.exports = {
         "I haven't had this bad of a Monday since last Monday...",
         'ugh it actually is monday *shudders*',
         'God gave us Mondays to punish us for the things we did over the weekend.',
-        '...good thing i got some :whiskey: under this desk',
+        '...good thing i got some :whiskey: under this desk :fist::skin-tone-5:',
       ];
 
       msg += `\n${_.sample(mikeResponses2)}`;
@@ -176,7 +176,7 @@ module.exports = {
 
   getMikeFridayResponse(user, bot, message) {
     const mikeResponses = [
-      `|USERNAME| fucck yea${vocabulary.getMikeDang().toUpperCase()} FRIDAY... I LOVE IT `,
+      `|USERNAME| fucck yea ${vocabulary.getMikeDang().toUpperCase()} FRIDAY... I LOVE IT `,
       `FRIDAY i could marry the ${vocabulary.getMikeDang()} word`,
       '|USERNAME|, you tryna start a party? cuz if you say Friday a couple more times, im bring up the :tequila:',
     ];
