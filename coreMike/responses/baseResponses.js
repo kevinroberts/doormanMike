@@ -163,19 +163,21 @@ const baseResponses = (controller, appCache) => {
     } else if (matcher.isMatch(usersMessage, ':nerd_face: define *')) {
       const word = usersMessage.split(':nerd_face: define ')[1];
       dictionary.getDefinition(word, (definition) => {
-        if (definition != null) {
+        if (definition) {
           bot.reply(message, definition);
         } else {
-          bot.reply(message, 'Go look it up yourself! I have no idea.');
+          const nonRust = S(word).replaceAll('rusty ', '').s;
+          bot.reply(message, `Go look it up yourself! I have no idea. Did you try the rusty version? \`define rusty ${nonRust}\``);
         }
       });
     } else if (matcher.isMatch(usersMessage, ':nerd_face: *')) {
       const wordToDefine = usersMessage.split(':nerd_face: ')[1];
       dictionary.getDefinition(wordToDefine, (definition) => {
-        if (definition != null) {
+        if (definition) {
           bot.reply(message, definition);
         } else {
-          bot.reply(message, 'Go look it up yourself! I have no idea.');
+          const nonRust = S(wordToDefine).replaceAll('rusty ', '').s;
+          bot.reply(message, `Go look it up yourself! I have no idea. Did you try the rusty version? \`define rusty ${nonRust}\``);
         }
       });
     } else if (matcher.isMatch(usersMessage, 'send mornin to*')) {

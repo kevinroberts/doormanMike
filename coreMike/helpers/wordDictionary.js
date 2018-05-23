@@ -9,7 +9,7 @@ module.exports = {
       .header('Accept', 'application/json')
       .end((result) => {
         if (result && result.status === 200) {
-          if (result.body) {
+          if (result.body && result.body.length > 0) {
             let definitions = `The following definition(s) were found for the word ${word}\n`;
             let limit = 5;
             _.each(result.body, (definition) => {
