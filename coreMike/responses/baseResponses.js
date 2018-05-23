@@ -58,8 +58,6 @@ const baseResponses = (controller, appCache) => {
       fistTracker.handleFistMessage(controller, bot, message);
     } else if (matcher.isMatch(usersMessage, 'who* champ*') || matcher.isMatch(usersMessage, 'who is champ*')) {
       messageUtils.postReaction(bot, message, 'cena');
-    } else if (message.user === constants.getPopeUserId() && chance.bool({ likelihood: 30 })) {
-      messageUtils.postReaction(bot, message, 'downvote');
     } else if (matcher.isMatch(usersMessage, 'clear')) {
       messageUtils.postReaction(bot, message, 'zap');
       messageUtils.postReaction(bot, message, 'hearts');
@@ -332,6 +330,10 @@ const baseResponses = (controller, appCache) => {
           messageUtils.postReaction(bot, message, 'scream');
 
           bot.reply(message, vocabulary.getKidsReponse());
+        }
+
+        if (message.user === constants.getPopeUserId() && chance.bool({ likelihood: 40 })) {
+          messageUtils.postReaction(bot, message, 'downvote');
         }
 
         // initialize cleverbot module with a clerverbot instance
