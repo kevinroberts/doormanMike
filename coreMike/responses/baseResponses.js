@@ -58,6 +58,8 @@ const baseResponses = (controller, appCache) => {
       fistTracker.handleFistMessage(controller, bot, message);
     } else if (matcher.isMatch(usersMessage, 'who* champ*') || matcher.isMatch(usersMessage, 'who is champ*')) {
       messageUtils.postReaction(bot, message, 'cena');
+    } else if (message.user === constants.getPopeUserId() && chance.bool({ likelihood: 30 })) {
+      messageUtils.postReaction(bot, message, 'downvote');
     } else if (matcher.isMatch(usersMessage, 'clear')) {
       messageUtils.postReaction(bot, message, 'zap');
       messageUtils.postReaction(bot, message, 'hearts');
@@ -152,7 +154,7 @@ const baseResponses = (controller, appCache) => {
       urbandictionary.postFormattedDefinition(bot, message, word, (definition) => {
         if (!definition) {
           dictionary.getDefinition(word, (wordDef) => {
-            if (wordDef != null) {
+            if (wordDef) {
               bot.reply(message, wordDef);
             } else {
               bot.reply(message, 'Go look it up yourself! I have no idea.');

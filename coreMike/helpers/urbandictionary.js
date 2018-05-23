@@ -84,6 +84,7 @@ module.exports = {
             short: tags.length < 5,
           });
         }
+        // Remove to add Urban Dictionary author to display
         // if (result.author) {
         //   fields.push({
         //     "title": "Author",

@@ -9,6 +9,9 @@ module.exports = {
   getAdminUserID() {
     return 'U1THK0L78';
   },
+  getPopeUserId() {
+    return 'U1THPVAF8';
+  },
   getGeneralChannelID() {
     return 'C1THK0QUW';
   },
