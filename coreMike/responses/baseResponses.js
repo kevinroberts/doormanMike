@@ -309,7 +309,7 @@ const baseResponses = (controller, appCache) => {
     } else {
       // catch all other responses
       const profane = appCache.get('profane');
-      const result = { found: false, curse: '' };
+      const result = {found: false, curse: ''};
 
       _.forEach(_.words(usersMessage), (word) => {
         if (messageUtils.multiSearchOr(word, profane.profaneList)) {
@@ -317,11 +317,10 @@ const baseResponses = (controller, appCache) => {
           result.curse = word;
         }
       });
-
       if (messageUtils.multiSearchOr(usersMessage, profane.profaneList)) {
         console.log('heard profanity: ', result.curse);
         // give them a :disapproval:
-        messageUtils.postReaction(bot, message, ':disapproval:');
+        messageUtils.postReaction(bot, message, 'disapproval');
         // messageUtils.getUsernameFromController(controller, message.user, (name) => {
         //   let msg = `${name} ${vocabulary.getProfaneReponse()}`;
         //   if (message.user === constants.getAdminUserID()) {
@@ -329,20 +328,18 @@ const baseResponses = (controller, appCache) => {
         //   }
         //   bot.reply(message, msg);
         // });
-      } else {
-        if (usersMessage.search(patterns.getKidsRegex()) !== -1 && chance
-          .bool({ likelihood: 50 })) {
-          messageUtils.postReaction(bot, message, 'scream');
-
-          bot.reply(message, vocabulary.getKidsReponse());
-        }
-
-        // initialize cleverbot module with a clerverbot instance
-        // ask clever bot for a response (cleverbot.io)
-        CleverbotImpl.getCleverBotResponse(message, (response) => {
-          bot.reply(message, response);
-        });
       }
+      if (usersMessage.search(patterns.getKidsRegex()) !== -1 && chance
+        .bool({likelihood: 50})) {
+        messageUtils.postReaction(bot, message, 'scream');
+
+        bot.reply(message, vocabulary.getKidsReponse());
+      }
+      // initialize cleverbot module with a clerverbot instance
+      // ask clever bot for a response (cleverbot.io)
+      CleverbotImpl.getCleverBotResponse(message, (response) => {
+        bot.reply(message, response);
+      });
     }
   });
 };
