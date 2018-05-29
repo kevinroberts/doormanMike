@@ -319,23 +319,22 @@ const baseResponses = (controller, appCache) => {
       });
 
       if (messageUtils.multiSearchOr(usersMessage, profane.profaneList)) {
-        messageUtils.getUsernameFromController(controller, message.user, (name) => {
-          let msg = `${name} ${vocabulary.getProfaneReponse()}`;
-          if (message.user === constants.getAdminUserID()) {
-            msg += ` (you said ${result.curse})`;
-          }
-          bot.reply(message, msg);
-        });
+        console.log('heard profanity: ', result.curse);
+        // give them a :disapproval:
+        messageUtils.postReaction(bot, message, ':disapproval:');
+        // messageUtils.getUsernameFromController(controller, message.user, (name) => {
+        //   let msg = `${name} ${vocabulary.getProfaneReponse()}`;
+        //   if (message.user === constants.getAdminUserID()) {
+        //     msg += ` (you said ${result.curse})`;
+        //   }
+        //   bot.reply(message, msg);
+        // });
       } else {
         if (usersMessage.search(patterns.getKidsRegex()) !== -1 && chance
           .bool({ likelihood: 50 })) {
           messageUtils.postReaction(bot, message, 'scream');
 
           bot.reply(message, vocabulary.getKidsReponse());
-        }
-
-        if (message.user === constants.getPopeUserId() && chance.bool({ likelihood: 40 })) {
-          messageUtils.postReaction(bot, message, 'downvote');
         }
 
         // initialize cleverbot module with a clerverbot instance
