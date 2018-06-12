@@ -22,6 +22,8 @@ module.exports = {
     let name = '';
     if (nameExtracted) {
       name = S(nameExtracted).replaceAll(':', '').s;
+    } else {
+      name = S(message.text.match(patterns.getMyNameRegex())[2]).replaceAll(':', '').s;
     }
 
     let tooLong = false;
