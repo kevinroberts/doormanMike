@@ -271,7 +271,7 @@ const baseResponses = (controller, appCache) => {
       bot.reply(message, `No, what dumbass calls themselves ${name}?`);
     } else if (matcher.isMatch(usersMessage, '*weekend*')) {
       bot.reply(message, dayOfTheWeekResponses.getMikeWeekendResponse());
-    } else if (matcher.isMatch(usersMessage, '*trump*')) {
+    } else if (matcher.isMatch(usersMessage.toLowerCase(), 'trump') || matcher.isMatch(usersMessage.toLowerCase(), 'what would trump say')) {
       const mikeReactions = [
         'As Trump would say, ',
         ':trump: ',

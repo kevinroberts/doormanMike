@@ -39,8 +39,6 @@ module.exports = {
 
     if (name.search(patterns.getInvalidNameRegex()) !== -1) {
       bot.reply(message, 'woah bro I cannot call you that.');
-    } else if (messageUtils.multiSearchOr(name, profane.profaneList)) {
-      bot.reply(message, `woah bro I cannot call you that ${result.curse}`);
     } else {
       controller.storage.users.get(message.user, (err, user) => {
         let updatedUser = user;
@@ -58,6 +56,9 @@ module.exports = {
           let loveMsg = love.getLoveReactionForName(user.name);
           if (loveMsg) {
             loveMsg = ` I kind of like that name.${loveMsg}`;
+          }
+          if (messageUtils.multiSearchOr(name, profane.profaneList)) {
+            loveMsg += `\n woah bro I like your style ${result.curse}`;
           }
 
           if (tooLong) {
