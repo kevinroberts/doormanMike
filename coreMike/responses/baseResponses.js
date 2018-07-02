@@ -292,7 +292,7 @@ const baseResponses = (controller, appCache) => {
       messageUtils.postMikeFist(bot, message);
 
       messageUtils.getUsernameFromController(controller, message.user, (name) => {
-        bot.reply(message, `${name} thanks for the ${vocabulary.getMikeDang()} fist bro.\nCheck out the leaderboard \`@${constants.getBotUsername()} leaderboard\` and over at http://transithelper.com/leaderboard`);
+        bot.reply(message, `${name} thanks for the ${vocabulary.getMikeDang()} fist bro.\nCheck out the leaderboard \`@${constants.getBotUsername()} leaderboard\``);
       });
 
       fistTracker.handleBotFist(controller, bot, message);
@@ -309,7 +309,7 @@ const baseResponses = (controller, appCache) => {
     } else {
       // catch all other responses
       const profane = appCache.get('profane');
-      const result = {found: false, curse: ''};
+      const result = { found: false, curse: '' };
 
       _.forEach(_.words(usersMessage), (word) => {
         if (messageUtils.multiSearchOr(word, profane.profaneList)) {
@@ -318,7 +318,7 @@ const baseResponses = (controller, appCache) => {
         }
       });
       if (messageUtils.multiSearchOr(usersMessage, profane.profaneList)) {
-        console.log('heard profanity: ', result.curse);
+        // console.log('heard profanity: ', result.curse);
         // give them a :disapproval:
         messageUtils.postReaction(bot, message, 'disapproval');
         // messageUtils.getUsernameFromController(controller, message.user, (name) => {
@@ -338,7 +338,20 @@ const baseResponses = (controller, appCache) => {
       // initialize cleverbot module with a clerverbot instance
       // ask clever bot for a response (cleverbot.io)
       CleverbotImpl.getCleverBotResponse(message, (response) => {
-        bot.reply(message, response);
+        let returnMsg = response;
+        if (chance.bool({ likelihood: 80 }) && result.curse) {
+          if (returnMsg.endsWith('.')) {
+            returnMsg.trimEnd('.');
+          } else if (returnMsg.endsWith('?')) {
+            returnMsg.trimEnd('?');
+          }
+          if (result.curse === 'ass') {
+            returnMsg += `, my ${result.curse}.`;
+          } else {
+            returnMsg += `, ${result.curse}.`;
+          }
+        }
+        bot.reply(message, returnMsg);
       });
     }
   });

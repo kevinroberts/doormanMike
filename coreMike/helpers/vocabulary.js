@@ -1,6 +1,7 @@
 const love = require('../responses/loveMachine');
 const _ = require('lodash');
 const complimentStore = require('../resources/compliments.json');
+const lunchStore = require('../resources/lunchOptions.json');
 const sqlite3 = require('sqlite3').verbose();
 
 const db = new sqlite3.Database('insults');
@@ -137,26 +138,6 @@ const birthday = [
   'YO EVERYONE TODAY IS |USERNAME| |DANG| BIRTHDAY! :birthday: :fist::skin-tone-5:',
 ];
 
-const lunchDestinations = [
-  'La Cocina :flag-mx: :burrito: :flag-mx:',
-  'Tommy\'s Place -> https://goo.gl/maps/m2hR5yT8gS52',
-  'Blackwoods BBQ :meat_on_bone: -> https://goo.gl/maps/7BaCbKpUbLn',
-  'Goodwins sandwiches :bread: -> https://goo.gl/maps/uxqAZJG1AYH2',
-  'UB DOGS :hamburger: :hotdog: -> :hamburger: https://goo.gl/maps/orVEFT9PMJz',
-  'Naf Naf :camel: -> https://goo.gl/maps/JsXP5QABoPu',
-  'Epic burger :hamburger: -> https://goo.gl/maps/n7yso4M6W2T2',
-  'Jersey Mikes sandwiches -> https://goo.gl/maps/TzAPwC5ZDWx',
-  'Cafecito :flag-cu: -> https://goo.gl/maps/PrWAYBd34bz',
-  'Pierogi Heaven :flag-pl: -> https://goo.gl/maps/tJU8rTF1jKo',
-  'Halsted Street Deli -> https://goo.gl/maps/kxEk9BCnV9F2',
-  'Baccis Pizza -> https://goo.gl/maps/1Ed4fu2rqcM2',
-  'Taza for some Mediterranean -> https://goo.gl/maps/NCUk1w3E2am',
-  'boring :sleeping: Caffe Baci -> https://goo.gl/maps/wiCXCFehbq72',
-  'Specialty\'s bakery :bread: -> https://goo.gl/maps/XvJmgaGH9852',
-  'Costa Vida for some Baja-style :burrito:\'s -> https://goo.gl/maps/L1MtEmRdeYE2',
-  'Mixed Greens :leaves: -> https://goo.gl/maps/LkRp5Lq46UJ2',
-];
-
 const lunchMikes = [
   '|INTRO| I don\'t know about you guy\'s but i\'m cravin some |DESTINATION| :fist::skin-tone-5:',
   '|INTRO| might I suggest you go to |DESTINATION|!?',
@@ -252,7 +233,7 @@ module.exports = {
   getLunchMike() {
     const myDate = new Date();
     let msg = _.sample(lunchMikes).replace('|DANG|', _.sample(mikeDangs));
-    msg = msg.replace('|DESTINATION|', _.sample(lunchDestinations));
+    msg = msg.replace('|DESTINATION|', _.sample(lunchStore.places));
     msg = msg.replace('|INTRO|', _.sample(lunchIntro));
 
     if (myDate.getHours() > 5 && myDate.getHours() <= 15) {
