@@ -341,9 +341,9 @@ const baseResponses = (controller, appCache) => {
         let returnMsg = response;
         if (chance.bool({ likelihood: 80 }) && result.curse) {
           if (returnMsg.endsWith('.')) {
-            returnMsg.trimEnd('.');
+            returnMsg = returnMsg.slice(0, -1);
           } else if (returnMsg.endsWith('?')) {
-            returnMsg.trimEnd('?');
+            returnMsg = returnMsg.slice(0, -1);
           }
           if (result.curse === 'ass') {
             returnMsg += `, my ${result.curse}.`;
