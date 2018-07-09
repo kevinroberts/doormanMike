@@ -48,7 +48,15 @@ const scheduledResponses = (controller, appCache, bot) => {
           messageUtils.postMessage(bot, 'general', `${vocabulary.getMikeMornin()}\n${dayOfTheWeekResponses.statementResponse()}`);
         }
       });
+    },
+    start: false,
+    timeZone: getDefaultTz(),
+  });
 
+  const dailyBirthday = new CronJob({
+    cronTime: '00 09 09 * * 1-7',
+    onTick() {
+      // Runs every day (Monday through Sun) at 9:09:00 AM.
       birthday.getBirthDayMessages(controller, bot);
     },
     start: false,
@@ -94,6 +102,7 @@ const scheduledResponses = (controller, appCache, bot) => {
   // dailyLunchJob.start();
   beerFridayJob.start();
   dailyResetJob.start();
+  dailyBirthday.start();
 };
 
 module.exports = scheduledResponses;

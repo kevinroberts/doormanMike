@@ -245,7 +245,7 @@ module.exports = {
     return msg;
   },
   getLunchDestination() {
-    return _.sample(lunchDestinations);
+    return _.sample(lunchStore.places);
   },
   getSadMikeReaction() {
     return _.sample(sadMikes);
