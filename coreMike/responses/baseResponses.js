@@ -330,7 +330,7 @@ const baseResponses = (controller, appCache) => {
         // });
       }
       if (usersMessage.search(patterns.getKidsRegex()) !== -1 && chance
-        .bool({likelihood: 50})) {
+        .bool({ likelihood: 50 })) {
         messageUtils.postReaction(bot, message, 'scream');
 
         bot.reply(message, vocabulary.getKidsReponse());
@@ -340,13 +340,11 @@ const baseResponses = (controller, appCache) => {
       CleverbotImpl.getCleverBotResponse(message, (response) => {
         let returnMsg = response;
         if (chance.bool({ likelihood: 80 }) && result.curse) {
-          if (returnMsg.endsWith('.')) {
-            returnMsg = returnMsg.slice(0, -1);
-          } else if (returnMsg.endsWith('?')) {
+          if (_.endsWith(returnMsg, '.') || _.endsWith(returnMsg, '?')) {
             returnMsg = returnMsg.slice(0, -1);
           }
           if (result.curse === 'ass') {
-            returnMsg += `, my ${result.curse}.`;
+            returnMsg += `, my ${result.curse}!`;
           } else {
             returnMsg += `, ${result.curse}.`;
           }
