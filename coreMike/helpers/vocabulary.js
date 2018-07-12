@@ -160,6 +160,12 @@ const wasters = [
   'interesting...',
 ];
 
+const mikeInsultIntro = [
+  'it just came to my attention that,',
+  'I just wanted to tell yah,',
+  'I just want to say,',
+];
+
 module.exports = {
   getMikeCompliment() {
     return _.sample(complimentStore.compliments);
@@ -197,10 +203,18 @@ module.exports = {
         const randomInsultInt = Math.floor(Math.random() * Math.floor(number));
         console.log(`getting random insult with ID: ${randomInsultInt}`);
         getInsultById(randomInsultInt, (insult) => {
-          let randomInsult = insult.replace('|MIKE_DANG|', _.sample(mikeDangs));
-          randomInsult = randomInsult.charAt(0).toLowerCase() + randomInsult.slice(1);
+          const randomInsult = insult.replace('|MIKE_DANG|', _.sample(mikeDangs));
+          let finalInsult = '';
+          const fistChar = randomInsult.charAt(0).toString();
+          const secChar = randomInsult.charAt(1).toString();
+          // only lower case if the first character is not a proper noun i.e. "I"
+          if (fistChar.toUpperCase() === 'I' && (secChar === ' ' || secChar === '\'')) {
+            finalInsult = randomInsult;
+          } else {
+            finalInsult = randomInsult.charAt(0).toLowerCase() + randomInsult.slice(1);
+          }
           updateInsultUsedStatus(randomInsultInt, 1, () => {
-            cb(randomInsult);
+            cb(finalInsult);
           });
         });
       } else {
@@ -273,6 +287,9 @@ module.exports = {
   },
   getKidsReponse() {
     return _.sample(kidsReponses).replace('|DANG|', _.sample(mikeDangs));
+  },
+  getInsultIntro() {
+    return _.sample(mikeInsultIntro);
   },
   getBirthdayGreeting(name) {
     let birthdayMsg = _.sample(birthday).replace('|USERNAME|', name);

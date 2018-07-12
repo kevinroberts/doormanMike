@@ -346,7 +346,11 @@ const baseResponses = (controller, appCache) => {
           if (result.curse === 'ass') {
             returnMsg += `, my ${result.curse}!`;
           } else {
-            returnMsg += `, ${result.curse}.`;
+            if (chance.bool({ likelihood: 80 })) {
+              returnMsg += `, ${result.curse.toUpperCase()}.`;
+            } else {
+              returnMsg += `, ${result.curse}.`;
+            }
           }
         }
         bot.reply(message, returnMsg);

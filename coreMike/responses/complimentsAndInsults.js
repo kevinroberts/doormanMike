@@ -44,7 +44,7 @@ module.exports = {
             } else {
               bot.reply(message, `Sneaky! Check ${constants.getGeneralChannelLink()}`);
               vocabulary.getMikeInsultLowercase((insult) => {
-                messageUtils.postMessage(bot, channel, `Yo ${user}, I just wanted to tell yah, ${insult}`);
+                messageUtils.postMessage(bot, channel, `Yo ${user}, ${vocabulary.getInsultIntro()} ${insult}`);
               });
             }
 
