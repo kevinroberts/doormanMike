@@ -223,10 +223,18 @@ module.exports = {
             getTotalNumberOfInsults((numOfInsults) => {
               const randomInsultInt = Math.floor(Math.random() * Math.floor(numOfInsults));
               getInsultById(randomInsultInt, (insult) => {
-                let randomInsult = insult.replace('|MIKE_DANG|', _.sample(mikeDangs));
-                randomInsult = randomInsult.charAt(0).toLowerCase() + randomInsult.slice(1);
+                const randomInsult = insult.replace('|MIKE_DANG|', _.sample(mikeDangs));
+                const fistChar = randomInsult.charAt(0).toString();
+                const secChar = randomInsult.charAt(1).toString();
+                let finalInsult = '';
+                // only lower case if the first character is not a proper noun i.e. "I"
+                if (fistChar.toUpperCase() === 'I' && (secChar === ' ' || secChar === '\'')) {
+                  finalInsult = randomInsult;
+                } else {
+                  finalInsult = randomInsult.charAt(0).toLowerCase() + randomInsult.slice(1);
+                }
                 updateInsultUsedStatus(randomInsultInt, 1, () => {
-                  cb(randomInsult);
+                  cb(finalInsult);
                 });
               });
             });
