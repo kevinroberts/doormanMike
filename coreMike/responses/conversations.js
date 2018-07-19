@@ -18,10 +18,10 @@ module.exports = {
   callMeHandler(appCache, controller, bot, message) {
     const profane = appCache.get('profane');
     const result = { found: false, curse: '' };
-    const nameExtracted = message.text.match(patterns.getMyNameRegex())[1];
+    const nameExtracted = message.text.match(patterns.getMyNameRegex());
     let name = '';
-    if (nameExtracted) {
-      name = S(nameExtracted).replaceAll(':', '').s;
+    if (nameExtracted && nameExtracted[1]) {
+      name = S(nameExtracted[1]).replaceAll(':', '').s;
     } else {
       name = S(message.text.match(patterns.getMyNameRegex())[2]).replaceAll(':', '').s;
     }
@@ -59,7 +59,7 @@ module.exports = {
           if (loveMsg) {
             loveMsg = ` I kind of like that name.${loveMsg}`;
           }
-          if (messageUtils.multiSearchOr(name, profane.profaneList)) {
+          if (result.found) {
             loveMsg += `\n woah bro I like your style ${result.curse}`;
           }
 
@@ -76,7 +76,7 @@ module.exports = {
             if (response && response.status === 200) {
               if (response.body.gender) {
                 let genderMsg = '';
-                const { gender } = response.body;
+                const {gender} = response.body;
                 if (gender === 'male') {
                   genderMsg = "\nThat's a nice manly name :muscle::skin-tone-4:";
                 }
@@ -96,8 +96,10 @@ module.exports = {
     const profane = appCache.get('profane');
     const result = { found: false, curse: '' };
 
-    controller.storage.users.get(message.user, (storErr, user) => {
-      if (user && user.name) {
+    controller.storage.users.get(message.user, (storageErr, user) => {
+      if (storageErr) {
+        console.log('storage error trying to retrieve message user from firebase', message.user);
+      } else if (user && user.name) {
         bot.reply(message, `Your name is ${user.name} ${love.getLoveReactionForName(user.name)}`);
       } else {
         bot.startConversation(message, (err, convo) => {
@@ -125,6 +127,8 @@ module.exports = {
                 {
                   default: true,
                   callback(nextResponse, nextConvo) {
+                    // Do Nothing
+                    // convo.say('Ok forget it then. You tell me some other time?');
                     nextConvo.repeat();
                     nextConvo.next();
                   },
@@ -133,13 +137,11 @@ module.exports = {
 
               convo.next();
             }, { key: 'nickname' }); // store the results in a field called nickname
-
             convo.on('end', (nextConvo) => {
               if (convo.status === 'completed') {
-                bot.reply(message, 'OK! I will update my god dang notes...');
+                nextConvo.say('OK! I will update my god dang notes...');
 
                 let tooLong = false;
-
 
                 controller.storage.users.get(message.user, (storeRetErr, userRes) => {
                   let updatedUser = userRes;
@@ -148,7 +150,6 @@ module.exports = {
                       id: message.user,
                     };
                   }
-
 
                   updatedUser.name = S(convo.extractResponse('nickname')).replaceAll(':', '').s;
 
@@ -165,8 +166,7 @@ module.exports = {
 
                   if (updatedUser.name.search(patterns.getInvalidNameRegex()) !== -1) {
                     bot.reply(message, 'woah bro I cannot call you that.');
-                  } else if (messageUtils.multiSearchOr(updatedUser.name, profane.profaneList)) {
-                    bot.reply(message, `woah bro I cannot call you that ${result.curse}`);
+                    nextConvo.stop();
                   } else {
                     controller.storage.users.save(updatedUser, (storErr2, id) => {
                       if (storErr2) {
@@ -174,20 +174,21 @@ module.exports = {
                       }
                       let loveMsg = love.getLoveReactionForName(updatedUser.name);
                       if (loveMsg) {
-                        loveMsg = ` I kind of like that name.${loveMsg}`;
+                        loveMsg = ` I kind of like that name. ${loveMsg}`;
                       }
                       if (tooLong) {
                         bot.reply(message, `woah bro that's a long ass name.. im gonna cut yah off and call yah \`${updatedUser.name}\``);
                       } else {
                         bot.reply(message, `Got it. I will call you ${updatedUser.name} from now on.${loveMsg}`);
                       }
+                      nextConvo.stop();
                     });
                   }
                 });
               } else {
                 // this happens if the conversation ended prematurely for some reason
                 bot.reply(message, 'OK, never mind!');
-                nextConvo.stop();
+                nextConvo.next();
               }
             });
           }
@@ -277,7 +278,6 @@ module.exports = {
       }
     }
   },
-
   setMyBirthdayHandler(controller, bot, message) {
     const monthDayRegex = /[0-9][0-9]\/[0-9][0-9]/;
     const sryMsg = `Sorry I didn't get that. If you want me to remember your birthday, say \`@${constants.getBotUsername()} my birthday is MM/DD\``;
@@ -328,7 +328,6 @@ module.exports = {
       bot.reply(message, sryMsg);
     }
   },
-
   sendMorninToHandler(bot, message) {
     const user = message.text.split('send mornin to ')[1];
     let channel = 'general';
@@ -390,6 +389,5 @@ module.exports = {
       });
     });
   },
-
 
 };

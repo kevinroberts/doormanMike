@@ -18,7 +18,7 @@ const kidsRegex = new RegExp(':baby:|kids|children', 'i');
 
 const tacoRegex = new RegExp(':taco:', 'i');
 
-const invalidNameRegex = /@/;
+const invalidNameRegex = new RegExp('@|:', 'ig');
 
 const whereToEat = new RegExp('(.*) I eat(.*)|(.*)for lunch(.*)|(.*)for food(.*)|lunch\\?', 'i');
 
