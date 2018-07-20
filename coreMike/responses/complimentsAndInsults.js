@@ -38,8 +38,10 @@ module.exports = {
             if (response.text === 'yes' || response.text === 'Yes') {
               bot.reply(message, `Will do! Check ${constants.getGeneralChannelLink()}`);
 
-              vocabulary.getMikeInsultLowercase((insult) => {
-                messageUtils.postMessage(bot, channel, `Yo ${user}, <@${message.user}> wants me to tell yah, ${insult}`, channel);
+              messageUtils.getUsernameFromController(controller, message.user, (username) => {
+                vocabulary.getMikeInsultLowercase((insult) => {
+                  messageUtils.postMessage(bot, channel, `Yo ${user}, ${username} (<@${message.user}>) wants me to tell yah, ${insult}`, channel);
+                });
               });
             } else {
               bot.reply(message, `Sneaky! Check ${constants.getGeneralChannelLink()}`);
@@ -85,9 +87,10 @@ module.exports = {
           convo.ask(`No problem! \n Should I tell ${user} you sent this? Say \`yes\` or \`no\``, (response, nextConvo) => {
             if (response.text === 'yes' || response.text === 'Yes') {
               bot.reply(message, `Will do! Check ${constants.getGeneralChannelLink()}`);
-
-              messageUtils.postMessage(bot, channel, `Yo ${user}, <@${message.user}> wants me to tell yah, ${
-                vocabulary.getMikeCompliment()}`);
+              messageUtils.getUsernameFromController(controller, message.user, (username) => {
+                messageUtils.postMessage(bot, channel, `Yo ${user}, ${username} (<@${message.user}>) wants me to tell yah, ${
+                  vocabulary.getMikeCompliment()}`);
+              });
             } else {
               bot.reply(message, `Sneaky! Check ${constants.getGeneralChannelLink()}`);
 
