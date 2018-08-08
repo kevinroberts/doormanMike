@@ -161,7 +161,7 @@ const wasters = [
 ];
 
 const mikeInsultIntro = [
-  'it just came to my attention that,',
+  '',
   'I just wanted to tell yah,',
   'I just want to say,',
 ];
