@@ -161,6 +161,13 @@ const wasters = [
   'interesting...',
 ];
 
+const farts = [
+  '_farts_ BRAAAAAAAAAAAAAPT',
+  '_farts_ in Jordan\'s direction',
+  ':monkey: :dash:  :wtf:',
+  '_toots explosively_',
+];
+
 const mikeInsultIntro = [
   '',
   'I just wanted to tell yah,',
@@ -170,6 +177,9 @@ const mikeInsultIntro = [
 module.exports = {
   getMikeCompliment() {
     return _.sample(complimentStore.compliments);
+  },
+  getMikeFart() {
+    return _.sample(farts);
   },
   getMikeInsult(cb) {
     getTotalNumberOfInsults((number) => {
