@@ -10,6 +10,7 @@ const db = new sqlite3.Database('insults');
 function getTotalNumberOfInsults(cb) {
   db.get('SELECT count(*) as total FROM insults WHERE used < 1', (err, result) => {
     if (result.total) {
+      console.log('returning total number of insults: ', result.total);
       cb(result.total);
     } else {
       cb(0);

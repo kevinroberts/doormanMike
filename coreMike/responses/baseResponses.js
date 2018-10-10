@@ -56,6 +56,10 @@ const baseResponses = (controller, appCache) => {
       bot.reply(message, responseMsg);
     } else if (matcher.isMatch(usersMessage, '*:fist:*')) {
       fistTracker.handleFistMessage(controller, bot, message);
+    } else if (matcher.isMatch(usersMessage, '*at the same time*')) {
+      messageUtils.postMikeFist(bot, message);
+      const responseMsg = `Hell yea brother. At the same ${vocabulary.getMikeDang()} time!`;
+      bot.reply(message, responseMsg);
     } else if (matcher.isMatch(usersMessage, 'who* champ*') || matcher.isMatch(usersMessage, 'who is champ*')) {
       messageUtils.postReaction(bot, message, 'cena');
     } else if (matcher.isMatch(usersMessage, 'clear')) {
