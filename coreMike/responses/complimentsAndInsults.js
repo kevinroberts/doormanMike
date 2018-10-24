@@ -173,56 +173,64 @@ module.exports = {
   },
 
   addInsultToUser(userId, controller, callback) {
-    controller.storage.users.get(userId, (err, user) => {
-      let totalInsults = 1;
-      let updatedUser = user;
-      if (!user) {
-        updatedUser = {
-          id: userId,
-          insulted: 1,
-        };
-      } else {
-        if (user.insulted) {
-          updatedUser.insulted += 1;
+    try {
+      controller.storage.users.get(userId, (err, user) => {
+        let totalInsults = 1;
+        let updatedUser = user;
+        if (!user) {
+          updatedUser = {
+            id: userId,
+            insulted: 1,
+          };
         } else {
-          updatedUser.insulted = 1;
+          if (user.insulted) {
+            updatedUser.insulted += 1;
+          } else {
+            updatedUser.insulted = 1;
+          }
+          totalInsults = user.insulted;
         }
-        totalInsults = user.insulted;
-      }
 
-      controller.storage.users.save(updatedUser, (storageErr, id) => {
-        if (storageErr) {
-          console.error(`Storage error occurred for user id: ${id}`, storageErr);
-        }
-        callback(totalInsults);
+        controller.storage.users.save(updatedUser, (storageErr, id) => {
+          if (storageErr) {
+            console.error(`Storage error occurred for user id: ${id}`, storageErr);
+          }
+          callback(totalInsults);
+        });
       });
-    });
+    } catch (e) {
+      console.error(`Unable to add insult storage for user id ${userId}`, e);
+    }
   },
 
   addComplimentToUser(userId, controller, callback) {
-    controller.storage.users.get(userId, (err, user) => {
-      let totalCompliments = 1;
-      let updatedUser = user;
-      if (!user) {
-        updatedUser = {
-          id: userId,
-          complimented: 1,
-        };
-      } else {
-        if (user.complimented) {
-          updatedUser.complimented += 1;
+    try {
+      controller.storage.users.get(userId, (err, user) => {
+        let totalCompliments = 1;
+        let updatedUser = user;
+        if (!user) {
+          updatedUser = {
+            id: userId,
+            complimented: 1,
+          };
         } else {
-          updatedUser.complimented = 1;
+          if (user.complimented) {
+            updatedUser.complimented += 1;
+          } else {
+            updatedUser.complimented = 1;
+          }
+          totalCompliments = user.complimented;
         }
-        totalCompliments = user.complimented;
-      }
 
-      controller.storage.users.save(updatedUser, (storageErr, id) => {
-        if (storageErr) {
-          console.error(`Storage error occurred for user id: ${id}`, storageErr);
-        }
-        callback(totalCompliments);
+        controller.storage.users.save(updatedUser, (storageErr, id) => {
+          if (storageErr) {
+            console.error(`Storage error occurred for user id: ${id}`, storageErr);
+          }
+          callback(totalCompliments);
+        });
       });
-    });
+    } catch (e) {
+      console.error(`Unable to add compliment storage for user id ${userId}`, e);
+    }
   },
 };

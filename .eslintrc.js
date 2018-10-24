@@ -5,6 +5,7 @@ module.exports = {
     "node": true
   },
   "rules": {
-    'no-console': 'off'
+    'no-console': 'off',
+    'func-style': 'off'
   }
 };
