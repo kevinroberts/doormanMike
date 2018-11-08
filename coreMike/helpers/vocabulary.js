@@ -1,6 +1,7 @@
 const love = require('../responses/loveMachine');
 const _ = require('lodash');
 const complimentStore = require('../resources/compliments.json');
+const constants = require('../slackConstants');
 const lunchStore = require('../resources/lunchOptions.json');
 const sqlite3 = require('sqlite3').verbose();
 
@@ -267,6 +268,25 @@ module.exports = {
     const myDate = new Date();
     let msg = _.sample(lunchMikes).replace('|DANG|', _.sample(mikeDangs));
     msg = msg.replace('|DESTINATION|', _.sample(lunchStore.places));
+    msg = msg.replace('|INTRO|', _.sample(lunchIntro));
+
+    if (myDate.getHours() > 5 && myDate.getHours() <= 15) {
+      return msg;
+      /* Else if hour is past 3pm it is like totes Dinner time for Mike */
+    } else if (myDate.getHours() >= 15) {
+      return `it's ${_.sample(mikeDangs)} past lunch time. Go to monks pub or make yourself some dinner.`;
+    }
+    return msg;
+  },
+  getPersonalizedLunchMike(userID) {
+    const myDate = new Date();
+    let msg = _.sample(lunchMikes).replace('|DANG|', _.sample(mikeDangs));
+    if (constants.getTylerUserID() === userID) {
+      const tylerMsg = ` BUt since this is Tyler asking, Im gonna say ${_.sample(mikeDangs)} UB DOGS :hamburger: :hotdog: -> :hamburger: https://goo.gl/maps/orVEFT9PMJz`;
+      msg = msg.replace('|DESTINATION|', tylerMsg);
+    } else {
+      msg = msg.replace('|DESTINATION|', _.sample(lunchStore.places));
+    }
     msg = msg.replace('|INTRO|', _.sample(lunchIntro));
 
     if (myDate.getHours() > 5 && myDate.getHours() <= 15) {

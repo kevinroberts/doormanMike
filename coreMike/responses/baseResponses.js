@@ -119,7 +119,7 @@ const baseResponses = (controller, appCache) => {
       bot.reply(message, `I did! And it's NONE OF YOUR ${vocabulary.getMikeDang().toUpperCase()} BUSINESS `);
     } else if (usersMessage.search(patterns.getWhereToEatRegex()) !== -1) {
       messageUtils.postReaction(bot, message, 'fork_and_knife');
-      const lunchSuggestion = vocabulary.getLunchMike();
+      const lunchSuggestion = vocabulary.getPersonalizedLunchMike(message.user);
       messageUtils.getUsernameFromController(controller, message.user, (name) => {
         const loveMessage = love.getLoveReactionForName(name);
         bot.reply(message, `${name} ${lunchSuggestion}${loveMessage}`);
