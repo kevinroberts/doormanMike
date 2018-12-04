@@ -321,18 +321,6 @@ const baseResponses = (controller, appCache) => {
           result.curse = word;
         }
       });
-      if (messageUtils.multiSearchOr(usersMessage, profane.profaneList)) {
-        // console.log('heard profanity: ', result.curse);
-        // give them a :disapproval:
-        messageUtils.postReaction(bot, message, 'disapproval');
-        // messageUtils.getUsernameFromController(controller, message.user, (name) => {
-        //   let msg = `${name} ${vocabulary.getProfaneReponse()}`;
-        //   if (message.user === constants.getAdminUserID()) {
-        //     msg += ` (you said ${result.curse})`;
-        //   }
-        //   bot.reply(message, msg);
-        // });
-      }
       if (usersMessage.search(patterns.getKidsRegex()) !== -1 && chance
         .bool({ likelihood: 50 })) {
         messageUtils.postReaction(bot, message, 'scream');
@@ -344,18 +332,23 @@ const baseResponses = (controller, appCache) => {
       CleverbotImpl.getCleverBotResponse(message, (response) => {
         let returnMsg = response;
         if (chance.bool({ likelihood: 80 }) && result.curse) {
-          if (_.endsWith(returnMsg, '.') || _.endsWith(returnMsg, '?')) {
+          if (_.endsWith(returnMsg, '.') || _.endsWith(returnMsg, '?') || _.endsWith(returnMsg, '?')) {
             returnMsg = returnMsg.slice(0, -1);
+            while (_.endsWith(returnMsg, '.')) {
+              returnMsg = returnMsg.slice(0, -1);
+            }
           }
           if (result.curse === 'ass') {
             returnMsg += `, my ${result.curse}!`;
+            messageUtils.postReaction(bot, message, 'peach');
+          } else if (result.curse === 'asshole') {
+            returnMsg += `. Also kiss my ${result.curse}!`;
           } else {
-            if (chance.bool({ likelihood: 80 })) {
-              returnMsg += `, ${result.curse.toUpperCase()}.`;
-            } else {
-              returnMsg += `, ${result.curse}.`;
-            }
+            returnMsg += `, ${result.curse.toUpperCase()}.`;
           }
+        }
+        if (result.curse) {
+          messageUtils.postReaction(bot, message, 'disapproval');
         }
         bot.reply(message, returnMsg);
       });
