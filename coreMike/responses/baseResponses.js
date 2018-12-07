@@ -341,8 +341,9 @@ const baseResponses = (controller, appCache) => {
           if (result.curse === 'ass') {
             returnMsg += `, my ${result.curse}!`;
             messageUtils.postReaction(bot, message, 'peach');
-          } else if (result.curse === 'asshole') {
-            returnMsg += `. Also kiss my ${result.curse}!`;
+          } else if (result.curse === 'asshole' || result.curse === 'dick') {
+            const pronouns = ['my', 'your own', 'his', 'her'];
+            returnMsg += `. Also why don't you kiss ${_.sample(pronouns)} ${result.curse}!`;
           } else {
             returnMsg += `, ${result.curse.toUpperCase()}.`;
           }

@@ -76,7 +76,7 @@ module.exports = {
             if (response && response.status === 200) {
               if (response.body.gender) {
                 let genderMsg = '';
-                const {gender} = response.body;
+                const { gender } = response.body;
                 if (gender === 'male') {
                   genderMsg = "\nThat's a nice manly name :muscle::skin-tone-4:";
                 }
