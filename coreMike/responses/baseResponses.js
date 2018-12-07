@@ -332,9 +332,15 @@ const baseResponses = (controller, appCache) => {
       CleverbotImpl.getCleverBotResponse(message, (response) => {
         let returnMsg = response;
         if (chance.bool({ likelihood: 80 }) && result.curse) {
-          if (_.endsWith(returnMsg, '.') || _.endsWith(returnMsg, '?') || _.endsWith(returnMsg, '?')) {
+          if (_.endsWith(returnMsg, '.') || _.endsWith(returnMsg, '!') || _.endsWith(returnMsg, '?')) {
             returnMsg = returnMsg.slice(0, -1);
             while (_.endsWith(returnMsg, '.')) {
+              returnMsg = returnMsg.slice(0, -1);
+            }
+            while (_.endsWith(returnMsg, '!')) {
+              returnMsg = returnMsg.slice(0, -1);
+            }
+            while (_.endsWith(returnMsg, '?')) {
               returnMsg = returnMsg.slice(0, -1);
             }
           }
