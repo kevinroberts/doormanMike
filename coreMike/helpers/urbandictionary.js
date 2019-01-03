@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const unirest = require('unirest');
+const S = require('string');
 
 // "list": [
 //     {
@@ -50,13 +51,15 @@ module.exports = {
       if (result) {
         let msgText = result.definition;
         // replace all the bracketed definitions with actual links
-        const linkExtractor = new RegExp(/\[([a-zA-Z0-9!@#$\- ]+)\]/g);
+        const linkExtractor = new RegExp(/\[([\w!@#'.$\- ]+)\]/g);
         if (linkExtractor.test(msgText)) {
           const res = msgText.match(linkExtractor);
           for (let i = 0; i < res.length; i += 1) {
             const linkToReplace = res[i];
             const linkWithoutBrackets = linkToReplace.replace(/\[|\]/g, '');
-            msgText = msgText.replace(linkToReplace, `<https://www.urbandictionary.com/define.php?term=${linkWithoutBrackets}|${linkWithoutBrackets}>`);
+            // remove the ending apostrophe "s" from definitions (invalid results)
+            const linkToSearch = S(linkWithoutBrackets).chompRight("'s").s;
+            msgText = msgText.replace(linkToReplace, `<https://www.urbandictionary.com/define.php?term=${linkToSearch}|${linkWithoutBrackets}>`);
           }
         }
         const fields = [];
