@@ -2,35 +2,36 @@ const vocabulary = require('../helpers/vocabulary');
 
 // node constructor pattern https://github.com/FredKSchott/the-node-way/blob/master/02-custom-type-example.js
 
-const CleverbotAPI = require('cleverbot-api');
+const cleverbot = require('cleverbot.io');
 
-const cleverbot = new CleverbotAPI(process.env.CLEVERBOTAPI);
+const clever = new cleverbot(process.env.ClEVERBOTUSER, process.env.CLEVERBOTAPI);
 
+clever.setNick('Doorman Mike');
 
 module.exports = {
   getCleverBotResponse(message, callback) {
-    cleverbot.getReply({
-      input: message.text,
-    }, (error, response) => {
-      if (error) {
-        console.log('cleverbot err received', error);
+    clever.create(function (err, session) {
+      clever.ask(message.text, function (error, response) {
+        if (error) {
+          console.log('cleverbot err received', error);
 
-        callback(vocabulary.getWaster());
-      } else {
-        let msg = response.output;
-        if (msg) {
-          if (msg.indexOf('HAL') !== -1) {
-            msg = msg.replace('HAL', `<@${message.user}>`);
-          }
-          if (msg.indexOf('Cleverbot') !== -1) {
-            msg = msg.replace('Cleverbot', 'Mike');
-          }
-          callback(msg);
-        } else {
-          console.log('clever bot response was empty: ', response);
           callback(vocabulary.getWaster());
+        } else {
+          let msg = response;
+          if (msg) {
+            if (msg.indexOf('HAL') !== -1) {
+              msg = msg.replace('HAL', `<@${message.user}>`);
+            }
+            if (msg.indexOf('Cleverbot') !== -1) {
+              msg = msg.replace('Cleverbot', 'Mike');
+            }
+            callback(msg);
+          } else {
+            console.log('clever bot response was empty: ', response);
+            callback(vocabulary.getWaster());
+          }
         }
-      }
+      });
     });
   },
 };
