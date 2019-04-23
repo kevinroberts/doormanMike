@@ -22,6 +22,7 @@ const urbandictionary = require('../helpers/urbandictionary');
 const dictionary = require('../helpers/wordDictionary');
 const trumpism = require('../helpers/getTrumpism');
 const constants = require('../slackConstants');
+const kanyeApi = require('../helpers/getKanye');
 const CleverbotImpl = require('../helpers/cleverbot');
 
 const chance = new Chance();
@@ -273,6 +274,14 @@ const baseResponses = (controller, appCache) => {
       name = S(name).stripPunctuation().s;
 
       bot.reply(message, `No, what dumbass calls themselves ${name}?`);
+    } else if (matcher.isMatch(usersMessage, 'kanye*')) {
+      const kanyeReactions = [
+        'As Kanye would say, ',
+        ':kanye: ',
+      ];
+      kanyeApi.getKanye( (quote) => {
+        bot.reply(message, _.sample(kanyeReactions) + quote);
+      });
     } else if (matcher.isMatch(usersMessage, '*weekend*')) {
       bot.reply(message, dayOfTheWeekResponses.getMikeWeekendResponse());
     } else if (matcher.isMatch(usersMessage.toLowerCase(), 'trump') || matcher.isMatch(usersMessage.toLowerCase(), 'what would trump say')) {

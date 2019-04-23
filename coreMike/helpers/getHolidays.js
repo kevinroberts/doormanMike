@@ -21,7 +21,7 @@ module.exports = {
   getUpcomingHolidays(appCache) {
     const now = moment();
     const upcoming = [];
-    let limit = 15;
+    let limit = 20;
     _.forEach(appCache.get('holidays'), (value, key) => {
       if (!value) {
         console.log(`no holiday value found for key: ${key}`);
