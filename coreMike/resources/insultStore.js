@@ -25,7 +25,7 @@ function insertRows() {
     if (result.total && result.total > 0) {
       console.log('insult table already populated: ', result);
     } else {
-      console.log('insertRows insult i');
+      console.log('insertRows to insult db');
       const stmt = db.prepare('INSERT INTO insults VALUES (?, ?)');
 
       for (let i = 0; i < insultStore.insults.length; i += 1) {
