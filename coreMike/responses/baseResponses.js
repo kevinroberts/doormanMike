@@ -57,6 +57,8 @@ const baseResponses = (controller, appCache) => {
       bot.reply(message, responseMsg);
     } else if (matcher.isMatch(usersMessage, '*:fist:*')) {
       fistTracker.handleFistMessage(controller, bot, message);
+    } else if (message.user === constants.getPopeUserId() && chance.bool({ likelihood: 30 })) {
+      messageUtils.postReaction(bot, message, 'downvote');
     } else if (matcher.isMatch(usersMessage, '*at the same time*')) {
       messageUtils.postMikeFist(bot, message);
       const responseMsg = `Hell yea brother. At the same ${vocabulary.getMikeDang()} time!`;

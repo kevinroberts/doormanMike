@@ -9,6 +9,9 @@ module.exports = {
   getAdminUserID() {
     return 'U1THK0L78';
   },
+  getPopeUserId() {
+    return 'U1THPVAF8';
+  },
   getTylerUserID() {
     return 'U8V2VMAV9';
   },
