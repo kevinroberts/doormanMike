@@ -12,6 +12,7 @@
     "botkit-storage-firebase": "1.0.0",
     "chance": "^1.0.18",
     "cheerio": "^0.22.0",
+    "cleverbot": "^1.0.1",
     "cleverbot.io": "^1.0.4",
     "cron": "^1.7.0",
     "day-of-week": "^1.0.4",
