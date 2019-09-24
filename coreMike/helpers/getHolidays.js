@@ -7,7 +7,7 @@ const path = require('path');
 module.exports = {
 
   getHolidaysForYear(callback) {
-    // sources http://www.calendarlabs.com/templates/ical/US-Holidays.ics
+    // sources http://www.calendarlabs.com/templates/ical/US-Holidays.ics http://www.fastertechnologies.com/us-government-holidays-ics.html
     // editor http://apps.marudot.com/ical/
     fs.readFile(path.join(__dirname, '../resources/US-Holidays.ics'), (err, data) => {
       if (err) {
