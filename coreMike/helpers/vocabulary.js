@@ -3,50 +3,7 @@ const _ = require('lodash');
 const complimentStore = require('../resources/compliments.json');
 const constants = require('../slackConstants');
 const lunchStore = require('../resources/lunchOptions.json');
-const sqlite3 = require('sqlite3').verbose();
-
-const db = new sqlite3.Database('insults');
-
-
-function getTotalNumberOfInsults(cb) {
-  db.get('SELECT count(*) as total FROM insults WHERE used < 1', (err, result) => {
-    if (result.total) {
-      console.log('returning total number of insults: ', result.total);
-      cb(result.total);
-    } else {
-      cb(0);
-    }
-  });
-}
-
-function getInsultById(id, cb) {
-  db.get('SELECT insult from insults WHERE rowid = ?', id, (err, result) => {
-    if (result) {
-      cb(result.insult);
-    } else {
-      cb('');
-    }
-  });
-}
-
-function updateInsultUsedStatus(id, used, cb) {
-  db.run('UPDATE insults SET used = $used WHERE rowid = $id', {
-    $id: id,
-    $used: used,
-  }, cb);
-}
-
-function resetInsultUsedCount(cb) {
-  console.log('resetting insults to 0 used.');
-  db.all('SELECT rowid AS id, insult, used FROM insults WHERE used > 0', (err, rows) => {
-    rows.forEach((row) => {
-      updateInsultUsedStatus(row.id, 0, (result) => {
-        console.log(result);
-      });
-    });
-    cb('done');
-  });
-}
+const insultStore = require('../resources/insults.json');
 
 
 const timesheetResponse = 'and finish that timesheet https://webet.icfi.com/DeltekTC/welcome.msv';
@@ -182,78 +139,17 @@ module.exports = {
   getMikeFart() {
     return _.sample(farts);
   },
-  getMikeInsult(cb) {
-    getTotalNumberOfInsults((number) => {
-      if (number > 0) {
-        const randomInsultInt = Math.floor(Math.random() * Math.floor(number));
-        console.log(`getting random insult with ID: ${randomInsultInt}`);
-        getInsultById(randomInsultInt, (insult) => {
-          updateInsultUsedStatus(randomInsultInt, 1, () => {
-            cb(insult.replace('|MIKE_DANG|', _.sample(mikeDangs)));
-          });
-        });
-      } else {
-        // time to reset insult in DB
-        resetInsultUsedCount((result) => {
-          if (result) {
-            getTotalNumberOfInsults((numOfInsults) => {
-              const randomInsultInt = Math.floor(Math.random() * Math.floor(numOfInsults));
-              getInsultById(randomInsultInt, (insult) => {
-                updateInsultUsedStatus(randomInsultInt, 1, () => {
-                  cb(insult.replace('|MIKE_DANG|', _.sample(mikeDangs)));
-                });
-              });
-            });
-          }
-        });
-      }
-    });
+  getMikeInsult() {
+    let insult = _.sample(insultStore.insults);
+    insult = insult.replace('|MIKE_DANG|', _.sample(mikeDangs));
+    return insult;
   },
-  getMikeInsultLowercase(cb) {
-    getTotalNumberOfInsults((number) => {
-      if (number > 0) {
-        const randomInsultInt = Math.floor(Math.random() * Math.floor(number));
-        console.log(`getting random insult with ID: ${randomInsultInt}`);
-        getInsultById(randomInsultInt, (insult) => {
-          const randomInsult = insult.replace('|MIKE_DANG|', _.sample(mikeDangs));
-          let finalInsult = '';
-          const fistChar = randomInsult.charAt(0).toString();
-          const secChar = randomInsult.charAt(1).toString();
-          // only lower case if the first character is not a proper noun i.e. "I"
-          if (fistChar.toUpperCase() === 'I' && (secChar === ' ' || secChar === '\'')) {
-            finalInsult = randomInsult;
-          } else {
-            finalInsult = randomInsult.charAt(0).toLowerCase() + randomInsult.slice(1);
-          }
-          updateInsultUsedStatus(randomInsultInt, 1, () => {
-            cb(finalInsult);
-          });
-        });
-      } else {
-        resetInsultUsedCount((result) => {
-          if (result) {
-            getTotalNumberOfInsults((numOfInsults) => {
-              const randomInsultInt = Math.floor(Math.random() * Math.floor(numOfInsults));
-              getInsultById(randomInsultInt, (insult) => {
-                const randomInsult = insult.replace('|MIKE_DANG|', _.sample(mikeDangs));
-                const fistChar = randomInsult.charAt(0).toString();
-                const secChar = randomInsult.charAt(1).toString();
-                let finalInsult = '';
-                // only lower case if the first character is not a proper noun i.e. "I"
-                if (fistChar.toUpperCase() === 'I' && (secChar === ' ' || secChar === '\'')) {
-                  finalInsult = randomInsult;
-                } else {
-                  finalInsult = randomInsult.charAt(0).toLowerCase() + randomInsult.slice(1);
-                }
-                updateInsultUsedStatus(randomInsultInt, 1, () => {
-                  cb(finalInsult);
-                });
-              });
-            });
-          }
-        });
-      }
-    });
+  getMikeInsultLowercase() {
+    let insult = _.sample(insultStore.insults);
+    insult = insult.replace('|MIKE_DANG|', _.sample(mikeDangs));
+    // lower case first letter
+    insult = insult.charAt(0).toLowerCase() + insult.slice(1);
+    return insult;
   },
   getMikeDang() {
     return _.sample(mikeDangs);

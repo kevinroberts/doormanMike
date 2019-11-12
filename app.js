@@ -4,7 +4,6 @@ const NodeCache = require('node-cache');
 const holidays = require('./coreMike/helpers/getHolidays.js');
 const constants = require('./coreMike/slackConstants');
 require('dotenv').config({ silent: true });
-require('./coreMike/resources/insultStore');
 
 const appCache = new NodeCache();
 

@@ -9,7 +9,7 @@ const development = process.env.NODE_ENV !== 'production';
 module.exports = {
 
   sendInsultToHandler(controller, bot, message) {
-    const user = message.text.split('send insult to ')[1];
+    const user = message.text.split(/[sS]end insult to /)[1];
 
     let channel = 'general';
     if (development) {
@@ -39,15 +39,11 @@ module.exports = {
               bot.reply(message, `Will do! Check ${constants.getGeneralChannelLink()}`);
 
               messageUtils.getUsernameFromController(controller, message.user, (username) => {
-                vocabulary.getMikeInsultLowercase((insult) => {
-                  messageUtils.postMessage(bot, channel, `Yo ${user}, ${username} (<@${message.user}>) wants me to tell yah, ${insult}`, channel);
-                });
+                messageUtils.postMessage(bot, channel, `Yo ${user}, ${username} (<@${message.user}>) wants me to tell yah, ${vocabulary.getMikeInsultLowercase()}`, channel);
               });
             } else {
               bot.reply(message, `Sneaky! Check ${constants.getGeneralChannelLink()}`);
-              vocabulary.getMikeInsultLowercase((insult) => {
-                messageUtils.postMessage(bot, channel, `Yo ${user}, ${vocabulary.getInsultIntro()} ${insult}`);
-              });
+              messageUtils.postMessage(bot, channel, `Yo ${user}, I just wanted to tell yah, ${vocabulary.getMikeInsultLowercase()}`);
             }
 
             nextConvo.next();
