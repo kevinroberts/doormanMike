@@ -46,7 +46,7 @@ const insultNames = [
 
 const beerFriday = [
   `It's gahdamn :beer: FRIDAY time! Grabs yo self a brew! \n${timesheetResponse}`,
-  `It's gahdamn :beer: FRIDAY time! Grabs yo self a brew! I bet Tyler has got a dope ass movie playin!\n${timesheetResponse}`,
+  `It's gahdamn :beer: FRIDAY time! Grabs yo self a brew! I bet Jake has drunk 10 :malort: shots already!\n${timesheetResponse}`,
   `It's gahdamn :beer: FRIDAY time! Grabs yo self a brew! AND yo JMOLSEN its time to getttt crunk! \n${timesheetResponse}`,
   `:fist::skin-tone-5: SOMEONE SAY GGAAAAAHDAMN BEER FRIDAY TIME!!!!!1@? CUZ IT IS, GRAB YOURSELF A BEER :beers: :fist::skin-tone-5: \n${timesheetResponse}`,
   `BRAAAPT! its :beer: Friday time! grabs yo self a beer! :fist::skin-tone-5:\n${timesheetResponse}`,
@@ -134,7 +134,9 @@ const mikeInsultIntro = [
 
 module.exports = {
   getMikeCompliment() {
-    return _.sample(complimentStore.compliments);
+    let compliment = _.sample(complimentStore.compliments);
+    compliment = compliment.replace('|MIKE_DANG|', _.sample(mikeDangs));
+    return compliment;
   },
   getMikeFart() {
     return _.sample(farts);

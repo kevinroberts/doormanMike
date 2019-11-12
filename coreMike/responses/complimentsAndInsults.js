@@ -54,7 +54,7 @@ module.exports = {
   },
 
   sendComplimentHandler(controller, bot, message) {
-    const user = message.text.split('send compliment to ')[1];
+    const user = message.text.split(/[sS]end compliment to /)[1];
 
     let channel = 'general';
     if (development) {
