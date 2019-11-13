@@ -10,7 +10,7 @@ const clev = new Cleverbot({
 
 module.exports = {
   getCleverBotResponse(message, callback) {
-    clev.query(message.text).then((response) => {
+    clev.query(encodeURI(message.text)).then((response) => {
       let msg = response.output;
       if (msg) {
         if (msg.indexOf('HAL') !== -1) {
