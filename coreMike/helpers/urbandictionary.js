@@ -27,7 +27,10 @@ module.exports = {
           if (result.body.list) {
             if (result.body.list[0]) {
               // return the first definition by default
-              const def = result.body.list[defNum];
+              let def = result.body.list[0];
+              if (result.body.list.length >= defNum) {
+                def = result.body.list[defNum];
+              }
               if (result.body.tags) {
                 def.tags = result.body.tags;
               } else {
@@ -46,8 +49,8 @@ module.exports = {
         }
       });
   },
-  postFormattedDefinition(bot, message, word, callback) {
-    this.getUrbanDefinition(word, 0, (result) => {
+  postFormattedDefinition(bot, message, word, defNumber, callback) {
+    this.getUrbanDefinition(word, defNumber, (result) => {
       if (result) {
         let msgText = result.definition;
         // replace all the bracketed definitions with actual links
@@ -69,8 +72,8 @@ module.exports = {
             const results = exTxt.match(linkExtractor);
             for (let j = 0; j < results.length; j += 1) {
               const ltor = results[j];
-              const linkwoBrackets = ltor.replace(/\[|\]/g, '');
-              exTxt = exTxt.replace(ltor, `<https://www.urbandictionary.com/define.php?term=${linkwoBrackets}|${linkwoBrackets}>`);
+              const linkWOutBrackets = ltor.replace(/\[|\]/g, '');
+              exTxt = exTxt.replace(ltor, `<https://www.urbandictionary.com/define.php?term=${linkWOutBrackets}|${linkWOutBrackets}>`);
             }
           }
           fields.push({
@@ -104,6 +107,7 @@ module.exports = {
               title_link: result.permalink,
               title: word,
               text: msgText,
+              color: '#EFFF00',
               attachment_type: 'default',
               fields,
             },

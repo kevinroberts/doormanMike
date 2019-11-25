@@ -151,8 +151,15 @@ const baseResponses = (controller, appCache) => {
         }
       });
     } else if (matcher.isMatch(usersMessage, 'define *')) {
-      const word = usersMessage.split(/[dD]efine /)[1];
-      urbandictionary.postFormattedDefinition(bot, message, word, (definition) => {
+      let word = usersMessage.split(/[dD]efine /)[1];
+      let defNumber = word.split(/.* \[(\d)\]/);
+      if (defNumber.length > 1) {
+        defNumber = parseInt(defNumber[1], 10) + 1;
+        word = word.split(/ \[/)[0];
+      } else {
+        defNumber = 0;
+      }
+      urbandictionary.postFormattedDefinition(bot, message, word, defNumber, (definition) => {
         if (!definition) {
           dictionary.getDefinition(word, (wordDef) => {
             if (wordDef) {
@@ -170,16 +177,6 @@ const baseResponses = (controller, appCache) => {
           bot.reply(message, definition);
         } else {
           const nonRust = S(word).replaceAll('rusty ', '').s;
-          bot.reply(message, `Go look it up yourself! I have no idea. Did you try the rusty version? \`define rusty ${nonRust}\``);
-        }
-      });
-    } else if (matcher.isMatch(usersMessage, ':nerd_face: *')) {
-      const wordToDefine = usersMessage.split(':nerd_face: ')[1];
-      dictionary.getDefinition(wordToDefine, (definition) => {
-        if (definition) {
-          bot.reply(message, definition);
-        } else {
-          const nonRust = S(wordToDefine).replaceAll('rusty ', '').s;
           bot.reply(message, `Go look it up yourself! I have no idea. Did you try the rusty version? \`define rusty ${nonRust}\``);
         }
       });

@@ -330,7 +330,6 @@ module.exports = {
   },
   sendMorninToHandler(bot, message) {
     const user = message.text.split(/[sS]end mornin to /)[1];
-
     let channel = 'general';
     if (development) {
       channel = 'private-testing';
