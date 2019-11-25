@@ -51,10 +51,8 @@ const baseResponses = (controller, appCache) => {
           bot.reply(message, `${name} ${dayOfTheWeekResponses.getMikeMorninTimeSensitive(null)}${love.getLoveReactionForName(name)}`);
         });
       }
-    } else if (matcher.isMatch(usersMessage, '*doorman-mike*')) {
+    } else if (matcher.isMatch(usersMessage, '*doorman mike*')) {
       messageUtils.postMikeFist(bot, message);
-      const responseMsg = `<@${message.user}> what's up?`;
-      bot.reply(message, responseMsg);
     } else if (matcher.isMatch(usersMessage, '*:fist:*')) {
       fistTracker.handleFistMessage(controller, bot, message);
     } else if (matcher.isMatch(usersMessage, '*at the same time*')) {
@@ -153,7 +151,7 @@ const baseResponses = (controller, appCache) => {
         }
       });
     } else if (matcher.isMatch(usersMessage, 'define *')) {
-      const word = usersMessage.split('define ')[1];
+      const word = usersMessage.split(/[dD]efine /)[1];
       urbandictionary.postFormattedDefinition(bot, message, word, (definition) => {
         if (!definition) {
           dictionary.getDefinition(word, (wordDef) => {
