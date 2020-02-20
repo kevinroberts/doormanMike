@@ -112,6 +112,8 @@ module.exports = {
             updatedUser.insulted = storageUser.insulted ? storageUser.insulted : 0;
             acc.push(updatedUser);
             callback(null);
+          } else {
+            callback(null);
           }
         });
       }, (err, usersWithInsults) => {
@@ -125,7 +127,7 @@ module.exports = {
             i += 1;
             let rankMsg = `${i}). ${member.name} *${member.insulted}*`;
             if (member.insulted > 30) {
-              rankMsg += ` ... ${vocabulary.getMikeDang()} you're a ${vocabulary.getInsultName()}`;
+              rankMsg += ` ... you're a ${vocabulary.getMikeDang()} ${vocabulary.getInsultName()}`;
             }
             leaderboardMessage += `${rankMsg}\n`;
           }
@@ -147,6 +149,8 @@ module.exports = {
           if (storageUser) {
             updatedUser.complimented = storageUser.complimented ? storageUser.complimented : 0;
             acc.push(updatedUser);
+            callback(null);
+          } else {
             callback(null);
           }
         });

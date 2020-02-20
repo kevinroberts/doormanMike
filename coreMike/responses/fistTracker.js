@@ -103,6 +103,8 @@ module.exports = {
             updatedUser.fists = storageUser.fists ? storageUser.fists : 0;
             acc.push(updatedUser);
             callback(null);
+          } else {
+            callback(null);
           }
         });
       }, (err, usersWithFists) => {

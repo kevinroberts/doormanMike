@@ -1,6 +1,5 @@
 const S = require('string');
 const unirest = require('unirest');
-const vocabulary = require('../helpers/vocabulary');
 
 module.exports = {
 
@@ -27,7 +26,7 @@ module.exports = {
           }
         } else {
           console.log('could not get fact for doorman mike: ', result.status);
-          bot.reply(message, vocabulary.getWaster());
+          bot.reply(message, 'Doorman mike is having trouble retrieving a fact about himself at the moment.');
         }
       });
   },
