@@ -126,23 +126,14 @@ const baseResponses = (controller, appCache) => {
         bot.reply(message, `${name} ${lunchSuggestion}${loveMessage}`);
       });
     } else if (matcher.isMatch(usersMessage, '*upcoming holiday*') || matcher.isMatch(usersMessage, '*holidays*')) {
-      let msg;
-
-      const upcomingHolidays = holidays.getUpcomingHolidays(appCache);
-
-      if (upcomingHolidays.length > 0) {
-        msg = `I know of ${upcomingHolidays.length} ${vocabulary.getMikeDang()} holidays coming up: `;
-
-        _.forEach(upcomingHolidays, (holiday) => {
-          const holidayDate = moment(holiday.startDate).format('dddd, MMMM Do YYYY');
-          msg += `\n${holiday.name} on ${holidayDate}`;
-        });
-      } else {
-        msg = "I don't know of any upcoming holidays.";
-      }
-
-      bot.reply(message, msg);
-    } else if (matcher.isMatch(usersMessage, '*holiday*')) {
+      controller.storage.users.get(constants.getBotUserID(), (err, userObj) => {
+        if (userObj && userObj.holidays) {
+          bot.reply(message, userObj.holidays);
+        } else {
+          bot.reply(message, 'I don\'t know of any upcoming holidays.');
+        }
+      });
+    } else if (matcher.isMatch(usersMessage, '* a holiday*')) {
       holidays.checkIfCurrentDayIsHoliday(appCache, (holidaysFound) => {
         if (holidaysFound) {
           let msg = `Yes, today is a holiday for ${vocabulary.getMikeDang()} `;
