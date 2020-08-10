@@ -19,7 +19,7 @@ module.exports = {
 
   getUrbanDefinition(word, defNumber, callback) {
     const defNum = defNumber || 0;
-    unirest.get(`https://mashape-community-urban-dictionary.p.mashape.com/define?term=${word}`)
+    unirest.get(`https://mashape-community-urban-dictionary.p.rapidapi.com/define?term=${word}`)
       .header('X-Mashape-Key', process.env.MASHAPEKEY)
       .header('Accept', 'application/json')
       .end((result) => {
