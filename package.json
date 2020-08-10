@@ -19,7 +19,7 @@
     "debug": "~2.2.0",
     "dotenv": "^2.0.0",
     "ics-parser": "^0.1.5",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "matcher": "^0.1.2",
     "moment": "^2.24.0",
     "node-cache": "^3.2.1",
