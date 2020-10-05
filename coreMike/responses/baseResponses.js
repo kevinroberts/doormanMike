@@ -5,7 +5,6 @@ const os = require('os');
 const S = require('string');
 const _ = require('lodash');
 const matcher = require('matcher');
-const moment = require('moment');
 const Chance = require('chance');
 const dayOfTheWeekResponses = require('./dayOfTheWeek');
 const messageUtils = require('../helpers/messageUtils');

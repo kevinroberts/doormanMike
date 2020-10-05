@@ -6,7 +6,7 @@ const lunchStore = require('../resources/lunchOptions.json');
 const insultStore = require('../resources/insults.json');
 
 
-const timesheetResponse = 'and finish that timesheet https://webet.icfi.com/DeltekTC/welcome.msv';
+const timesheetResponse = 'and if your work requires you to fill out a timesheet, you should fill that shiz in';
 
 const mikeDangs = [
   'gawd damn',
@@ -179,19 +179,14 @@ module.exports = {
   getPersonalizedLunchMike(userID) {
     const myDate = new Date();
     let msg = _.sample(lunchMikes).replace('|DANG|', _.sample(mikeDangs));
-    if (constants.getTylerUserID() === userID) {
-      const tylerMsg = ` BUt since this is Tyler asking, Im gonna say ${_.sample(mikeDangs)} UB DOGS :hamburger: :hotdog: -> :hamburger: https://goo.gl/maps/orVEFT9PMJz`;
-      msg = msg.replace('|DESTINATION|', tylerMsg);
-    } else {
-      msg = msg.replace('|DESTINATION|', _.sample(lunchStore.places));
-    }
+    msg = msg.replace('|DESTINATION|', _.sample(lunchStore.places));
     msg = msg.replace('|INTRO|', _.sample(lunchIntro));
 
     if (myDate.getHours() > 5 && myDate.getHours() <= 15) {
       return msg;
       /* Else if hour is past 3pm it is like totes Dinner time for Mike */
     } else if (myDate.getHours() >= 15) {
-      return `it's ${_.sample(mikeDangs)} past lunch time. Go to monks pub or make yourself some dinner.`;
+      return `it's ${_.sample(mikeDangs)} past lunch time. Go to the pub or make yourself some gawd dammn dinner.`;
     }
     return msg;
   },

@@ -78,11 +78,11 @@ const scheduledResponses = (controller, appCache, bot) => {
   // });
 
   const beerFridayJob = new CronJob({
-    cronTime: '00 10 15 * * 5',
+    cronTime: '00 10 16 * * 5',
     onTick() {
       /*
              * Runs every Friday
-             * at 3 PM.
+             * afternoon.
              */
       holidays.checkIfCurrentDayIsHoliday(appCache, (holidaysFound) => {
         if (holidaysFound) {
@@ -99,7 +99,6 @@ const scheduledResponses = (controller, appCache, bot) => {
 
 
   dailyMorninJob.start();
-  // dailyLunchJob.start();
   beerFridayJob.start();
   dailyResetJob.start();
   dailyBirthday.start();
