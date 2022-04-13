@@ -7,7 +7,7 @@
     "lint": "./node_modules/.bin/eslint */**.js coreMike/**"
   },
   "dependencies": {
-    "async": "^2.6.3",
+    "async": "^3.2.2",
     "botkit": "^0.7.5",
     "botkit-storage-firebase": "1.0.0",
     "chance": "^1.1.3",
